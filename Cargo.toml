@@ -1,0 +1,13 @@
+[package]
+name = "hyper-lll"
+version = "0.1.0"
+edition = "2024"
+description = "High-precision integer relation & hypergeometric constant discovery engine in pure Rust"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["mathematics", "lll-algorithm", "lattice-reduction", "hypergeometric", "number-theory"]
+categories = ["mathematics", "science"]
+
+[dependencies]
+dashu = "0.6.2"
+rayon = "1.12.0"

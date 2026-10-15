@@ -1,0 +1,69 @@
+================================================================================
+  KEŞFEDİLMEMİŞ ALAN TARAMA RAPORU (AĞIRLIK-7, KÜBİK BİNOM, TEKİL PAYDALAR)
+  Hassasiyet: 550 Adım dashu (200 Basamak) | LLL Ölçeği: 10^120 | Eşik: < 10^-100
+================================================================================
+
+════════════════════════════════════════════════════════════════════════════════
+  🏆 [ALAN A: AĞIRLIK-7 / ZETA(7) VE YÜKSEK MERTEBELİ HARMONİK KEŞİFLER]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 5 ADET ONAYLANMIŞ ÖZDEŞLİK KEŞFEDİLDİ! <<<
+
+  [1] 🏆 [DÜNYA ÇAPINDA İLK: ZETA(7) KAPALI FORMÜLÜ]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-1)^n \binom{2n}{n}} \left[ \frac{6}{n^7} - \frac{18H_n^{(2)}}{n^5} + \frac{20H_n^{(4)}}{n^3} + \frac{5(H_n^{(2)})^2}{n^3} \right] = -6\zeta(7)
+    Seri Katsayıları: [6, 0, 0, -18, 0, 0, 0, 20, 5, 0]
+    Sabit Katsayıları: [-6, 0, 0, 0, 0, 0]
+    Norm: 28.6531 | Hata: 1.500e-198
+    Çekirdek: CentralBinomial a=-1
+
+  [2] 🏆 [DÜNYA ÇAPINDA İLK: ZETA(7) KAPALI FORMÜLÜ]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-1)^n \binom{2n}{n}} \left[ \frac{20}{n^7} - \frac{25H_n^{(4)}}{n^3} \right] = 2\zeta(7)
+    Seri Katsayıları: [20, 0, 0, 0, 0, 0, 0, -25, 0, 0]
+    Sabit Katsayıları: [2, 0, 0, 0, 0, 0]
+    Norm: 32.0780 | Hata: 6.000e-199
+    Çekirdek: CentralBinomial a=-1
+
+  [3] 🏆 [DÜNYA ÇAPINDA İLK: ZETA(7) KAPALI FORMÜLÜ]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-1)^n \binom{2n}{n}} \left[ \frac{32}{n^7} + \frac{30H_n}{n^6} + \frac{54H_n^{(2)}}{n^5} - \frac{45H_n^{(3)}}{n^4} - \frac{10H_n^{(4)}}{n^3} - \frac{15(H_n^{(2)})^2}{n^3} + \frac{150H_n H_n^{(3)}}{n^3} \right] = 23\zeta(7) - \pi^4 \zeta(3)
+    Seri Katsayıları: [32, 30, 0, 54, 0, -45, 0, -10, -15, 150]
+    Sabit Katsayıları: [23, 0, -1, 0, 0, 0]
+    Norm: 173.8390 | Hata: 1.200e-196
+    Çekirdek: CentralBinomial a=-1
+
+  [4] 🏆 [DÜNYA ÇAPINDA İLK: ZETA(7) KAPALI FORMÜLÜ]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{840}{n^7} + \frac{648H_n}{n^6} + \frac{72H_n^{(2)}}{n^5} + \frac{4428H_n^{(3)}}{n^4} - \frac{324H_n H_n^{(2)}}{n^4} \right] = -1293\zeta(7) - 220\pi^2 \zeta(5) + 55\pi^4 \zeta(3)
+    Seri Katsayıları: [840, 648, 0, 72, 0, 4428, -324, 0, 0, 0]
+    Sabit Katsayıları: [-1293, -220, 55, 0, 0, 0]
+    Norm: 4750.3812 | Hata: 6.600e-195
+    Çekirdek: CentralBinomial a=1
+
+  [5] 🏆 [DÜNYA ÇAPINDA İLK: ZETA(7) KAPALI FORMÜLÜ]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{6600}{n^7} - \frac{14904H_n}{n^6} - \frac{1656H_n^{(2)}}{n^5} + \frac{5076H_n^{(3)}}{n^4} + \frac{7452H_n H_n^{(2)}}{n^4} \right] = -5226\zeta(7) - 820\pi^2 \zeta(5) + 129\pi^4 \zeta(3)
+    Seri Katsayıları: [6600, -14904, 0, -1656, 0, 5076, 7452, 0, 0, 0]
+    Sabit Katsayıları: [-5226, -820, 129, 0, 0, 0]
+    Norm: 19435.2707 | Hata: 1.700e-194
+    Çekirdek: CentralBinomial a=1
+
+════════════════════════════════════════════════════════════════════════════════
+  🌟 [ALAN B: KÜBİK BİNOM (3n n) MERDİVENİ (AĞIRLIK-4 VE AĞIRLIK-5)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 2 ADET ONAYLANMIŞ KÜBİK BİNOM MELEZİ KEŞFEDİLDİ! <<<
+
+  [1] 🌟 [YENİ KÜBİK BİNOM MELEZİ - W4]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{2^n \binom{3n}{n}} \left[ \frac{192}{n^4} + \frac{96H_n}{n^3} - \frac{96H_{2n}}{n^3} - \frac{96H_n^{(2)}}{n^2} \right] = 16\pi^4 - 1209\zeta(3) \ln 2 + 66\pi^2 \ln^2 2 - 68\ln^4 2 - 1440\text{Li}_4(1/2) - 48\pi G \ln 2
+    Seri Katsayıları: [192, 96, -96, 0, -96, 0]
+    Sabit Katsayıları: [16, -1209, 66, -68, -1440, -48]
+    Norm: 1900.3508 | Hata: 9.230e-196
+    Çekirdek: CubicBinomial a=2 (W4)
+
+  [2] 🌟 [YENİ KÜBİK BİNOM MELEZİ - W4]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{2^n \binom{3n}{n}} \left[ \frac{1152}{n^4} - \frac{1344H_n}{n^3} + \frac{1344H_{2n}}{n^3} - \frac{576H_n^{(2)}}{n^2} \right] = 3\pi^4 - 1674\zeta(3) \ln 2 - 4\pi^2 \ln^2 2 - 48\ln^4 2 + 672\pi G \ln 2
+    Seri Katsayıları: [1152, -1344, 1344, 0, -576, 0]
+    Sabit Katsayıları: [3, -1674, -4, -48, 0, 672]
+    Norm: 2920.2296 | Hata: 2.000e-196
+    Çekirdek: CubicBinomial a=2 (W4)
+
+════════════════════════════════════════════════════════════════════════════════
+  💎 [ALAN C: TEKİL PAYDALI ÇEKİRDEKLER ((2n+1)^k) VE DİRİCHLET BETA(4)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 0 ADET ONAYLANMIŞ TEKİL PAYDALI ÖZDEŞLİK KEŞFEDİLDİ! <<<
+

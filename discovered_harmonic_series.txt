@@ -1,0 +1,39 @@
+================================================================================
+  AĞIRLIK-5 UZAYI: KARESİEL HARMONİKLER (H_n^2, H_n·O_n) VE ZETA(5) LLL RAPORU
+  Hassasiyet: 450 Adım dashu | 7D LLL Ölçeği: 10^70 | Eşik: < 10^-85 | Max Norm: 6000
+================================================================================
+
+════════════════════════════════════════════════════════════════════════════════
+  🔥 [KATEGORİ 1: YENİ KARESİEL HARMONİK / ZETA(5) KEŞİFLERİ (H_n^2, H_n·O_n)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 0 ADET ONAYLANMIŞ KARESİEL HARMONİK SERİ ÖZDEŞLİĞİ KEŞFEDİLDİ! <<<
+
+════════════════════════════════════════════════════════════════════════════════
+  📌 [KATEGORİ 2: KONTROL SERİLERİ]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 4 ADET ONAYLANMIŞ KONTROL SERİSİ KEŞFEDİLDİ! <<<
+
+  [1] 📌 KONTROL SERİSİ:
+    LaTeX: \sum_{n=1}^\infty \frac{3}{(-2)^n n \binom{2n}{n}} = -\ln 2
+    Katsayılar: m = [3, 0, 0, 0, 0, 1, 0]
+    Norm: 3.1623 | Hata: 1.000e-160
+    Çekirdek: HarmonicCentralBinomial a=-2, k=1
+
+  [2] 📌 KONTROL SERİSİ:
+    LaTeX: \sum_{n=1}^\infty \frac{5}{(-1)^n n^{3} \binom{2n}{n}} = -2\zeta(3)
+    Katsayılar: m = [5, 0, 0, 0, 0, 2, 0]
+    Norm: 5.3852 | Hata: 5.074e-102
+    Çekirdek: HarmonicCentralBinomial a=-1, k=3
+
+  [3] 📌 KONTROL SERİSİ:
+    LaTeX: \sum_{n=1}^\infty \frac{18}{n^{2} \binom{2n}{n}} = \pi^2
+    Katsayılar: m = [18, 0, 0, 0, 0, -1, 0]
+    Norm: 18.0278 | Hata: 2.000e-159
+    Çekirdek: HarmonicCentralBinomial a=1, k=2
+
+  [4] 📌 KONTROL SERİSİ:
+    LaTeX: \sum_{n=1}^\infty \frac{3240}{n^{4} \binom{2n}{n}} = 17\pi^4
+    Katsayılar: m = [3240, 0, 0, 0, 0, -17, 0]
+    Norm: 3240.0446 | Hata: 0.000e0
+    Çekirdek: HarmonicCentralBinomial a=1, k=4
+

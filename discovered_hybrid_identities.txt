@@ -1,0 +1,93 @@
+================================================================================
+  LLL KAFES İNDİRGEME (INTEGER RELATION) MELEZ VE SAF SABİT KEŞİF RAPORU
+  Hassasiyet: 240 Adım dashu | LLL Ölçeği: 10^42 | Bağımsız Eşik: < 10^-38 | Max Norm: 1500
+================================================================================
+
+════════════════════════════════════════════════════════════════════════════════
+  🌟 [KATEGORİ 1: GERÇEK MELEZ KÖPRÜLER (CROSS-CONSTANT HYBRID BRIDGES)]
+════════════════════════════════════════════════════════════════════════════════
+  Bu parametre aralığında her iki sabiti aynı anda içeren doğrusal/projektif melez bağıntı bulunamadı.
+
+════════════════════════════════════════════════════════════════════════════════
+  📌 [KATEGORİ 2: SAF KÖK BAĞINTILARI (SINGLE-CONSTANT KONTROL GRUBU)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 13 ADET DOĞRULANMIŞ SAF KÖK BAĞINTISI YAKALANDI! <<<
+
+  [1] 📌 SAF BAĞINTI: Çift 1: (G, π · ln 2) — Catalan & Clausen/Log-Pi
+    PCF: Aile 1D: a(n) = 3n² + 7n + 3, b(n) = -2n³(n + 2)
+    Denklem: K = (-6·G + 5) / (2·G - 1)
+    Katsayılar: m = [2, -1, 6, 0, -5]
+    Norm: 8.1240 | Hata: 2.843e-77
+
+  [2] 📌 SAF BAĞINTI: Çift 2: (G, π²) — Catalan & Karesel Pi
+    PCF: Aile 1D: a(n) = 3n² + 7n + 3, b(n) = -2n³(n + 2)
+    Denklem: K = (-6·G + 5) / (2·G - 1)
+    Katsayılar: m = [2, -1, 6, 0, -5]
+    Norm: 8.1240 | Hata: 2.843e-77
+
+  [3] 📌 SAF BAĞINTI: Çift 3: (G, ln 2) — Catalan & Doğal Logaritma 2
+    PCF: Aile 1D: a(n) = 3n² + 7n + 3, b(n) = -2n³(n + 2)
+    Denklem: K = (-6·G + 5) / (2·G - 1)
+    Katsayılar: m = [2, -1, 6, 0, -5]
+    Norm: 8.1240 | Hata: 2.843e-77
+
+  [4] 📌 SAF BAĞINTI: Çift 3: (G, ln 2) — Catalan & Doğal Logaritma 2
+    PCF: Aile 1D: a(n) = 10n² + 7n + -3, b(n) = -9n³(n + 1)
+    Denklem: K = (3·ln(2) + 9) / (ln(2) - 6)
+    Katsayılar: m = [1, -6, -3, 0, -9]
+    Norm: 11.2694 | Hata: 6.000e-139
+
+  [5] 📌 SAF BAĞINTI: Çift 4: (π, ln 2) — Çembersel & Logaritmik Köprü
+    PCF: Aile 1D: a(n) = 10n² + 7n + -3, b(n) = -9n³(n + 1)
+    Denklem: K = (3·ln(2) + 9) / (ln(2) - 6)
+    Katsayılar: m = [1, -6, -3, 0, -9]
+    Norm: 11.2694 | Hata: 6.000e-139
+
+  [6] 📌 SAF BAĞINTI: Çift 4: (π, ln 2) — Çembersel & Logaritmik Köprü
+    PCF: Aile 2: a(n) = 6n + 4, b(n) = -1(2n + 0)(4n + -2)
+    Denklem: K = (-4·π + 12) / (π - 2)
+    Katsayılar: m = [1, -2, 4, 0, -12]
+    Norm: 12.8452 | Hata: 3.806e-78
+
+  [7] 📌 SAF BAĞINTI: Çift 6: (ϖ, π) — Lemniscate & Pi Doğrusal Köprü
+    PCF: Aile 2: a(n) = 6n + 4, b(n) = -1(2n + 0)(4n + -2)
+    Denklem: K = (-4·π + 12) / (π - 2)
+    Katsayılar: m = [1, -2, 4, 0, -12]
+    Norm: 12.8452 | Hata: 3.806e-78
+
+  [8] 📌 SAF BAĞINTI: Çift 3: (G, ln 2) — Catalan & Doğal Logaritma 2
+    PCF: Aile 2: a(n) = 6n + 4, b(n) = -1(2n + 0)(4n + 0)
+    Denklem: K = (-4·ln(2) + 2) / (ln(2))
+    Katsayılar: m = [1, 0, 4, 0, -2]
+    Norm: 4.5826 | Hata: 3.360e-75
+
+  [9] 📌 SAF BAĞINTI: Çift 4: (π, ln 2) — Çembersel & Logaritmik Köprü
+    PCF: Aile 2: a(n) = 6n + 4, b(n) = -1(2n + 0)(4n + 0)
+    Denklem: K = (-4·ln(2) + 2) / (ln(2))
+    Katsayılar: m = [1, 0, 4, 0, -2]
+    Norm: 4.5826 | Hata: 3.360e-75
+
+  [10] 📌 SAF BAĞINTI: Çift 4: (π, ln 2) — Çembersel & Logaritmik Köprü
+    PCF: Aile 2: a(n) = 6n + 4, b(n) = -1(2n + 2)(4n + -2)
+    Denklem: K = (-2·π) / (π + 2)
+    Katsayılar: m = [1, 2, 2, 0, 0]
+    Norm: 3.0000 | Hata: 1.217e-71
+
+  [11] 📌 SAF BAĞINTI: Çift 6: (ϖ, π) — Lemniscate & Pi Doğrusal Köprü
+    PCF: Aile 2: a(n) = 6n + 4, b(n) = -1(2n + 2)(4n + -2)
+    Denklem: K = (-2·π) / (π + 2)
+    Katsayılar: m = [1, 2, 2, 0, 0]
+    Norm: 3.0000 | Hata: 1.217e-71
+
+  [12] 📌 SAF BAĞINTI: Çift 4: (π, ln 2) — Çembersel & Logaritmik Köprü
+    PCF: Aile 2: a(n) = 12n + 4, b(n) = -4(2n + 0)(4n + -2)
+    Denklem: K = (-4·π + 8) / (π)
+    Katsayılar: m = [1, 0, 4, 0, -8]
+    Norm: 9.0000 | Hata: 1.640e-73
+
+  [13] 📌 SAF BAĞINTI: Çift 6: (ϖ, π) — Lemniscate & Pi Doğrusal Köprü
+    PCF: Aile 2: a(n) = 12n + 4, b(n) = -4(2n + 0)(4n + -2)
+    Denklem: K = (-4·π + 8) / (π)
+    Katsayılar: m = [1, 0, 4, 0, -8]
+    Norm: 9.0000 | Hata: 1.640e-73
+

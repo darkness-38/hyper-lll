@@ -1,0 +1,188 @@
+================================================================================
+  HOMOJEN AĞIRLIK (WEIGHT-3, 4, 5) TAM HARMONİK ÇOKLU-SABİTLİ LLL RAPORU
+  Hassasiyet: 450 Adım dashu | LLL Ölçeği: 10^105 | Eşik: < 10^-95 | Max Norm: 20000
+================================================================================
+
+════════════════════════════════════════════════════════════════════════════════
+  🌟 [UZAY 1: HOMOJEN AĞIRLIK-3 SERİ ÖZDEŞLİKLERİ (WEIGHT-3)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 9 ADET ONAYLANMIŞ AĞIRLIK-3 ÖZDEŞLİĞİ KEŞFEDİLDİ! <<<
+
+  [1] 🌟 WEIGHT-3 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{1}{n^3} - \frac{3H_n}{n^2} \right] = -\zeta(3)
+    Seri Katsayıları: [1, -3, 0, 0, 0]
+    Sabit Katsayıları: [-1, 0, 0, 0, 0]
+    Norm: 3.3166 | Hata: 1.000e-179
+    Çekirdek: CentralBinomial a=1
+
+  [2] 🌟 WEIGHT-3 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{2}{n^3} + \frac{3H_{2n}}{n^2} \right] = 3\zeta(3)
+    Seri Katsayıları: [2, 0, 3, 0, 0]
+    Sabit Katsayıları: [3, 0, 0, 0, 0]
+    Norm: 4.6904 | Hata: 2.000e-179
+    Çekirdek: CentralBinomial a=1
+
+  [3] 🌟 WEIGHT-3 [SAF BİNOM]:
+    LaTeX: \sum_{n=1}^\infty \frac{5}{n^3 (-1)^n \binom{2n}{n}} = -2\zeta(3)
+    Seri Katsayıları: [5, 0, 0, 0, 0]
+    Sabit Katsayıları: [-2, 0, 0, 0, 0]
+    Norm: 5.3852 | Hata: 1.000e-179
+    Çekirdek: CentralBinomial a=-1
+
+  [4] 🌟 WEIGHT-3 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{2}{n^3} - \frac{6H_n^{(2)}}{n} \right] = \zeta(3) - \ln^3 2
+    Seri Katsayıları: [2, 0, 0, 0, -6]
+    Sabit Katsayıları: [1, 0, -1, 0, 0]
+    Norm: 6.4807 | Hata: 6.000e-180
+    Çekirdek: CentralBinomial a=-2
+
+  [5] 🌟 WEIGHT-3 [SAF BİNOM]:
+    LaTeX: \sum_{n=1}^\infty \frac{12}{n^3 (-2)^n \binom{2n}{n}} = -3\zeta(3) + 2\ln^3 2
+    Seri Katsayıları: [12, 0, 0, 0, 0]
+    Sabit Katsayıları: [-3, 0, 2, 0, 0]
+    Norm: 12.5300 | Hata: 5.800e-179
+    Çekirdek: CentralBinomial a=-2
+
+  [6] 🌟 WEIGHT-3 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{6}{n^3} - \frac{12H_n}{n^2} + \frac{12H_{2n}}{n^2} \right] = 3\zeta(3) - \pi^2 \ln 2 + \ln^3 2
+    Seri Katsayıları: [6, -12, 12, 0, 0]
+    Sabit Katsayıları: [3, -1, 1, 0, 0]
+    Norm: 18.3030 | Hata: 8.400e-179
+    Çekirdek: CentralBinomial a=-2
+
+  [7] 🌟 WEIGHT-3 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{2^n \binom{3n}{n}} \left[ \frac{24}{n^3} - \frac{48H_n}{n^2} + \frac{48H_{2n}}{n^2} \right] = \pi^2 \ln 2 + 4\ln^3 2
+    Seri Katsayıları: [24, -48, 48, 0, 0]
+    Sabit Katsayıları: [0, 1, 4, 0, 0]
+    Norm: 72.1180 | Hata: 3.700e-178
+    Çekirdek: CubicBinomial a=2
+
+  [8] 🌟 WEIGHT-3 [SAF BİNOM]:
+    LaTeX: \sum_{n=1}^\infty \frac{48}{n^3 2^n \binom{3n}{n}} = -99\zeta(3) - 2\pi^2 \ln 2 + 8\ln^3 2 + 48\pi G
+    Seri Katsayıları: [48, 0, 0, 0, 0]
+    Sabit Katsayıları: [-99, -2, 8, 0, 48]
+    Norm: 120.3204 | Hata: 1.000e-176
+    Çekirdek: CubicBinomial a=2
+
+  [9] 🌟 WEIGHT-3 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{108}{n^3} + \frac{60H_n}{n^2} - \frac{51H_{2n}}{n^2} - \frac{162H_n^{(2)}}{n} \right] = -31\zeta(3) - \frac{\pi^3}{\sqrt{3}}
+    Seri Katsayıları: [108, 60, -51, 0, -162]
+    Sabit Katsayıları: [-31, 0, 0, -1, 0]
+    Norm: 212.2993 | Hata: 9.000e-178
+    Çekirdek: CentralBinomial a=1
+
+════════════════════════════════════════════════════════════════════════════════
+  🔥 [UZAY 2: HOMOJEN AĞIRLIK-4 SERİ ÖZDEŞLİKLERİ (WEIGHT-4 / EN ZENGİN UZAY)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 5 ADET ONAYLANMIŞ AĞIRLIK-4 ÖZDEŞLİĞİ KEŞFEDİLDİ! <<<
+
+  [1] 🔥 WEIGHT-4 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{24}{n^4} - \frac{24H_n^{(2)}}{n^2} \right] = -\ln^4 2
+    Seri Katsayıları: [24, 0, 0, 0, -24, 0]
+    Sabit Katsayıları: [0, 0, 0, -1, 0, 0]
+    Norm: 33.9559 | Hata: 8.500e-179
+    Çekirdek: CentralBinomial a=-2
+
+  [2] 🔥 WEIGHT-4 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-1)^n \binom{2n}{n}} \left[ \frac{54}{n^4} + \frac{60H_n}{n^3} + \frac{60H_{2n}}{n^3} \right] = -\pi^4
+    Seri Katsayıları: [54, 60, 60, 0, 0, 0]
+    Sabit Katsayıları: [-1, 0, 0, 0, 0, 0]
+    Norm: 100.5833 | Hata: 4.800e-177
+    Çekirdek: CentralBinomial a=-1
+
+  [3] 🔥 WEIGHT-4 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{32}{n^4} - \frac{32H_n}{n^3} + \frac{32H_{2n}}{n^3} - \frac{4H_n^{(2)}}{n^2} \right] = -\pi^4 + 65\zeta(3) \ln 2 - 2\pi^2 \ln^2 2 + 2\ln^4 2 + 80\text{Li}_4(1/2)
+    Seri Katsayıları: [32, -32, 32, 0, -4, 0]
+    Sabit Katsayıları: [-1, 65, -2, 2, 80, 0]
+    Norm: 117.1409 | Hata: 5.530e-177
+    Çekirdek: CentralBinomial a=-2
+
+  [4] 🔥 WEIGHT-4 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{110}{n^4} - \frac{2H_n}{n^3} + \frac{3H_n^2}{n^2} + \frac{72H_n^{(2)}}{n^2} \right] = \pi^4
+    Seri Katsayıları: [110, -2, 0, 3, 72, 0]
+    Sabit Katsayıları: [1, 0, 0, 0, 0, 0]
+    Norm: 131.5219 | Hata: 4.200e-177
+    Çekirdek: CentralBinomial a=1
+
+  [5] 🔥 WEIGHT-4 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{88}{n^4} - \frac{112H_n}{n^3} + \frac{112H_{2n}}{n^3} + \frac{100H_n^{(2)}}{n^2} \right] = -65\zeta(3) \ln 2 + 8\pi^2 \ln^2 2 - 7\ln^4 2 - 80\text{Li}_4(1/2)
+    Seri Katsayıları: [88, -112, 112, 0, 100, 0]
+    Sabit Katsayıları: [0, -65, 8, -7, -80, 0]
+    Norm: 231.4519 | Hata: 1.060e-177
+    Çekirdek: CentralBinomial a=-2
+
+════════════════════════════════════════════════════════════════════════════════
+  ⚡ [UZAY 3: HOMOJEN AĞIRLIK-5 / ZETA(5) SERİ ÖZDEŞLİKLERİ (WEIGHT-5)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 10 ADET ONAYLANMIŞ AĞIRLIK-5 ÖZDEŞLİĞİ KEŞFEDİLDİ! <<<
+
+  [1] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{2H_n}{n^4} - \frac{H_n^{(2)}}{n^3} - \frac{6H_n^{(3)}}{n^2} + \frac{3H_n H_n^{(2)}}{n^2} \right] = -\zeta(5)
+    Seri Katsayıları: [0, 2, 0, 0, -1, 0, -6, 3]
+    Sabit Katsayıları: [-1, 0, 0, 0, 0, 0, 0]
+    Norm: 7.1414 | Hata: 8.400e-179
+    Çekirdek: CentralBinomial a=1
+
+  [2] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-1)^n \binom{2n}{n}} \left[ \frac{9}{n^5} - \frac{5H_n^{(2)}}{n^3} \right] = -2\zeta(5)
+    Seri Katsayıları: [9, 0, 0, 0, -5, 0, 0, 0]
+    Sabit Katsayıları: [-2, 0, 0, 0, 0, 0, 0]
+    Norm: 10.4881 | Hata: 1.300e-178
+    Çekirdek: CentralBinomial a=-1
+
+  [3] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-1)^n \binom{2n}{n}} \left[ \frac{4}{n^5} + \frac{6H_n}{n^4} - \frac{10H_n^2}{n^3} - \frac{5H_n^{(2)}}{n^3} \right] = 2\zeta(5)
+    Seri Katsayıları: [4, 6, 0, -10, -5, 0, 0, 0]
+    Sabit Katsayıları: [2, 0, 0, 0, 0, 0, 0]
+    Norm: 13.4536 | Hata: 1.600e-178
+    Çekirdek: CentralBinomial a=-1
+
+  [4] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{8H_n}{n^4} - \frac{4H_n^{(2)}}{n^3} + \frac{3H_n^{(3)}}{n^2} + \frac{12H_n H_n^{(2)}}{n^2} \right] = -\zeta(5) + \pi^2 \zeta(3)
+    Seri Katsayıları: [0, 8, 0, 0, -4, 0, 3, 12]
+    Sabit Katsayıları: [-1, 1, 0, 0, 0, 0, 0]
+    Norm: 15.3297 | Hata: 4.000e-178
+    Çekirdek: CentralBinomial a=1
+
+  [5] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{4}{n^5} - \frac{14H_n}{n^4} - \frac{2H_n^{(2)}}{n^3} + \frac{3H_n^{(3)}}{n^2} + \frac{6H_n H_n^{(2)}}{n^2} \right] = -\zeta(5)
+    Seri Katsayıları: [4, -14, 0, 0, -2, 0, 3, 6]
+    Sabit Katsayıları: [-1, 0, 0, 0, 0, 0, 0]
+    Norm: 16.1864 | Hata: 1.000e-179
+    Çekirdek: CentralBinomial a=1
+
+  [6] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{\binom{2n}{n}} \left[ \frac{14}{n^5} + \frac{5H_n}{n^4} + \frac{9H_{2n}}{n^4} + \frac{2H_n^{(2)}}{n^3} - \frac{3H_n^{(3)}}{n^2} - \frac{6H_n H_n^{(2)}}{n^2} \right] = 12\zeta(5)
+    Seri Katsayıları: [14, 5, 9, 0, 2, 0, -3, -6]
+    Sabit Katsayıları: [12, 0, 0, 0, 0, 0, 0]
+    Norm: 22.2486 | Hata: 8.000e-178
+    Çekirdek: CentralBinomial a=1
+
+  [7] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-1)^n \binom{2n}{n}} \left[ \frac{32}{n^5} + \frac{12H_n}{n^4} - \frac{20H_n^2}{n^3} + \frac{30H_n^{(2)}}{n^3} - \frac{15H_{2n}^{(2)}}{n^3} \right] = 143\zeta(5) - 14\pi^2 \zeta(3)
+    Seri Katsayıları: [32, 12, 0, -20, 30, -15, 0, 0]
+    Sabit Katsayıları: [143, -14, 0, 0, 0, 0, 0]
+    Norm: 152.7678 | Hata: 1.400e-176
+    Çekirdek: CentralBinomial a=-1
+
+  [8] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{96}{n^5} - \frac{96H_n}{n^4} + \frac{96H_{2n}}{n^4} + \frac{144H_n^{(2)}}{n^3} - \frac{48H_n^{(3)}}{n^2} \right] = 93\zeta(5) - 26\pi^2 \zeta(3) + 2\pi^4 \ln 2 - 54\zeta(3) \ln^2 2 + 96\text{Li}_5(1/2)
+    Seri Katsayıları: [96, -96, 96, 0, 144, 0, -48, 0]
+    Sabit Katsayıları: [93, -26, 2, -54, 0, 0, 96]
+    Norm: 268.6057 | Hata: 8.500e-177
+    Çekirdek: CentralBinomial a=-2
+
+  [9] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{144}{n^5} - \frac{72H_n^{(3)}}{n^2} \right] = -180\zeta(5) + 2\pi^4 \ln 2 - 81\zeta(3) \ln^2 2 + 2\pi^2 \ln^3 2 + 144\text{Li}_5(1/2)
+    Seri Katsayıları: [144, 0, 0, 0, 0, 0, -72, 0]
+    Sabit Katsayıları: [-180, 0, 2, -81, 2, 0, 144]
+    Norm: 292.6175 | Hata: 1.780e-176
+    Çekirdek: CentralBinomial a=-2
+
+  [10] ⚡ WEIGHT-5 [TAM HARMONİK]:
+    LaTeX: \sum_{n=1}^\infty \frac{1}{(-2)^n \binom{2n}{n}} \left[ \frac{264}{n^5} - \frac{180H_n^{(2)}}{n^3} - \frac{12H_n^{(3)}}{n^2} \right] = 180\zeta(5) - 2\pi^4 \ln 2 + 84\zeta(3) \ln^2 2 - 3\pi^2 \ln^3 2 + 4\ln^5 2 - 216\text{Li}_5(1/2)
+    Seri Katsayıları: [264, 0, 0, 0, -180, 0, -12, 0]
+    Sabit Katsayıları: [180, 0, -2, 84, -3, 4, -216]
+    Norm: 434.0288 | Hata: 1.900e-176
+    Çekirdek: CentralBinomial a=-2
+

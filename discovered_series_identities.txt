@@ -1,0 +1,215 @@
+================================================================================
+  LLL TABANLI HİPERGEOMETRİK BİNOM VE BBP SERİSİ KEŞİF RAPORU
+  Hassasiyet: 450 Adım dashu | LLL Ölçeği: 10^65 | Bağımsız Eşik: < 10^-85 | Max Norm: 5000
+================================================================================
+
+════════════════════════════════════════════════════════════════════════════════
+  🌟 [KATEGORİ 1: GERÇEK MELEZ SERİ KÖPRÜLERİ (CROSS-CONSTANT HYBRID BRIDGES)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 3 ADET ONAYLANMIŞ GERÇEK MELEZ SERİ ÖZDEŞLİĞİ KEŞFEDİLDİ! <<<
+
+  [1] 🌟 MELEZ SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{12}{(-2)^n n^{3} \binom{2n}{n}} = 2\ln^3 2 - 3\zeta(3)
+    Katsayılar: m = [12, 0, 0, -2, 3]
+    Norm: 12.5300 | Hata: 7.610e-102
+
+  [2] 🌟 MELEZ SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{10}{2^n n \binom{3n}{n}} = \pi - 2\ln 2
+    Katsayılar: m = [10, 0, 0, -1, 2]
+    Norm: 10.2470 | Hata: 2.000e-159
+
+  [3] 🌟 MELEZ SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{24}{2^n n^{2} \binom{3n}{n}} = \pi^2 - 12\ln^2 2
+    Katsayılar: m = [24, 0, 0, -1, 12]
+    Norm: 26.8514 | Hata: 8.000e-159
+
+════════════════════════════════════════════════════════════════════════════════
+  📌 [KATEGORİ 2: SAF SABİT SERİ ÖZDEŞLİKLERİ (SINGLE-CONSTANT CONTROL & DISCOVERY)]
+════════════════════════════════════════════════════════════════════════════════
+  >>> TOPLAM 37 ADET DOĞRULANMIŞ SAF SABİT SERİ ÖZDEŞLİĞİ KEŞFEDİLDİ! <<<
+
+  [1] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{65n - 31}{(-16)^n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -31, 65, 1, 0]
+    Norm: 72.0208 | Hata: 7.000e-160
+
+  [2] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{65n - 32}{(-16)^n n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -32, 65, 1, 0]
+    Norm: 72.4569 | Hata: 8.000e-160
+
+  [3] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{33n - 16}{(-8)^n n \binom{2n}{n}} = -1
+    Katsayılar: m = [-16, 33, 0, 1, 0]
+    Norm: 36.6879 | Hata: 0.000e0
+
+  [4] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{17n - 7}{(-4)^n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -7, 17, 1, 0]
+    Norm: 18.4120 | Hata: 2.200e-159
+
+  [5] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{17n - 8}{(-4)^n n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -8, 17, 1, 0]
+    Norm: 18.8149 | Hata: 2.000e-160
+
+  [6] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{9n - 3}{(-2)^n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -3, 9, 1, 0]
+    Norm: 9.5394 | Hata: 2.700e-159
+
+  [7] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{9n^{2} - 2n + 1}{(-2)^n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, 1, -2, 9, 1, 0]
+    Norm: 9.3274 | Hata: 3.500e-159
+
+  [8] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{3}{(-2)^n n \binom{2n}{n}} = -\ln 2
+    Katsayılar: m = [3, 0, 0, 0, 1]
+    Norm: 3.1623 | Hata: 1.000e-160
+
+  [9] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{9n - 4}{(-2)^n n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -4, 9, 1, 0]
+    Norm: 9.8995 | Hata: 3.400e-159
+
+  [10] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{2}{(-2)^n n^{2} \binom{2n}{n}} = -\ln^2 2
+    Katsayılar: m = [2, 0, 0, 0, 1]
+    Norm: 2.2361 | Hata: 1.000e-160
+
+  [11] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{5n - 1}{(-1)^n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -1, 5, 1, 0]
+    Norm: 5.1962 | Hata: 2.700e-159
+
+  [12] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{5n - 2}{(-1)^n n \binom{2n}{n}} = -1
+    Katsayılar: m = [0, -2, 5, 1, 0]
+    Norm: 5.4772 | Hata: 8.000e-160
+
+  [13] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{5}{(-1)^n n^{3} \binom{2n}{n}} = -2\zeta(3)
+    Katsayılar: m = [5, 0, 0, 0, 2]
+    Norm: 5.3852 | Hata: 5.074e-102
+
+  [14] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{7n - 4}{2^n n \binom{2n}{n}} = 1
+    Katsayılar: m = [-4, 7, 0, -1, 0]
+    Norm: 8.1240 | Hata: 5.000e-159
+
+  [15] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{15n - 8}{4^n n \binom{2n}{n}} = 1
+    Katsayılar: m = [-8, 15, 0, -1, 0]
+    Norm: 17.0294 | Hata: 4.000e-159
+
+  [16] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{31n - 16}{8^n n \binom{2n}{n}} = 1
+    Katsayılar: m = [-16, 31, 0, -1, 0]
+    Norm: 34.8999 | Hata: 0.000e0
+
+  [17] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{63n - 32}{16^n n \binom{2n}{n}} = 1
+    Katsayılar: m = [-32, 63, 0, -1, 0]
+    Norm: 70.6682 | Hata: 0.000e0
+
+  [18] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{127n - 64}{32^n n \binom{2n}{n}} = 1
+    Katsayılar: m = [-64, 127, 0, -1, 0]
+    Norm: 142.2181 | Hata: 2.000e-159
+
+  [19] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{56n^{2} - 53n + 12}{(-4)^n n \binom{3n}{n}} = -1
+    Katsayılar: m = [12, -53, 56, 1, 0]
+    Norm: 78.0385 | Hata: 2.200e-159
+
+  [20] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{31n^{2} - 25n + 6}{(-1)^n n \binom{3n}{n}} = -2
+    Katsayılar: m = [6, -25, 31, 2, 0]
+    Norm: 40.3237 | Hata: 1.700e-158
+
+  [21] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{31n^{3} + 10n^{2} - 17n + 6}{(-1)^n n \binom{3n}{n}} = -4
+    Katsayılar: m = [6, -17, 10, 31, 4, 0]
+    Norm: 37.4433 | Hata: 1.700e-158
+
+  [22] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{34n^{2} - 31n + 6}{(-1)^n n \binom{4n}{2n}} = -1
+    Katsayılar: m = [6, -31, 34, 1, 0]
+    Norm: 46.4112 | Hata: 1.060e-158
+
+  [23] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{34n^{3} + 5n^{2} - 24n + 6}{(-1)^n n \binom{4n}{2n}} = -2
+    Katsayılar: m = [6, -24, 5, 34, 2, 0]
+    Norm: 42.3910 | Hata: 1.660e-158
+
+  [24] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{25n^{2} - 28n + 6}{2^n n \binom{3n}{n}} = 1
+    Katsayılar: m = [6, -28, 25, -1, 0]
+    Norm: 38.0263 | Hata: 6.000e-159
+
+  [25] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{25n^{2} + 22n - 6}{2^n n \binom{3n}{n}} = 5 + \pi
+    Katsayılar: m = [-6, 22, 25, -5, -1]
+    Norm: 34.2199 | Hata: 1.000e-158
+
+  [26] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{25n^{3} - 5n^{2} - 23n + 6}{2^n n \binom{3n}{n}} = 2
+    Katsayılar: m = [6, -23, -5, 25, -2, 0]
+    Norm: 34.9142 | Hata: 1.000e-158
+
+  [27] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{25n^{2} - 3n - 5}{2^n n \binom{3n}{n}} = 3 + \ln 2
+    Katsayılar: m = [-5, -3, 25, -3, -1]
+    Norm: 25.8650 | Hata: 2.300e-159
+
+  [28] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{25n^{3} - 5n^{2} + 2n - 5}{2^n n \binom{3n}{n}} = 4 + \ln 2
+    Katsayılar: m = [-5, 2, -5, 25, -4, -1]
+    Norm: 26.3818 | Hata: 1.700e-159
+
+  [29] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{50n^{2} - 81n + 23}{2^n n \binom{3n}{n}} = -\ln 2
+    Katsayılar: m = [23, -81, 50, 0, 1]
+    Norm: 97.9337 | Hata: 1.930e-158
+
+  [30] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{62n^{2} - 65n + 12}{2^n n \binom{4n}{2n}} = 1
+    Katsayılar: m = [12, -65, 62, -1, 0]
+    Norm: 90.6311 | Hata: 0.000e0
+
+  [31] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{50n - 12}{2^n n \binom{3n}{n}} = 4 + \pi
+    Katsayılar: m = [0, -12, 50, -4, -1]
+    Norm: 51.5849 | Hata: 1.600e-158
+
+  [32] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{25n - 11}{2^n n \binom{3n}{n}} = 2 + \ln 2
+    Katsayılar: m = [0, -11, 25, -2, -1]
+    Norm: 27.4044 | Hata: 8.300e-159
+
+  [33] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{52n^{2} - 55n + 12}{4^n n \binom{3n}{n}} = 1
+    Katsayılar: m = [12, -55, 52, -1, 0]
+    Norm: 76.6420 | Hata: 0.000e0
+
+  [34] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{65n^{2} - 63n + 16}{(-4)^n n \binom{2n}{n}^2} = -1
+    Katsayılar: m = [16, -63, 65, 1, 0]
+    Norm: 91.9293 | Hata: 8.000e-160
+
+  [35] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{65n^{2} - 64n + 16}{(-4)^n n^{2} \binom{2n}{n}^2} = -1
+    Katsayılar: m = [16, -64, 65, 1, 0]
+    Norm: 92.6175 | Hata: 1.500e-159
+
+  [36] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{63n^{2} - 65n + 16}{4^n n \binom{2n}{n}^2} = 1
+    Katsayılar: m = [16, -65, 63, -1, 0]
+    Norm: 91.9293 | Hata: 3.000e-159
+
+  [37] 📌 SAF SERİ ÖZDEŞLİĞİ:
+    LaTeX: \sum_{n=1}^\infty \frac{63n^{2} - 64n + 16}{4^n n^{2} \binom{2n}{n}^2} = 1
+    Katsayılar: m = [16, -64, 63, -1, 0]
+    Norm: 91.2250 | Hata: 1.000e-159
+
