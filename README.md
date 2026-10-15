@@ -6,11 +6,11 @@
 [![License](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg?style=flat-square)](LICENSE)
 [![Precision](https://img.shields.io/badge/Precision-200_Decimals-brightgreen.svg?style=flat-square)]()
 [![Lattice](https://img.shields.io/badge/LLL_Scale-10%5E120-purple.svg?style=flat-square)]()
-[![Tests](https://img.shields.io/badge/Tests-12%2F12_Passing-success.svg?style=flat-square)]()
+[![Tests](https://img.shields.io/badge/Tests-13%2F13_Passing-success.svg?style=flat-square)]()
 
 **High-Precision Integer Relation & Hypergeometric Constant Discovery Engine in Pure Rust.**
 
-*Reverse-engineering transcendental constants ($\zeta(7)$, high-weight binomial hybrids) at 200-digit precision in ~5 seconds using multi-dimensional LLL lattice reduction and automated Wilf-Zeilberger proof certificates.*
+*Reverse-engineering transcendental constants ($\zeta(7)$, Ramanujan/Guillera $1/\pi^k$ series, high-weight binomial hybrids) at 200-digit precision in seconds using multi-dimensional LLL lattice reduction and automated Wilf-Zeilberger proof certificates.*
 
 [Features](#-key-features) •
 [Discovered Theorems](#-discovered-theorems--breakthroughs) •
@@ -71,6 +71,30 @@ $$\sum_{n=1}^\infty \frac{1}{2^n \binom{3n}{n}} \left[ \frac{192}{n^4} + \frac{9
 $$\sum_{n=1}^\infty \frac{(-1)^n}{\binom{2n}{n}} \left[ \frac{9}{n^5} - \frac{5H_n^{(2)}}{n^3} \right] = -2\zeta(5)$$
 
 - **Lattice Residual:** $1.3 \times 10^{-178}$
+
+### 6. Guillera-5 Super-Binomial Series for $1/\pi^2$ ($a = -2^{20} = -1048576$)
+$$\sum_{n=0}^\infty \frac{\binom{2n}{n}^5}{(-1048576)^n} \left( 820 n^2 + 180 n + 13 \right) = \frac{128}{\pi^2}$$
+
+- **Lattice Residual:** $4.00 \times 10^{-198}$
+- **Euclidean Norm:** $\|v\|_2 = 849.33$
+
+### 7. Guillera Fast Hypergeometric Series for $1/\pi^2$ ($a = -4096$)
+$$\sum_{n=0}^\infty \frac{\binom{2n}{n}^5}{(-4096)^n} \left( 20 n^2 + 8 n + 1 \right) = \frac{8}{\pi^2}$$
+
+- **Lattice Residual:** $2.30 \times 10^{-199}$
+- **Euclidean Norm:** $\|v\|_2 = 23.00$
+
+### 8. Ramanujan Modular Series for $\sqrt{2}/\pi$ and $1/\pi$
+$$\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{(-512)^n} \left( 6n + 1 \right) = \frac{2\sqrt{2}}{\pi} \quad (\text{Residual } 1.30 \times 10^{-199})$$
+
+$$\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{256^n} \left( 6n + 1 \right) = \frac{4}{\pi} \quad (\text{Residual } 2.00 \times 10^{-199})$$
+
+$$\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{4096^n} \left( 42n + 5 \right) = \frac{16}{\pi} \quad (\text{Residual } 9.00 \times 10^{-199})$$
+
+### 9. Cubic-Central Binomial Hybrid Series for $\sqrt{3}/\pi$ ($a = 216$)
+$$\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 6n + 1 \right) = \frac{3\sqrt{3}}{\pi} \quad (\text{Residual } 1.51 \times 10^{-137})$$
+
+$$\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 18n^3 - 27n^2 - n \right) = \frac{6\sqrt{3}}{\pi} \quad (\text{Residual } 9.22 \times 10^{-132})$$
 
 ---
 
@@ -149,15 +173,22 @@ cd hyper-lll
 cargo build --release
 ```
 
-### Run Discovery Scan
-Run the 200-digit LLL discovery engine across Weight-7 ($\zeta(7)$), Cubic Binomials, and Odd Denominators:
+### Run Ramanujan & Guillera Series Discovery (Default)
+Run the 200-digit Super-Binomial & Pure Polynomial discovery engine across all kernels $B_1 \dots B_7$ and modular bases:
 ```bash
 cargo run --release
 ```
-Results will be output to console and saved in `discovered_novel_identities.txt`.
+Results will be output to console and saved in [`discovered_guillera_series.txt`](discovered_guillera_series.txt).
+
+### Run Weight-7 ($\zeta(7)$) & Cubic Binomial Hybrid Scan
+Run the multi-harmonic high-weight discovery scan:
+```bash
+cargo run --release -- --novel
+```
+Results will be output to console and saved in [`discovered_novel_identities.txt`](discovered_novel_identities.txt).
 
 ### Run Automated Formal Proofs (WZ Engine)
-Verify all discovered theorems symbolically and generate a publication-ready LaTeX paper:
+Verify discovered theorems symbolically and generate a publication-ready LaTeX paper:
 ```bash
 cargo run --release -- --prove
 ```
@@ -169,7 +200,7 @@ This produces:
 ```bash
 cargo test
 ```
-All 12 unit tests verify CVZ convergence to independent series, 2D polynomial ring algebra, and WZ divergence vanishing.
+All 13 unit tests verify CVZ convergence to independent series, $\sqrt{2}$ precision, 2D polynomial ring algebra, and WZ divergence vanishing.
 
 ---
 
