@@ -3,19 +3,321 @@ mod kernels;
 mod lll;
 mod proof;
 
-use constants::{NovelConstantPool, TargetConstant, PRECISION};
-use kernels::{
-    compute_cubic_bases, compute_odd_denom_bases, compute_w7_bases,
-    format_cubic_w4_lhs_latex, format_cubic_w5_lhs_latex, format_odd_denom_lhs_latex,
-    format_w7_lhs_latex, HarmonicTables,
+use constants::{
+    NovelConstantPool, RamanujanGuilleraPool, TargetConstant, PRECISION,
 };
-use lll::{find_all_integer_relations_generic, IntegerRelation};
+use kernels::{
+    compute_cubic_bases, compute_odd_denom_bases, compute_super_binomial_bases, compute_w7_bases,
+    format_cubic_w4_lhs_latex, format_cubic_w5_lhs_latex, format_odd_denom_lhs_latex,
+    format_polynomial_latex, format_polynomial_text, format_w7_lhs_latex,
+    get_bases_for_kernel, HarmonicTables, SuperBinomialType,
+};
+use lll::{
+    find_all_integer_relations_generic, find_all_integer_relations_guillera, IntegerRelation,
+};
 use rayon::prelude::*;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::Write;
 use std::time::Instant;
 use dashu::float::DBig;
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  RAMANUJAN-GUILLERA KEŞİF YAPILARI VE FORMÜL OLUŞTURUCULAR
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Debug)]
+pub struct GuilleraDiscovery {
+    pub kernel: SuperBinomialType,
+    pub a: i64,
+    pub poly: [i64; 4],
+    pub const_coeffs: Vec<(TargetConstant, i64)>,
+    pub formula_text: String,
+    pub formula_latex: String,
+    pub residual_str: String,
+    pub residual_f64: f64,
+    pub norm: f64,
+}
+
+fn build_guillera_formula(
+    kernel: SuperBinomialType,
+    a: i64,
+    poly: [i64; 4],
+    const_coeffs: &[(TargetConstant, i64)],
+) -> (String, String) {
+    let poly_txt = format_polynomial_text(&poly);
+    let poly_ltx = format_polynomial_latex(&poly);
+
+    let k_code = kernel.code();
+    let k_latex = kernel.latex();
+
+    // RHS Text
+    let mut rhs_txt_parts = Vec::new();
+    for (tc, k) in const_coeffs {
+        let k = *k;
+        if k != 0 {
+            let sign = if k < 0 {
+                if rhs_txt_parts.is_empty() { "-" } else { " - " }
+            } else if rhs_txt_parts.is_empty() {
+                ""
+            } else {
+                " + "
+            };
+            let abs_k = k.abs();
+            let term = if tc.name.starts_with("1/") {
+                let denom = &tc.name[2..];
+                if abs_k == 1 {
+                    format!("1 / {denom}")
+                } else {
+                    format!("{abs_k} / {denom}")
+                }
+            } else if abs_k == 1 {
+                tc.name.to_string()
+            } else {
+                format!("{abs_k}*{}", tc.name)
+            };
+            rhs_txt_parts.push(format!("{sign}{term}"));
+        }
+    }
+    let rhs_txt = if rhs_txt_parts.is_empty() { "0".to_string() } else { rhs_txt_parts.join("") };
+
+    // RHS LaTeX
+    let mut rhs_ltx_parts = Vec::new();
+    for (tc, k) in const_coeffs {
+        let k = *k;
+        if k != 0 {
+            let sign = if k < 0 {
+                if rhs_ltx_parts.is_empty() { "-" } else { " - " }
+            } else if rhs_ltx_parts.is_empty() {
+                ""
+            } else {
+                " + "
+            };
+            let abs_k = k.abs();
+            // Handle fractions nicely: e.g. \frac{1}{\pi} with k => \frac{k}{\pi}, \frac{\sqrt{2}}{\pi} => \frac{k\sqrt{2}}{\pi}
+            let term = if tc.latex.starts_with("\\frac{1}{") && abs_k != 1 {
+                tc.latex.replacen("\\frac{1}{", &format!("\\frac{{{abs_k}}}{{"), 1)
+            } else if tc.latex.starts_with("\\frac{\\sqrt{") && abs_k != 1 {
+                tc.latex.replacen("\\frac{\\sqrt{", &format!("\\frac{{{abs_k}\\sqrt{{"), 1)
+            } else if abs_k == 1 {
+                tc.latex.to_string()
+            } else {
+                format!("{abs_k} {}", tc.latex)
+            };
+            rhs_ltx_parts.push(format!("{sign}{term}"));
+        }
+    }
+    let rhs_ltx = if rhs_ltx_parts.is_empty() { "0".to_string() } else { rhs_ltx_parts.join("") };
+
+    let a_txt = if a < 0 { format!("({a})^n") } else { format!("{a}^n") };
+    let formula_text = format!(
+        "sum_{{n=0}}^inf ({k_code}(n) / {a_txt}) * ({poly_txt}) = {rhs_txt}"
+    );
+
+    let a_str = if a < 0 { format!("({a})^n") } else { format!("{a}^n") };
+    let formula_latex = format!(
+        "\\sum_{{n=0}}^\\infty \\frac{{{k_latex}}}{{{a_str}}} \\left( {poly_ltx} \\right) = {rhs_ltx}"
+    );
+
+    (formula_text, formula_latex)
+}
+
+fn scan_kernel_base(
+    kernel: SuperBinomialType,
+    a: i64,
+    pool: &RamanujanGuilleraPool,
+) -> Vec<GuilleraDiscovery> {
+    let mut discoveries = Vec::new();
+    let bases = match compute_super_binomial_bases(kernel, a, PRECISION, 450) {
+        Some(b) => b,
+        None => return discoveries,
+    };
+
+    let [s0, s1, s2, s3] = bases;
+
+    let mut check_targets = |targets: &[TargetConstant]| {
+        let mut x = Vec::with_capacity(4 + targets.len());
+        x.push(s0.clone());
+        x.push(s1.clone());
+        x.push(s2.clone());
+        x.push(s3.clone());
+        for tc in targets {
+            x.push(tc.value.clone());
+        }
+
+        let rels = find_all_integer_relations_guillera(&x);
+        for rel in rels {
+            let m = &rel.m;
+            let mut c_series = [m[0], m[1], m[2], m[3]];
+            let mut c_consts: Vec<i64> = m[4..].to_vec();
+
+            if c_series.iter().all(|&v| v == 0) {
+                continue;
+            }
+            if c_consts.iter().all(|&v| v == 0) {
+                continue;
+            }
+
+            let leading = if c_series[3] != 0 {
+                c_series[3]
+            } else if c_series[2] != 0 {
+                c_series[2]
+            } else if c_series[1] != 0 {
+                c_series[1]
+            } else {
+                c_series[0]
+            };
+
+            if leading < 0 {
+                for v in &mut c_series {
+                    *v = -*v;
+                }
+                for v in &mut c_consts {
+                    *v = -*v;
+                }
+            }
+
+            let k_consts: Vec<(TargetConstant, i64)> = targets
+                .iter()
+                .zip(c_consts.iter())
+                .filter(|(_, c)| **c != 0)
+                .map(|(tc, c)| (tc.clone(), -*c))
+                .collect();
+
+            if k_consts.is_empty() {
+                continue;
+            }
+
+            let (formula_text, formula_latex) =
+                build_guillera_formula(kernel, a, c_series, &k_consts);
+
+            let residual_str = format!("{:.2e}", rel.residual_f64);
+
+            discoveries.push(GuilleraDiscovery {
+                kernel,
+                a,
+                poly: c_series,
+                const_coeffs: k_consts,
+                formula_text,
+                formula_latex,
+                residual_str,
+                residual_f64: rel.residual_f64,
+                norm: rel.norm,
+            });
+        }
+    };
+
+    // 1. Tekil hedefler
+    for tc in &pool.targets {
+        check_targets(std::slice::from_ref(tc));
+    }
+
+    // 2. Çoklu hedef grupları
+    check_targets(&pool.pi_powers);
+    check_targets(&pool.radicals);
+    check_targets(&pool.catalan_zeta);
+
+    discoveries
+}
+
+pub fn run_guillera_discovery_scan() {
+    let t_start = Instant::now();
+
+    println!("================================================================================");
+    println!("  RAMANUJAN / GUILLERA SÜPER-BİNOM VE SAF POLİNOM ARAMA MOTORU");
+    println!("  Hassasiyet: 450 Adım dashu (200 Basamak) | LLL Ölçeği: 10^130 | Eşik: < 10^-110");
+    println!("================================================================================");
+
+    print!("[1/3] 200-Basamak Rasyonel / Ters Transandantal Sabit Havuzu üretiliyor... ");
+    let t_pool = Instant::now();
+    let pool = RamanujanGuilleraPool::new();
+    println!("Tamamlandı ({:.2?})", t_pool.elapsed());
+
+    let mut tasks = Vec::new();
+    for &kernel in &SuperBinomialType::ALL {
+        let bases = get_bases_for_kernel(kernel);
+        for a in bases {
+            tasks.push((kernel, a));
+        }
+    }
+
+    println!(
+        "[2/3] Süper-Binom Çekirdekleri (B1..B7) ve {} Geometrik Taban Rayon ile taranıyor...",
+        tasks.len()
+    );
+
+    let raw_results: Vec<Vec<GuilleraDiscovery>> = tasks
+        .par_iter()
+        .map(|&(kernel, a)| scan_kernel_base(kernel, a, &pool))
+        .collect();
+
+    let mut seen = HashSet::new();
+    let mut all_discoveries = Vec::new();
+
+    for list in raw_results {
+        for id in list {
+            let sig = format!(
+                "{}_{}_{:?}_{:?}",
+                id.kernel.code(),
+                id.a,
+                id.poly,
+                id.const_coeffs.iter().map(|(c, k)| (c.name, *k)).collect::<Vec<_>>()
+            );
+            if seen.insert(sig) {
+                all_discoveries.push(id);
+            }
+        }
+    }
+
+    all_discoveries.sort_by(|a, b| {
+        a.norm
+            .partial_cmp(&b.norm)
+            .unwrap_or(std::cmp::Ordering::Equal)
+            .then_with(|| {
+                a.residual_f64
+                    .partial_cmp(&b.residual_f64)
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            })
+    });
+
+    println!("[3/3] Tarama tamamlandı. Bulunan bağıntılar listeleniyor:\n");
+
+    if all_discoveries.is_empty() {
+        println!("(Belirtilen aralıkta ve kalibrasyonda yeni bağıntı bulunamadı)");
+    } else {
+        for id in &all_discoveries {
+            println!("🔥 [RAMANUJAN-GUILLERA KEŞFİ]");
+            println!("Çekirdek: {} | Taban: a = {}", id.kernel.description(), id.a);
+            println!("Formül: {}", id.formula_text);
+            println!("Hata: {} | Norm: {:.4}\n", id.residual_str, id.norm);
+        }
+    }
+
+    let filename = "discovered_guillera_series.txt";
+    let mut file = File::create(filename).expect("Sonuç dosyası oluşturulamadı");
+
+    writeln!(file, "================================================================================").unwrap();
+    writeln!(file, "RAMANUJAN-GUILLERA SUPER-BINOMIAL & POLYNOMIAL IDENTITIES").unwrap();
+    writeln!(file, "Discovered by hyper-lll (200-digit precision, LLL scale 10^130, threshold 10^-110)").unwrap();
+    writeln!(file, "Total Identities Discovered: {}", all_discoveries.len()).unwrap();
+    writeln!(file, "================================================================================\n").unwrap();
+
+    for (i, id) in all_discoveries.iter().enumerate() {
+        writeln!(file, "% ─────────────────────────────────────────────────────────────────────────────").unwrap();
+        writeln!(file, "% [{}] Çekirdek: {}, Taban: a = {}", i + 1, id.kernel.description(), id.a).unwrap();
+        writeln!(file, "% Hata: {} | Norm: {:.4}", id.residual_str, id.norm).unwrap();
+        writeln!(file, "\\begin{{equation}}").unwrap();
+        writeln!(file, "{}", id.formula_latex).unwrap();
+        writeln!(file, "\\end{{equation}}\n").unwrap();
+    }
+
+    println!("Sonuçlar '{}' kütüğüne kaydedildi.", filename);
+    println!("Toplam Süre: {:.2?}", t_start.elapsed());
+}
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  ÖNCEKİ ALANLAR (AĞIRLIK-7, KÜBİK BİNOM, TEKİL PAYDA) -- NOVEL MODU
+// ════════════════════════════════════════════════════════════════════════════════
 
 #[derive(Clone, Debug)]
 pub struct NovelIdentity {
@@ -73,12 +375,10 @@ fn process_novel_relations(
         let c_series = &m[0..num_series_bases];
         let c_consts = &m[num_series_bases..];
 
-        // Filter: must have at least one series term
         if c_series.iter().all(|&v| v == 0) {
             continue;
         }
 
-        // Filter: must have at least one constant term
         if c_consts.iter().all(|&v| v == 0) {
             continue;
         }
@@ -106,48 +406,26 @@ fn process_novel_relations(
     results
 }
 
-fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    if args.iter().any(|arg| arg == "--prove") {
-        proof::run_formal_proof_verification();
-        return;
-    }
-
-    // 1. Rayon ThreadPool: 7 iş parçacığı
-    rayon::ThreadPoolBuilder::new()
-        .num_threads(7)
-        .build_global()
-        .unwrap();
+pub fn run_novel_areas_scan() {
+    let t_start = Instant::now();
 
     println!("================================================================================");
     println!("  KEŞFEDİLMEMİŞ ALAN TARAMASI: AĞIRLIK-7 (ζ(7)), KÜBİK BİNOM VE TEKİL PAYDALAR");
     println!("  Hassasiyet: 550 Adım dashu (200 Basamak) | LLL Ölçeği: 10^120 | Eşik: < 10^-100");
     println!("================================================================================");
 
-    let t_start = Instant::now();
-
-    // 2. Precompute Harmonic Tables up to 1650 steps
-    print!("[1/4] Tam harmonik tabloları (H_n, H_{{2n}}, H_{{3n}}, H_n^(2..5), O_n, O_n^(2)) 1650 adım hesaplanıyor... ");
+    print!("[1/4] Tam harmonik tabloları 1650 adım hesaplanıyor... ");
     let t_harm = Instant::now();
     let harmonics = HarmonicTables::build(1650, PRECISION);
     println!("Tamamlandı ({:.2?})", t_harm.elapsed());
 
-    // 3. Constants Pools
-    print!("[2/4] 200-Basamak Dinamik Sabit Havuzları (CVZ N=270, ζ(7), β(4), β(6)) üretiliyor... ");
+    print!("[2/4] 200-Basamak Dinamik Sabit Havuzları üretiliyor... ");
     let t_consts = Instant::now();
     let cpool = NovelConstantPool::new();
     println!("Tamamlandı ({:.2?})", t_consts.elapsed());
 
-    println!("[3/4] 3 Bakir Araştırma Alanı taranıyor:");
-    println!("      - Alan A: Ağırlık-7 (ζ(7)) 16-Boyutlu LLL (4 çekirdek)");
-    println!("      - Alan B: Kübik Binom (3n n) Ağırlık-4 & 5 12-Boyutlu LLL (2 çekirdek x 2 ağırlık)");
-    println!("      - Alan C: Tekil Paydalı (2n+1)^k ve β(4) 9-Boyutlu LLL (16 çekirdek)");
+    println!("[3/4] 3 Bakir Araştırma Alanı taranıyor...");
 
-    let t_scan = Instant::now();
-
-    // ════════════════════════════════════════════════════════════════════════════
-    //  TARAMA 1: ALAN A (AĞIRLIK-7 / ZETA 7 UZAYI - 16D KAFES)
-    // ════════════════════════════════════════════════════════════════════════════
     let a_w7 = [-2, -1, 1, 2];
     let results_w7: Vec<Vec<NovelIdentity>> = a_w7
         .par_iter()
@@ -181,9 +459,6 @@ fn main() {
         })
         .collect();
 
-    // ════════════════════════════════════════════════════════════════════════════
-    //  TARAMA 2: ALAN B (KÜBİK BİNOM MERDİVENİ W4 & W5 - 12D KAFES)
-    // ════════════════════════════════════════════════════════════════════════════
     let a_cubic = [2, -2];
     let results_cubic: Vec<Vec<NovelIdentity>> = a_cubic
         .par_iter()
@@ -191,7 +466,6 @@ fn main() {
             let mut local = Vec::new();
             let kb = compute_cubic_bases(a, 550, &harmonics);
 
-            // W4 (12D: 6 bases + 6 constants)
             let mut vec_w4: Vec<DBig> = Vec::with_capacity(12);
             for b in &kb.w4 {
                 vec_w4.push(b.clone());
@@ -212,7 +486,6 @@ fn main() {
             );
             local.extend(ids_w4);
 
-            // W5 (12D: 7 bases + 5 constants)
             let mut vec_w5: Vec<DBig> = Vec::with_capacity(12);
             for b in &kb.w5 {
                 vec_w5.push(b.clone());
@@ -237,9 +510,6 @@ fn main() {
         })
         .collect();
 
-    // ════════════════════════════════════════════════════════════════════════════
-    //  TARAMA 3: ALAN C (TEKİL PAYDALI (2n+1)^k VE BETA(4) - 9D KAFES)
-    // ════════════════════════════════════════════════════════════════════════════
     let odd_params: Vec<(i64, usize)> = {
         let a_vals = [-4, -1, 1, 4];
         let k_vals = [1, 2, 3, 4];
@@ -265,7 +535,7 @@ fn main() {
             }
 
             let rels = find_all_integer_relations_generic(&vec_odd);
-            let desc = format!("OddDenom a={a} k={k}");
+            let desc = format!("OddDenom (2n+1)^{k} a={a}");
             process_novel_relations(
                 "TEKİL PAYDA",
                 desc,
@@ -273,140 +543,32 @@ fn main() {
                 &cpool.beta,
                 rels,
                 |c| format_odd_denom_lhs_latex(a, k, c),
-                |_c_series, k_consts| {
-                    if k_consts[0] != 0 {
-                        "💎 [YENİ DİRİCHLET BETA(4) KEŞFİ]".to_string()
-                    } else {
-                        "💎 [YENİ TEKİL PAYDALI MELEZ]".to_string()
-                    }
-                },
+                |_c_series, _k_consts| "💎 [YENİ TEKİL PAYDALI ÖZDEŞLİK]".to_string(),
             )
         })
         .collect();
 
-    println!("Tüm LLL kafes analizleri tamamlandı ({:.2?})\n", t_scan.elapsed());
-
-    // Deduplication
     let mut all_identities = Vec::new();
-    let mut seen_formulas = HashSet::new();
-
-    for batch in results_w7.into_iter().chain(results_cubic).chain(results_odd) {
-        for id in batch {
-            if !seen_formulas.contains(&id.latex_formula) {
-                seen_formulas.insert(id.latex_formula.clone());
-                all_identities.push(id);
-            }
-        }
+    for sub in results_w7.into_iter().chain(results_cubic).chain(results_odd) {
+        all_identities.extend(sub);
     }
 
     all_identities.sort_by(|a, b| a.norm.partial_cmp(&b.norm).unwrap());
 
-    let w7_ids: Vec<_> = all_identities.iter().filter(|id| id.area == "AĞIRLIK-7").cloned().collect();
-    let cubic_w4_ids: Vec<_> = all_identities.iter().filter(|id| id.area == "KÜBİK BİNOM W4").cloned().collect();
-    let cubic_w5_ids: Vec<_> = all_identities.iter().filter(|id| id.area == "KÜBİK BİNOM W5").cloned().collect();
-    let odd_ids: Vec<_> = all_identities.iter().filter(|id| id.area == "TEKİL PAYDA").cloned().collect();
+    println!("[4/4] Alan taraması tamamlandı. {} adet özdeşlik bulundu.", all_identities.len());
+    println!("Toplam Süre: {:.2?}", t_start.elapsed());
+}
 
-    // Print to Console
-    println!("════════════════════════════════════════════════════════════════════════════════");
-    println!("  🏆 [ALAN A: AĞIRLIK-7 / ZETA(7) VE YÜKSEK MERTEBELİ HARMONİK KEŞİFLER]");
-    println!("════════════════════════════════════════════════════════════════════════════════");
-    if w7_ids.is_empty() {
-        println!("  (Ağırlık-7 / ζ(7) kafesinde lineer bağıntı bulunamadı)");
-    } else {
-        println!("  >>> TOPLAM {} ADET AĞIRLIK-7 ÖZDEŞLİĞİ KEŞFEDİLDİ! <<<\n", w7_ids.len());
-        for (i, id) in w7_ids.iter().enumerate() {
-            println!("  [{}] {}:", i + 1, id.category_tag);
-            println!("    LaTeX: {}", id.latex_formula);
-            println!("    Seri Katsayıları: {:?}", id.series_coeffs);
-            println!("    Sabit Katsayıları: {:?}", id.const_coeffs);
-            println!("    Norm: {:.4} | Hata: {}", id.norm, id.error_str);
-            println!("    Çekirdek: {}\n", id.kernel_desc);
-        }
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.iter().any(|arg| arg == "--prove") {
+        proof::run_formal_proof_verification();
+        return;
+    }
+    if args.iter().any(|arg| arg == "--novel") {
+        run_novel_areas_scan();
+        return;
     }
 
-    println!("════════════════════════════════════════════════════════════════════════════════");
-    println!("  🌟 [ALAN B: KÜBİK BİNOM (3n n) MERDİVENİ (AĞIRLIK-4 VE AĞIRLIK-5)]");
-    println!("════════════════════════════════════════════════════════════════════════════════");
-    let total_cubic = cubic_w4_ids.len() + cubic_w5_ids.len();
-    if total_cubic == 0 {
-        println!("  (Kübik Binom merdiveninde bağıntı bulunamadı)");
-    } else {
-        println!("  >>> TOPLAM {} ADET KÜBİK BİNOM MELEZİ KEŞFEDİLDİ! <<<\n", total_cubic);
-        for (i, id) in cubic_w4_ids.iter().chain(cubic_w5_ids.iter()).enumerate() {
-            println!("  [{}] {}:", i + 1, id.category_tag);
-            println!("    LaTeX: {}", id.latex_formula);
-            println!("    Seri Katsayıları: {:?}", id.series_coeffs);
-            println!("    Sabit Katsayıları: {:?}", id.const_coeffs);
-            println!("    Norm: {:.4} | Hata: {}", id.norm, id.error_str);
-            println!("    Çekirdek: {}\n", id.kernel_desc);
-        }
-    }
-
-    println!("════════════════════════════════════════════════════════════════════════════════");
-    println!("  💎 [ALAN C: TEKİL PAYDALI ÇEKİRDEKLER ((2n+1)^k) VE DİRİCHLET BETA(4)]");
-    println!("════════════════════════════════════════════════════════════════════════════════");
-    if odd_ids.is_empty() {
-        println!("  (Tekil paydalı çekirdeklerde bağıntı bulunamadı)");
-    } else {
-        println!("  >>> TOPLAM {} ADET TEKİL PAYDALI ÖZDEŞLİK KEŞFEDİLDİ! <<<\n", odd_ids.len());
-        for (i, id) in odd_ids.iter().enumerate() {
-            println!("  [{}] {}:", i + 1, id.category_tag);
-            println!("    LaTeX: {}", id.latex_formula);
-            println!("    Seri Katsayıları: {:?}", id.series_coeffs);
-            println!("    Sabit Katsayıları: {:?}", id.const_coeffs);
-            println!("    Norm: {:.4} | Hata: {}", id.norm, id.error_str);
-            println!("    Çekirdek: {}\n", id.kernel_desc);
-        }
-    }
-
-    // Save to discovered_novel_identities.txt
-    let filename = "discovered_novel_identities.txt";
-    let mut file = File::create(filename).expect("Sonuç dosyası oluşturulamadı");
-
-    writeln!(file, "================================================================================").unwrap();
-    writeln!(file, "  KEŞFEDİLMEMİŞ ALAN TARAMA RAPORU (AĞIRLIK-7, KÜBİK BİNOM, TEKİL PAYDALAR)").unwrap();
-    writeln!(file, "  Hassasiyet: 550 Adım dashu (200 Basamak) | LLL Ölçeği: 10^120 | Eşik: < 10^-100").unwrap();
-    writeln!(file, "================================================================================\n").unwrap();
-
-    writeln!(file, "════════════════════════════════════════════════════════════════════════════════").unwrap();
-    writeln!(file, "  🏆 [ALAN A: AĞIRLIK-7 / ZETA(7) VE YÜKSEK MERTEBELİ HARMONİK KEŞİFLER]").unwrap();
-    writeln!(file, "════════════════════════════════════════════════════════════════════════════════").unwrap();
-    writeln!(file, "  >>> TOPLAM {} ADET ONAYLANMIŞ ÖZDEŞLİK KEŞFEDİLDİ! <<<\n", w7_ids.len()).unwrap();
-    for (i, id) in w7_ids.iter().enumerate() {
-        writeln!(file, "  [{}] {}:", i + 1, id.category_tag).unwrap();
-        writeln!(file, "    LaTeX: {}", id.latex_formula).unwrap();
-        writeln!(file, "    Seri Katsayıları: {:?}", id.series_coeffs).unwrap();
-        writeln!(file, "    Sabit Katsayıları: {:?}", id.const_coeffs).unwrap();
-        writeln!(file, "    Norm: {:.4} | Hata: {}", id.norm, id.error_str).unwrap();
-        writeln!(file, "    Çekirdek: {}\n", id.kernel_desc).unwrap();
-    }
-
-    writeln!(file, "════════════════════════════════════════════════════════════════════════════════").unwrap();
-    writeln!(file, "  🌟 [ALAN B: KÜBİK BİNOM (3n n) MERDİVENİ (AĞIRLIK-4 VE AĞIRLIK-5)]").unwrap();
-    writeln!(file, "════════════════════════════════════════════════════════════════════════════════").unwrap();
-    writeln!(file, "  >>> TOPLAM {} ADET ONAYLANMIŞ KÜBİK BİNOM MELEZİ KEŞFEDİLDİ! <<<\n", total_cubic).unwrap();
-    for (i, id) in cubic_w4_ids.iter().chain(cubic_w5_ids.iter()).enumerate() {
-        writeln!(file, "  [{}] {}:", i + 1, id.category_tag).unwrap();
-        writeln!(file, "    LaTeX: {}", id.latex_formula).unwrap();
-        writeln!(file, "    Seri Katsayıları: {:?}", id.series_coeffs).unwrap();
-        writeln!(file, "    Sabit Katsayıları: {:?}", id.const_coeffs).unwrap();
-        writeln!(file, "    Norm: {:.4} | Hata: {}", id.norm, id.error_str).unwrap();
-        writeln!(file, "    Çekirdek: {}\n", id.kernel_desc).unwrap();
-    }
-
-    writeln!(file, "════════════════════════════════════════════════════════════════════════════════").unwrap();
-    writeln!(file, "  💎 [ALAN C: TEKİL PAYDALI ÇEKİRDEKLER ((2n+1)^k) VE DİRİCHLET BETA(4)]").unwrap();
-    writeln!(file, "════════════════════════════════════════════════════════════════════════════════").unwrap();
-    writeln!(file, "  >>> TOPLAM {} ADET ONAYLANMIŞ TEKİL PAYDALI ÖZDEŞLİK KEŞFEDİLDİ! <<<\n", odd_ids.len()).unwrap();
-    for (i, id) in odd_ids.iter().enumerate() {
-        writeln!(file, "  [{}] {}:", i + 1, id.category_tag).unwrap();
-        writeln!(file, "    LaTeX: {}", id.latex_formula).unwrap();
-        writeln!(file, "    Seri Katsayıları: {:?}", id.series_coeffs).unwrap();
-        writeln!(file, "    Sabit Katsayıları: {:?}", id.const_coeffs).unwrap();
-        writeln!(file, "    Norm: {:.4} | Hata: {}", id.norm, id.error_str).unwrap();
-        writeln!(file, "    Çekirdek: {}\n", id.kernel_desc).unwrap();
-    }
-
-    println!("[4/4] Sonuçlar '{}' kütüğüne kaydedildi.", filename);
-    println!("Toplam Çalışma Süresi: {:.2?}", t_start.elapsed());
+    run_guillera_discovery_scan();
 }

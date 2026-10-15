@@ -1,0 +1,118 @@
+================================================================================
+RAMANUJAN-GUILLERA SUPER-BINOMIAL & POLYNOMIAL IDENTITIES
+Discovered by hyper-lll (200-digit precision, LLL scale 10^130, threshold 10^-110)
+Total Identities Discovered: 16
+================================================================================
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [1] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = -512
+% Hata: 1.30e-199 | Norm: 6.4031
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{(-512)^n} \left( 6 n + 1 \right) = \frac{2\sqrt{2}}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [2] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = 256
+% Hata: 5.00e-200 | Norm: 6.7823
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{256^n} \left( 6 n^3 - 3 n^2 \right) = \frac{1}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [3] Çekirdek: B_4(n) = binom(2n,n)^2 * binom(3n,n), Taban: a = 216
+% Hata: 1.51e-137 | Norm: 6.7823
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 6 n + 1 \right) = \frac{3\sqrt{3}}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [4] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = -512
+% Hata: 1.70e-199 | Norm: 7.2801
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{(-512)^n} \left( 6 n + 1 \right) = \frac{4}{\pi\sqrt{2}}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [5] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = 256
+% Hata: 2.00e-199 | Norm: 7.2801
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{256^n} \left( 6 n + 1 \right) = \frac{4}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [6] Çekirdek: B_4(n) = binom(2n,n)^2 * binom(3n,n), Taban: a = 216
+% Hata: 1.51e-137 | Norm: 10.8628
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 6 n + 1 \right) = \frac{9}{\pi\sqrt{3}}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [7] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = -512
+% Hata: 2.00e-199 | Norm: 19.8746
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{(-512)^n} \left( 18 n^3 + 3 n^2 - 6 n - 1 \right) = -\frac{5}{\pi\sqrt{2}}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [8] Çekirdek: B_6(n) = binom(2n,n)^2 * binom(4n,2n), Taban: a = -1024
+% Hata: 4.00e-199 | Norm: 21.7486
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{4n}{2n}}{(-1024)^n} \left( 20 n + 3 \right) = \frac{8}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [9] Çekirdek: B_3(n) = binom(2n,n)^5, Taban: a = -4096
+% Hata: 2.30e-199 | Norm: 23.0000
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^5}{(-4096)^n} \left( 20 n^2 + 8 n + 1 \right) = \frac{8}{\pi^2}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [10] Çekirdek: B_4(n) = binom(2n,n)^2 * binom(3n,n), Taban: a = 216
+% Hata: 9.22e-132 | Norm: 33.0151
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 18 n^3 - 27 n^2 - n \right) = \frac{6\sqrt{3}}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [11] Çekirdek: B_4(n) = binom(2n,n)^2 * binom(3n,n), Taban: a = 216
+% Hata: 9.22e-132 | Norm: 34.4093
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 18 n^3 - 27 n^2 - 7 n - 1 \right) = \frac{9}{\pi\sqrt{3}}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [12] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = -512
+% Hata: 4.00e-199 | Norm: 38.7943
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{(-512)^n} \left( 36 n^3 + 6 n^2 - 12 n - 2 \right) = -\frac{5\sqrt{2}}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [13] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = 4096
+% Hata: 9.00e-199 | Norm: 45.2217
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{4096^n} \left( 42 n + 5 \right) = \frac{16}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [14] Çekirdek: B_6(n) = binom(2n,n)^2 * binom(4n,2n), Taban: a = -1024
+% Hata: 1.00e-198 | Norm: 94.5145
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{4n}{2n}}{(-1024)^n} \left( 80 n^3 + 24 n^2 - 39 n - 6 \right) = -\frac{20}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [15] Çekirdek: B_1(n) = binom(2n,n)^3, Taban: a = 4096
+% Hata: 6.50e-199 | Norm: 130.8969
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{4096^n} \left( 126 n^3 - 3 n^2 - 33 n - 4 \right) = -\frac{12}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [16] Çekirdek: B_3(n) = binom(2n,n)^5, Taban: a = -1048576
+% Hata: 4.00e-198 | Norm: 849.3250
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^5}{(-1048576)^n} \left( 820 n^2 + 180 n + 13 \right) = \frac{128}{\pi^2}
+\end{equation}
+

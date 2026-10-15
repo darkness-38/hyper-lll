@@ -116,6 +116,16 @@ pub fn compute_sqrt3(prec: usize) -> DBig {
     x.with_precision(prec).value()
 }
 
+pub fn compute_sqrt2(prec: usize) -> DBig {
+    let two = DBig::from_parts(IBig::from(2), 0).with_precision(prec).value();
+    let mut x = DBig::from_str("1.41421356237309504880168872420969807856967187537694807317667973799").unwrap().with_precision(prec).value();
+    for _ in 0..14 {
+        let inv = &two / &x;
+        x = &(&x + &inv) / &two;
+    }
+    x.with_precision(prec).value()
+}
+
 pub fn compute_catalan(prec: usize) -> DBig {
     let one = DBig::ONE.with_precision(prec).value();
     cvz_accelerate(270, prec, |k| {
@@ -438,6 +448,97 @@ impl NovelConstantPool {
     }
 }
 
+pub struct RamanujanGuilleraPool {
+    pub targets: Vec<TargetConstant>,
+    pub pi_powers: Vec<TargetConstant>,
+    pub radicals: Vec<TargetConstant>,
+    pub catalan_zeta: Vec<TargetConstant>,
+}
+
+impl RamanujanGuilleraPool {
+    pub fn new() -> Self {
+        let prec = PRECISION;
+        let one = DBig::ONE.with_precision(prec).value();
+        let pi = compute_pi(prec);
+        let sqrt2 = compute_sqrt2(prec);
+        let sqrt3 = compute_sqrt3(prec);
+        let g = compute_catalan(prec);
+        let zeta3 = compute_zeta3(prec);
+
+        let pi2 = (&pi * &pi).with_precision(prec).value();
+        let pi3 = (&pi2 * &pi).with_precision(prec).value();
+        let pi4 = (&pi2 * &pi2).with_precision(prec).value();
+
+        let inv_pi = (&one / &pi).with_precision(prec).value();
+        let inv_pi2 = (&one / &pi2).with_precision(prec).value();
+        let inv_pi3 = (&one / &pi3).with_precision(prec).value();
+        let inv_pi4 = (&one / &pi4).with_precision(prec).value();
+
+        let sqrt2_over_pi = (&sqrt2 / &pi).with_precision(prec).value();
+        let sqrt3_over_pi = (&sqrt3 / &pi).with_precision(prec).value();
+
+        let pi_sqrt2 = (&pi * &sqrt2).with_precision(prec).value();
+        let pi_sqrt3 = (&pi * &sqrt3).with_precision(prec).value();
+        let inv_pi_sqrt2 = (&one / &pi_sqrt2).with_precision(prec).value();
+        let inv_pi_sqrt3 = (&one / &pi_sqrt3).with_precision(prec).value();
+
+        let sqrt2_over_pi2 = (&sqrt2 / &pi2).with_precision(prec).value();
+        let sqrt3_over_pi2 = (&sqrt3 / &pi2).with_precision(prec).value();
+
+        let g_over_pi = (&g / &pi).with_precision(prec).value();
+        let zeta3_over_pi3 = (&zeta3 / &pi3).with_precision(prec).value();
+
+        let make_tc = |name: &'static str, latex: &'static str, val: DBig| -> TargetConstant {
+            TargetConstant {
+                name,
+                latex,
+                value: val,
+            }
+        };
+
+        let targets = vec![
+            make_tc("1/π", "\\frac{1}{\\pi}", inv_pi.clone()),
+            make_tc("1/π²", "\\frac{1}{\\pi^2}", inv_pi2.clone()),
+            make_tc("1/π³", "\\frac{1}{\\pi^3}", inv_pi3.clone()),
+            make_tc("1/π⁴", "\\frac{1}{\\pi^4}", inv_pi4.clone()),
+            make_tc("√2/π", "\\frac{\\sqrt{2}}{\\pi}", sqrt2_over_pi.clone()),
+            make_tc("√3/π", "\\frac{\\sqrt{3}}{\\pi}", sqrt3_over_pi.clone()),
+            make_tc("1/(π√2)", "\\frac{1}{\\pi\\sqrt{2}}", inv_pi_sqrt2),
+            make_tc("1/(π√3)", "\\frac{1}{\\pi\\sqrt{3}}", inv_pi_sqrt3),
+            make_tc("√2/π²", "\\frac{\\sqrt{2}}{\\pi^2}", sqrt2_over_pi2.clone()),
+            make_tc("√3/π²", "\\frac{\\sqrt{3}}{\\pi^2}", sqrt3_over_pi2.clone()),
+            make_tc("G/π", "\\frac{G}{\\pi}", g_over_pi.clone()),
+            make_tc("ζ(3)/π³", "\\frac{\\zeta(3)}{\\pi^3}", zeta3_over_pi3.clone()),
+        ];
+
+        let pi_powers = vec![
+            make_tc("1/π", "\\frac{1}{\\pi}", inv_pi),
+            make_tc("1/π²", "\\frac{1}{\\pi^2}", inv_pi2),
+            make_tc("1/π³", "\\frac{1}{\\pi^3}", inv_pi3),
+            make_tc("1/π⁴", "\\frac{1}{\\pi^4}", inv_pi4),
+        ];
+
+        let radicals = vec![
+            make_tc("√2/π", "\\frac{\\sqrt{2}}{\\pi}", sqrt2_over_pi),
+            make_tc("√3/π", "\\frac{\\sqrt{3}}{\\pi}", sqrt3_over_pi),
+            make_tc("√2/π²", "\\frac{\\sqrt{2}}{\\pi^2}", sqrt2_over_pi2),
+            make_tc("√3/π²", "\\frac{\\sqrt{3}}{\\pi^2}", sqrt3_over_pi2),
+        ];
+
+        let catalan_zeta = vec![
+            make_tc("G/π", "\\frac{G}{\\pi}", g_over_pi),
+            make_tc("ζ(3)/π³", "\\frac{\\zeta(3)}{\\pi^3}", zeta3_over_pi3),
+        ];
+
+        Self {
+            targets,
+            pi_powers,
+            radicals,
+            catalan_zeta,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -514,5 +615,16 @@ mod tests {
         // Tail is ~ 1/(2 * 200^4) ~ 3e-10
         let thresh = DBig::from_parts(IBig::ONE, -8).with_precision(prec).value();
         assert!(diff < thresh, "Beta(4) CVZ must agree with direct sum to tail accuracy");
+    }
+
+    #[test]
+    fn test_sqrt2_precision() {
+        let prec = PRECISION;
+        let sqrt2 = compute_sqrt2(prec);
+        let two = DBig::from_parts(IBig::from(2), 0).with_precision(prec).value();
+        let sq = (&sqrt2 * &sqrt2).with_precision(prec).value();
+        let diff = if sq >= two { &sq - &two } else { &two - &sq };
+        let thresh = DBig::from_parts(IBig::ONE, -190).with_precision(prec).value();
+        assert!(diff < thresh, "sqrt(2)^2 must equal 2 to >190 decimal places");
     }
 }

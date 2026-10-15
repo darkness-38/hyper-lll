@@ -568,3 +568,276 @@ pub fn generate_all_kernels() -> Vec<SeriesKernel> {
     }
     kernels
 }
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  RAMANUJAN / GUILLERA SÜPER-BİNOM ÇEKİRDEKLERİ VE POLİNOM BAZLARI
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum SuperBinomialType {
+    B1, // binom(2n, n)^3
+    B2, // binom(2n, n)^4
+    B3, // binom(2n, n)^5
+    B4, // binom(2n, n)^2 * binom(3n, n)
+    B5, // binom(2n, n) * binom(4n, 2n)
+    B6, // binom(2n, n)^2 * binom(4n, 2n)
+    B7, // binom(3n, n)^2
+}
+
+impl SuperBinomialType {
+    pub const ALL: [SuperBinomialType; 7] = [
+        SuperBinomialType::B1,
+        SuperBinomialType::B2,
+        SuperBinomialType::B3,
+        SuperBinomialType::B4,
+        SuperBinomialType::B5,
+        SuperBinomialType::B6,
+        SuperBinomialType::B7,
+    ];
+
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::B1 => "B_1",
+            Self::B2 => "B_2",
+            Self::B3 => "B_3",
+            Self::B4 => "B_4",
+            Self::B5 => "B_5",
+            Self::B6 => "B_6",
+            Self::B7 => "B_7",
+        }
+    }
+
+    pub fn description(&self) -> &'static str {
+        match self {
+            Self::B1 => "B_1(n) = binom(2n,n)^3",
+            Self::B2 => "B_2(n) = binom(2n,n)^4",
+            Self::B3 => "B_3(n) = binom(2n,n)^5",
+            Self::B4 => "B_4(n) = binom(2n,n)^2 * binom(3n,n)",
+            Self::B5 => "B_5(n) = binom(2n,n) * binom(4n,2n)",
+            Self::B6 => "B_6(n) = binom(2n,n)^2 * binom(4n,2n)",
+            Self::B7 => "B_7(n) = binom(3n,n)^2",
+        }
+    }
+
+    pub fn latex(&self) -> &'static str {
+        match self {
+            Self::B1 => "\\binom{2n}{n}^3",
+            Self::B2 => "\\binom{2n}{n}^4",
+            Self::B3 => "\\binom{2n}{n}^5",
+            Self::B4 => "\\binom{2n}{n}^2 \\binom{3n}{n}",
+            Self::B5 => "\\binom{2n}{n} \\binom{4n}{2n}",
+            Self::B6 => "\\binom{2n}{n}^2 \\binom{4n}{2n}",
+            Self::B7 => "\\binom{3n}{n}^2",
+        }
+    }
+
+    pub fn growth_ratio(&self) -> f64 {
+        match self {
+            Self::B1 => 64.0,
+            Self::B2 => 256.0,
+            Self::B3 => 1024.0,
+            Self::B4 => 108.0,
+            Self::B5 => 64.0,
+            Self::B6 => 256.0,
+            Self::B7 => 729.0 / 16.0, // 45.5625
+        }
+    }
+}
+
+pub const STANDARD_BASES: [i64; 26] = [
+    16, -16, 27, -27, 32, -32, 64, -64, 81, -81, 108, -108, 128, -128,
+    216, -216, 256, -256, 512, -512, 1024, -1024, 4096, -4096, 8192, -8192,
+];
+
+pub const GUILLERA_5_BASES: [i64; 2] = [1048576, -1048576]; // 2^20, -2^20
+
+pub fn get_bases_for_kernel(kernel: SuperBinomialType) -> Vec<i64> {
+    let mut bases = STANDARD_BASES.to_vec();
+    if kernel == SuperBinomialType::B3 {
+        bases.extend_from_slice(&GUILLERA_5_BASES);
+    }
+    bases
+}
+
+pub fn compute_super_binomial_bases(
+    kernel: SuperBinomialType,
+    a: i64,
+    prec: usize,
+    max_steps: usize,
+) -> Option<[DBig; 4]> {
+    let growth = kernel.growth_ratio();
+    if (a.abs() as f64) <= growth + 0.1 {
+        return None;
+    }
+
+    let prec_calc = prec + 25;
+    let mut s0 = DBig::ZERO.with_precision(prec_calc).value();
+    let mut s1 = DBig::ZERO.with_precision(prec_calc).value();
+    let mut s2 = DBig::ZERO.with_precision(prec_calc).value();
+    let mut s3 = DBig::ZERO.with_precision(prec_calc).value();
+
+    // n = 0 term: B(0) = 1, a^0 = 1 => 1
+    s0 = &s0 + DBig::ONE.with_precision(prec_calc).value();
+
+    let mut c2n = IBig::ONE;
+    let mut c3n = IBig::ONE;
+    let mut c4n = IBig::ONE;
+    let mut a_pow = IBig::ONE;
+    let a_ibig = IBig::from(a);
+
+    let eps = DBig::from_parts(IBig::ONE, -215).with_precision(prec_calc).value();
+
+    for n in 1..=max_steps {
+        let n_i = n as i64;
+        c2n = &c2n * IBig::from(2 * (2 * n_i - 1)) / IBig::from(n_i);
+        c3n = &c3n * IBig::from(3 * (3 * n_i - 1) * (3 * n_i - 2))
+            / IBig::from(2 * n_i * (2 * n_i - 1));
+        c4n = &c4n * IBig::from(2 * (4 * n_i - 1) * (4 * n_i - 3))
+            / IBig::from(n_i * (2 * n_i - 1));
+
+        a_pow = &a_pow * &a_ibig;
+
+        let b_n: IBig = match kernel {
+            SuperBinomialType::B1 => &c2n * &c2n * &c2n,
+            SuperBinomialType::B2 => {
+                let sq = &c2n * &c2n;
+                &sq * &sq
+            }
+            SuperBinomialType::B3 => {
+                let sq = &c2n * &c2n;
+                let q = &sq * &sq;
+                &q * &c2n
+            }
+            SuperBinomialType::B4 => {
+                let sq = &c2n * &c2n;
+                &sq * &c3n
+            }
+            SuperBinomialType::B5 => &c2n * &c4n,
+            SuperBinomialType::B6 => {
+                let sq = &c2n * &c2n;
+                &sq * &c4n
+            }
+            SuperBinomialType::B7 => &c3n * &c3n,
+        };
+
+        let b_d = DBig::from_parts(b_n, 0).with_precision(prec_calc).value();
+        let a_d = DBig::from_parts(a_pow.clone(), 0).with_precision(prec_calc).value();
+        let term = (&b_d / &a_d).with_precision(prec_calc).value();
+
+        if n == 15 {
+            let abs_t = if term < DBig::ZERO { -term.clone() } else { term.clone() };
+            if abs_t >= DBig::ONE.with_precision(prec_calc).value() {
+                return None;
+            }
+        }
+
+        let n_d = DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value();
+        let n2_d = (&n_d * &n_d).with_precision(prec_calc).value();
+        let n3_d = (&n2_d * &n_d).with_precision(prec_calc).value();
+
+        s0 = &s0 + &term;
+        s1 = &s1 + &(&n_d * &term);
+        s2 = &s2 + &(&n2_d * &term);
+        s3 = &s3 + &(&n3_d * &term);
+
+        let abs_t = if term < DBig::ZERO { -term } else { term };
+        if abs_t < eps {
+            break;
+        }
+    }
+
+    Some([
+        s0.with_precision(prec).value(),
+        s1.with_precision(prec).value(),
+        s2.with_precision(prec).value(),
+        s3.with_precision(prec).value(),
+    ])
+}
+
+pub fn format_polynomial_text(coeffs: &[i64; 4]) -> String {
+    let [c0, c1, c2, c3] = *coeffs;
+    let mut terms = Vec::new();
+
+    if c3 != 0 {
+        terms.push((c3, "n^3"));
+    }
+    if c2 != 0 {
+        terms.push((c2, "n^2"));
+    }
+    if c1 != 0 {
+        terms.push((c1, "n"));
+    }
+    if c0 != 0 {
+        terms.push((c0, ""));
+    }
+
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+
+    let mut res = String::new();
+    for (i, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if i == 0 { "-" } else { " - " }
+        } else if i == 0 {
+            ""
+        } else {
+            " + "
+        };
+
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c}*{var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}
+
+pub fn format_polynomial_latex(coeffs: &[i64; 4]) -> String {
+    let [c0, c1, c2, c3] = *coeffs;
+    let mut terms = Vec::new();
+
+    if c3 != 0 {
+        terms.push((c3, "n^3"));
+    }
+    if c2 != 0 {
+        terms.push((c2, "n^2"));
+    }
+    if c1 != 0 {
+        terms.push((c1, "n"));
+    }
+    if c0 != 0 {
+        terms.push((c0, ""));
+    }
+
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+
+    let mut res = String::new();
+    for (i, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if i == 0 { "-" } else { " - " }
+        } else if i == 0 {
+            ""
+        } else {
+            " + "
+        };
+
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c} {var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}

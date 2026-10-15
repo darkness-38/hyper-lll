@@ -6,6 +6,10 @@ pub const SCALE_EXPONENT: isize = 120;
 pub const VERIFY_EXPONENT: isize = -100;
 pub const MAX_NORM: f64 = 30000.0;
 
+pub const GUILLERA_SCALE_EXPONENT: isize = 130;
+pub const GUILLERA_VERIFY_EXPONENT: isize = -110;
+pub const GUILLERA_MAX_NORM: f64 = 80000.0;
+
 #[derive(Debug, Clone)]
 pub struct IntegerRelation {
     pub m: Vec<i64>,
@@ -170,11 +174,16 @@ pub fn lll_reduce_high_prec(basis: &mut Vec<Vec<IBig>>, delta_num: i64, delta_de
     }
 }
 
-/// Solves all integer relations for vector `x` with LLL at 10^95 scale and independent verification at < 10^-85.
-pub fn find_all_integer_relations_generic(x: &[DBig]) -> Vec<IntegerRelation> {
+/// Solves all integer relations for vector `x` with custom LLL parameters.
+pub fn find_all_integer_relations_custom(
+    x: &[DBig],
+    scale_exponent: isize,
+    verify_exponent: isize,
+    max_norm: f64,
+) -> Vec<IntegerRelation> {
     let d = x.len();
     let prec = 200;
-    let scale = DBig::from_parts(IBig::ONE, SCALE_EXPONENT).with_precision(prec).value();
+    let scale = DBig::from_parts(IBig::ONE, scale_exponent).with_precision(prec).value();
     let half = DBig::from_parts(IBig::from(5), -1).with_precision(prec).value();
 
     let mut basis: Vec<Vec<IBig>> = Vec::with_capacity(d);
@@ -193,7 +202,7 @@ pub fn find_all_integer_relations_generic(x: &[DBig]) -> Vec<IntegerRelation> {
 
     lll_reduce_high_prec(&mut basis, 99, 100);
 
-    let threshold = DBig::from_parts(IBig::ONE, VERIFY_EXPONENT).with_precision(prec).value();
+    let threshold = DBig::from_parts(IBig::ONE, verify_exponent).with_precision(prec).value();
     let mut relations = Vec::new();
     let mut seen_signatures = std::collections::HashSet::new();
 
@@ -240,14 +249,14 @@ pub fn find_all_integer_relations_generic(x: &[DBig]) -> Vec<IntegerRelation> {
             continue;
         }
 
-        // Euclidean norm check: norm <= MAX_NORM
+        // Euclidean norm check: norm <= max_norm
         let norm_sq: f64 = m_vec.iter().map(|&v| (v as f64) * (v as f64)).sum();
         let norm = norm_sq.sqrt();
-        if norm > MAX_NORM {
+        if norm > max_norm {
             continue;
         }
 
-        // Independent high-precision verification: |sum m_i x_i| < 10^-85
+        // Independent high-precision verification: |sum m_i x_i| < threshold
         let mut residual = DBig::ZERO.with_precision(prec).value();
         for i in 0..d {
             let m_d = DBig::from_parts(IBig::from(m_vec[i]), 0).with_precision(prec).value();
@@ -270,6 +279,22 @@ pub fn find_all_integer_relations_generic(x: &[DBig]) -> Vec<IntegerRelation> {
     relations
 }
 
+/// Solves all integer relations for vector `x` with LLL at 10^120 scale and independent verification at < 10^-100.
+pub fn find_all_integer_relations_generic(x: &[DBig]) -> Vec<IntegerRelation> {
+    find_all_integer_relations_custom(x, SCALE_EXPONENT, VERIFY_EXPONENT, MAX_NORM)
+}
+
+/// Solves all integer relations for Ramanujan-Guillera vector `x` with LLL at 10^130 scale and verification at < 10^-110 (max norm 80000).
+pub fn find_all_integer_relations_guillera(x: &[DBig]) -> Vec<IntegerRelation> {
+    find_all_integer_relations_custom(
+        x,
+        GUILLERA_SCALE_EXPONENT,
+        GUILLERA_VERIFY_EXPONENT,
+        GUILLERA_MAX_NORM,
+    )
+}
+
+#[allow(dead_code)]
 pub fn find_integer_relation_generic(x: &[DBig]) -> Option<IntegerRelation> {
     find_all_integer_relations_generic(x).into_iter().next()
 }
@@ -734,6 +759,7 @@ pub fn quick_check_relation_6d(x: &[f64; 6]) -> Option<[i64; 6]> {
 }
 
 /// Fast stack-allocated 7D LLL pre-filter (~5 microseconds)
+#[allow(dead_code)]
 pub fn quick_check_relation_7d(x: &[f64; 7]) -> Option<[i64; 7]> {
     let scale: f64 = 1e9;
     let mut basis = [[0i64; 8]; 7];
