@@ -841,3 +841,370 @@ pub fn format_polynomial_latex(coeffs: &[i64; 4]) -> String {
     }
     res
 }
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  SINIR ALAN ÇEKİRDEKLERİ (DOMB, ALMKVIST-ZUDILIN, B8, B9)
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum FrontierKernelType {
+    Domb,            // D_n
+    AlmkvistZudilin, // Z_n
+    B8,              // binom(2n, n)^6
+    B9,              // binom(2n, n)^3 * binom(3n, n)^2
+}
+
+impl FrontierKernelType {
+    pub const ALL: [FrontierKernelType; 4] = [
+        FrontierKernelType::Domb,
+        FrontierKernelType::AlmkvistZudilin,
+        FrontierKernelType::B8,
+        FrontierKernelType::B9,
+    ];
+
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::Domb => "D",
+            Self::AlmkvistZudilin => "Z",
+            Self::B8 => "B_8",
+            Self::B9 => "B_9",
+        }
+    }
+
+    pub fn description(&self) -> &'static str {
+        match self {
+            Self::Domb => "Domb Dizisi D_n = (-1)^n sum_{k=0}^n binom(n,k)^2 binom(2k,k) binom(2n-2k, n-k)",
+            Self::AlmkvistZudilin => "Almkvist-Zudilin Z_n = sum_{k=0}^{n/3} (-1)^k 3^{n-3k} (3k)!/(k!)^3 binom(n,3k) binom(n+k,k)",
+            Self::B8 => "B_8(n) = binom(2n,n)^6 (6. Mertebe Süper-Binom)",
+            Self::B9 => "B_9(n) = binom(2n,n)^3 * binom(3n,n)^2 (Kübik-Merkezi Kuantik Melez)",
+        }
+    }
+
+    pub fn latex(&self) -> &'static str {
+        match self {
+            Self::Domb => "D_n",
+            Self::AlmkvistZudilin => "Z_n",
+            Self::B8 => "\\binom{2n}{n}^6",
+            Self::B9 => "\\binom{2n}{n}^3 \\binom{3n}{n}^2",
+        }
+    }
+
+    pub fn growth_ratio(&self) -> f64 {
+        match self {
+            Self::Domb => 16.0,
+            Self::AlmkvistZudilin => 27.0,
+            Self::B8 => 4096.0,
+            Self::B9 => 2916.0,
+        }
+    }
+}
+
+pub const DOMB_BASES: [i64; 28] = [
+    -32, 32, -64, 64, -128, 128, -256, 256, -288, 288, -300, 300, -576, 576, -768, 768,
+    -1080, 1080, -1584, 1584, -2880, 2880, -3969, 3969, -5832, 5832, -11664, 11664,
+];
+
+pub const AZ_BASES: [i64; 28] = [
+    -72, 72, -81, 81, -108, 108, -216, 216, -324, 324, -432, 432, -576, 576, -864, 864,
+    -1296, 1296, -1728, 1728, -2916, 2916, -3888, 3888, -5184, 5184, -46656, 46656,
+];
+
+pub const B8_B9_BASES: [i64; 18] = [
+    -8192, 8192, -32768, 32768, -65536, 65536, -262144, 262144, -1048576, 1048576, -2097152,
+    2097152, -4194304, 4194304, -16777216, 16777216, -67108864, 67108864,
+];
+
+pub fn get_frontier_bases(kernel: FrontierKernelType) -> &'static [i64] {
+    match kernel {
+        FrontierKernelType::Domb => &DOMB_BASES,
+        FrontierKernelType::AlmkvistZudilin => &AZ_BASES,
+        FrontierKernelType::B8 | FrontierKernelType::B9 => &B8_B9_BASES,
+    }
+}
+
+pub fn compute_domb_table(max_n: usize) -> Vec<IBig> {
+    let mut central = Vec::with_capacity(max_n + 1);
+    let mut c = IBig::ONE;
+    central.push(c.clone());
+    for m in 1..=max_n {
+        c = &c * IBig::from(2 * (2 * m as i64 - 1)) / IBig::from(m as i64);
+        central.push(c.clone());
+    }
+
+    let mut pascal: Vec<Vec<IBig>> = Vec::with_capacity(max_n + 1);
+    for n in 0..=max_n {
+        let mut row = Vec::with_capacity(n + 1);
+        row.push(IBig::ONE);
+        for k in 1..n {
+            let val = &pascal[n - 1][k - 1] + &pascal[n - 1][k];
+            row.push(val);
+        }
+        if n > 0 {
+            row.push(IBig::ONE);
+        }
+        pascal.push(row);
+    }
+
+    let mut domb = Vec::with_capacity(max_n + 1);
+    for n in 0..=max_n {
+        let mut sum = IBig::ZERO;
+        for k in 0..=n {
+            let b_nk = &pascal[n][k];
+            let b_nk_sq = b_nk * b_nk;
+            let c_k = &central[k];
+            let c_nmk = &central[n - k];
+            let term = (&b_nk_sq * c_k) * c_nmk;
+            sum += term;
+        }
+        if n % 2 == 1 {
+            sum = -sum;
+        }
+        domb.push(sum);
+    }
+    domb
+}
+
+pub fn compute_az_table(max_n: usize) -> Vec<IBig> {
+    let max_pascal = max_n + (max_n / 3) + 5;
+    let mut pascal: Vec<Vec<IBig>> = Vec::with_capacity(max_pascal + 1);
+    for n in 0..=max_pascal {
+        let mut row = Vec::with_capacity(n + 1);
+        row.push(IBig::ONE);
+        for k in 1..n {
+            let val = &pascal[n - 1][k - 1] + &pascal[n - 1][k];
+            row.push(val);
+        }
+        if n > 0 {
+            row.push(IBig::ONE);
+        }
+        pascal.push(row);
+    }
+
+    let max_k = max_n / 3 + 2;
+    let mut w = Vec::with_capacity(max_k + 1);
+    for k in 0..=max_k {
+        let val = &pascal[3 * k][k] * &pascal[2 * k][k];
+        w.push(val);
+    }
+
+    let mut powers_of_3 = Vec::with_capacity(max_n + 1);
+    let mut p = IBig::ONE;
+    powers_of_3.push(p.clone());
+    for _ in 1..=max_n {
+        p = &p * IBig::from(3);
+        powers_of_3.push(p.clone());
+    }
+
+    let mut az = Vec::with_capacity(max_n + 1);
+    for n in 0..=max_n {
+        let mut sum = IBig::ZERO;
+        let k_limit = n / 3;
+        for k in 0..=k_limit {
+            let p3 = &powers_of_3[n - 3 * k];
+            let w_k = &w[k];
+            let b1 = &pascal[n][3 * k];
+            let b2 = &pascal[n + k][k];
+            let term = ((p3 * w_k) * b1) * b2;
+            if k % 2 == 0 {
+                sum += term;
+            } else {
+                sum -= term;
+            }
+        }
+        az.push(sum);
+    }
+    az
+}
+
+pub fn compute_frontier_bases(
+    kernel: FrontierKernelType,
+    a: i64,
+    prec: usize,
+    max_steps: usize,
+    domb_table: &[IBig],
+    az_table: &[IBig],
+) -> Option<[DBig; 5]> {
+    let growth = kernel.growth_ratio();
+    if (a.abs() as f64) <= growth + 0.1 {
+        return None;
+    }
+
+    let prec_calc = prec + 25;
+    let mut s0 = DBig::ZERO.with_precision(prec_calc).value();
+    let mut s1 = DBig::ZERO.with_precision(prec_calc).value();
+    let mut s2 = DBig::ZERO.with_precision(prec_calc).value();
+    let mut s3 = DBig::ZERO.with_precision(prec_calc).value();
+    let mut s4 = DBig::ZERO.with_precision(prec_calc).value();
+
+    // n = 0 term: K(0) = 1, a^0 = 1 => 1
+    s0 = &s0 + DBig::ONE.with_precision(prec_calc).value();
+
+    let mut c2n = IBig::ONE;
+    let mut c3n = IBig::ONE;
+    let mut a_pow = IBig::ONE;
+    let a_ibig = IBig::from(a);
+
+    let eps = DBig::from_parts(IBig::ONE, -235).with_precision(prec_calc).value();
+
+    for n in 1..=max_steps {
+        let n_i = n as i64;
+        a_pow = &a_pow * &a_ibig;
+
+        let k_n: IBig = match kernel {
+            FrontierKernelType::Domb => {
+                if n < domb_table.len() {
+                    domb_table[n].clone()
+                } else {
+                    return None;
+                }
+            }
+            FrontierKernelType::AlmkvistZudilin => {
+                if n < az_table.len() {
+                    az_table[n].clone()
+                } else {
+                    return None;
+                }
+            }
+            FrontierKernelType::B8 => {
+                c2n = &c2n * IBig::from(2 * (2 * n_i - 1)) / IBig::from(n_i);
+                let sq = &c2n * &c2n;
+                (&sq * &sq) * &sq
+            }
+            FrontierKernelType::B9 => {
+                c2n = &c2n * IBig::from(2 * (2 * n_i - 1)) / IBig::from(n_i);
+                c3n = &c3n * IBig::from(3 * (3 * n_i - 1) * (3 * n_i - 2))
+                    / IBig::from(2 * n_i * (2 * n_i - 1));
+                let c2_3 = (&c2n * &c2n) * &c2n;
+                let c3_2 = &c3n * &c3n;
+                &c2_3 * &c3_2
+            }
+        };
+
+        let k_d = DBig::from_parts(k_n, 0).with_precision(prec_calc).value();
+        let a_d = DBig::from_parts(a_pow.clone(), 0).with_precision(prec_calc).value();
+        let term = (&k_d / &a_d).with_precision(prec_calc).value();
+
+        let abs_t = if term < DBig::ZERO { -term.clone() } else { term.clone() };
+        if n > 50 && abs_t > DBig::from_parts(IBig::from(1000000), 0).with_precision(prec_calc).value() {
+            return None;
+        }
+
+        let n_d = DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value();
+        let n2_d = (&n_d * &n_d).with_precision(prec_calc).value();
+        let n3_d = (&n2_d * &n_d).with_precision(prec_calc).value();
+        let n4_d = (&n2_d * &n2_d).with_precision(prec_calc).value();
+
+        s0 = &s0 + &term;
+        s1 = &s1 + &(&n_d * &term);
+        s2 = &s2 + &(&n2_d * &term);
+        s3 = &s3 + &(&n3_d * &term);
+        s4 = &s4 + &(&n4_d * &term);
+
+        let abs_t = if term < DBig::ZERO { -term } else { term };
+        if abs_t < eps {
+            break;
+        }
+    }
+
+    Some([
+        s0.with_precision(prec).value(),
+        s1.with_precision(prec).value(),
+        s2.with_precision(prec).value(),
+        s3.with_precision(prec).value(),
+        s4.with_precision(prec).value(),
+    ])
+}
+
+pub fn format_polynomial5_text(coeffs: &[i64; 5]) -> String {
+    let [c0, c1, c2, c3, c4] = *coeffs;
+    let mut terms = Vec::new();
+
+    if c4 != 0 {
+        terms.push((c4, "n^4"));
+    }
+    if c3 != 0 {
+        terms.push((c3, "n^3"));
+    }
+    if c2 != 0 {
+        terms.push((c2, "n^2"));
+    }
+    if c1 != 0 {
+        terms.push((c1, "n"));
+    }
+    if c0 != 0 {
+        terms.push((c0, ""));
+    }
+
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+
+    let mut res = String::new();
+    for (i, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if i == 0 { "-" } else { " - " }
+        } else if i == 0 {
+            ""
+        } else {
+            " + "
+        };
+
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c}*{var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}
+
+pub fn format_polynomial5_latex(coeffs: &[i64; 5]) -> String {
+    let [c0, c1, c2, c3, c4] = *coeffs;
+    let mut terms = Vec::new();
+
+    if c4 != 0 {
+        terms.push((c4, "n^4"));
+    }
+    if c3 != 0 {
+        terms.push((c3, "n^3"));
+    }
+    if c2 != 0 {
+        terms.push((c2, "n^2"));
+    }
+    if c1 != 0 {
+        terms.push((c1, "n"));
+    }
+    if c0 != 0 {
+        terms.push((c0, ""));
+    }
+
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+
+    let mut res = String::new();
+    for (i, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if i == 0 { "-" } else { " - " }
+        } else if i == 0 {
+            ""
+        } else {
+            " + "
+        };
+
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c} {var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}

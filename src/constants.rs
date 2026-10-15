@@ -92,14 +92,17 @@ pub fn compute_pi(prec: usize) -> DBig {
         sum
     };
 
-    let a1 = arctan(5, 170);
-    let a2 = arctan(239, 80);
+    let s1 = (prec * 170) / 200 + 15;
+    let s2 = (prec * 80) / 200 + 15;
+    let a1 = arctan(5, s1);
+    let a2 = arctan(239, s2);
     (&(&sixteen * &a1) - &(&four * &a2)).with_precision(prec).value()
 }
 
 pub fn compute_ln2(prec: usize) -> DBig {
     let one = DBig::ONE.with_precision(prec).value();
-    cvz_accelerate(270, prec, |k| {
+    let cvz_n = if prec > 200 { 310 } else { 270 };
+    cvz_accelerate(cvz_n, prec, |k| {
         let den = DBig::from_parts(IBig::from(k as i64 + 1), 0).with_precision(prec).value();
         &one / &den
     })
@@ -128,7 +131,8 @@ pub fn compute_sqrt2(prec: usize) -> DBig {
 
 pub fn compute_catalan(prec: usize) -> DBig {
     let one = DBig::ONE.with_precision(prec).value();
-    cvz_accelerate(270, prec, |k| {
+    let cvz_n = if prec > 200 { 310 } else { 270 };
+    cvz_accelerate(cvz_n, prec, |k| {
         let odd = 2 * k as i64 + 1;
         let den = DBig::from_parts(IBig::from(odd * odd), 0).with_precision(prec).value();
         &one / &den
@@ -137,7 +141,8 @@ pub fn compute_catalan(prec: usize) -> DBig {
 
 pub fn compute_beta4(prec: usize) -> DBig {
     let one = DBig::ONE.with_precision(prec).value();
-    cvz_accelerate(270, prec, |k| {
+    let cvz_n = if prec > 200 { 310 } else { 270 };
+    cvz_accelerate(cvz_n, prec, |k| {
         let odd = 2 * k as i64 + 1;
         let odd2 = odd * odd;
         let odd4 = IBig::from(odd2) * IBig::from(odd2);
@@ -148,7 +153,8 @@ pub fn compute_beta4(prec: usize) -> DBig {
 
 pub fn compute_beta6(prec: usize) -> DBig {
     let one = DBig::ONE.with_precision(prec).value();
-    cvz_accelerate(270, prec, |k| {
+    let cvz_n = if prec > 200 { 310 } else { 270 };
+    cvz_accelerate(cvz_n, prec, |k| {
         let odd = 2 * k as i64 + 1;
         let odd2 = odd * odd;
         let odd4 = IBig::from(odd2) * IBig::from(odd2);
@@ -162,7 +168,8 @@ pub fn compute_zeta3(prec: usize) -> DBig {
     let one = DBig::ONE.with_precision(prec).value();
     let four_thirds = DBig::from_parts(IBig::from(4), 0).with_precision(prec).value()
         / DBig::from_parts(IBig::from(3), 0).with_precision(prec).value();
-    let eta3 = cvz_accelerate(270, prec, |k| {
+    let cvz_n = if prec > 200 { 310 } else { 270 };
+    let eta3 = cvz_accelerate(cvz_n, prec, |k| {
         let m = k as i64 + 1;
         let den_i = IBig::from(m * m) * IBig::from(m);
         let den = DBig::from_parts(den_i, 0).with_precision(prec).value();
@@ -535,6 +542,118 @@ impl RamanujanGuilleraPool {
             pi_powers,
             radicals,
             catalan_zeta,
+        }
+    }
+}
+
+pub const FRONTIER_PRECISION: usize = 220;
+
+pub struct FrontierConstantPool {
+    pub reference_targets: Vec<TargetConstant>,
+    pub w2_targets: Vec<TargetConstant>,
+    pub w3_targets: Vec<TargetConstant>,
+    pub w4_targets: Vec<TargetConstant>,
+    pub catalan_targets: Vec<TargetConstant>,
+}
+
+impl FrontierConstantPool {
+    pub fn new() -> Self {
+        let prec = FRONTIER_PRECISION;
+        let one = DBig::ONE.with_precision(prec).value();
+        let pi = compute_pi(prec);
+        let sqrt2 = compute_sqrt2(prec);
+        let sqrt3 = compute_sqrt3(prec);
+        let sqrt6 = (&sqrt2 * &sqrt3).with_precision(prec).value();
+        let g = compute_catalan(prec);
+        let zeta3 = compute_zeta3(prec);
+
+        let pi2 = (&pi * &pi).with_precision(prec).value();
+        let pi3 = (&pi2 * &pi).with_precision(prec).value();
+        let pi4 = (&pi2 * &pi2).with_precision(prec).value();
+
+        // 1. Modüler Referans & Kontrol (Ağırlık-1): 1/π, √2/π, √3/π, √6/π
+        let inv_pi = (&one / &pi).with_precision(prec).value();
+        let sqrt2_over_pi = (&sqrt2 / &pi).with_precision(prec).value();
+        let sqrt3_over_pi = (&sqrt3 / &pi).with_precision(prec).value();
+        let sqrt6_over_pi = (&sqrt6 / &pi).with_precision(prec).value();
+
+        // 2. Ağırlık-2: 1/π², √2/π², √3/π², √6/π²
+        let inv_pi2 = (&one / &pi2).with_precision(prec).value();
+        let sqrt2_over_pi2 = (&sqrt2 / &pi2).with_precision(prec).value();
+        let sqrt3_over_pi2 = (&sqrt3 / &pi2).with_precision(prec).value();
+        let sqrt6_over_pi2 = (&sqrt6 / &pi2).with_precision(prec).value();
+
+        // 3. Ağırlık-3: 1/π³, √2/π³, √3/π³, √6/π³, ζ(3)/π³
+        let inv_pi3 = (&one / &pi3).with_precision(prec).value();
+        let sqrt2_over_pi3 = (&sqrt2 / &pi3).with_precision(prec).value();
+        let sqrt3_over_pi3 = (&sqrt3 / &pi3).with_precision(prec).value();
+        let sqrt6_over_pi3 = (&sqrt6 / &pi3).with_precision(prec).value();
+        let zeta3_over_pi3 = (&zeta3 / &pi3).with_precision(prec).value();
+
+        // 4. Ağırlık-4: 1/π⁴, √2/π⁴, √3/π⁴, √6/π⁴
+        let inv_pi4 = (&one / &pi4).with_precision(prec).value();
+        let sqrt2_over_pi4 = (&sqrt2 / &pi4).with_precision(prec).value();
+        let sqrt3_over_pi4 = (&sqrt3 / &pi4).with_precision(prec).value();
+        let sqrt6_over_pi4 = (&sqrt6 / &pi4).with_precision(prec).value();
+
+        // 5. Catalan Hedefleri: G/π, √2G/π, √3G/π, √6G/π, G/π²
+        let g_over_pi = (&g / &pi).with_precision(prec).value();
+        let sqrt2_g_over_pi = (&(&sqrt2 * &g) / &pi).with_precision(prec).value();
+        let sqrt3_g_over_pi = (&(&sqrt3 * &g) / &pi).with_precision(prec).value();
+        let sqrt6_g_over_pi = (&(&sqrt6 * &g) / &pi).with_precision(prec).value();
+        let g_over_pi2 = (&g / &pi2).with_precision(prec).value();
+
+        let make_tc = |name: &'static str, latex: &'static str, val: DBig| -> TargetConstant {
+            TargetConstant {
+                name,
+                latex,
+                value: val,
+            }
+        };
+
+        let reference_targets = vec![
+            make_tc("1/π", "\\frac{1}{\\pi}", inv_pi),
+            make_tc("√2/π", "\\frac{\\sqrt{2}}{\\pi}", sqrt2_over_pi),
+            make_tc("√3/π", "\\frac{\\sqrt{3}}{\\pi}", sqrt3_over_pi),
+            make_tc("√6/π", "\\frac{\\sqrt{6}}{\\pi}", sqrt6_over_pi),
+        ];
+
+        let w2_targets = vec![
+            make_tc("1/π²", "\\frac{1}{\\pi^2}", inv_pi2),
+            make_tc("√2/π²", "\\frac{\\sqrt{2}}{\\pi^2}", sqrt2_over_pi2),
+            make_tc("√3/π²", "\\frac{\\sqrt{3}}{\\pi^2}", sqrt3_over_pi2),
+            make_tc("√6/π²", "\\frac{\\sqrt{6}}{\\pi^2}", sqrt6_over_pi2),
+        ];
+
+        let w3_targets = vec![
+            make_tc("1/π³", "\\frac{1}{\\pi^3}", inv_pi3),
+            make_tc("√2/π³", "\\frac{\\sqrt{2}}{\\pi^3}", sqrt2_over_pi3),
+            make_tc("√3/π³", "\\frac{\\sqrt{3}}{\\pi^3}", sqrt3_over_pi3),
+            make_tc("√6/π³", "\\frac{\\sqrt{6}}{\\pi^3}", sqrt6_over_pi3),
+            make_tc("ζ(3)/π³", "\\frac{\\zeta(3)}{\\pi^3}", zeta3_over_pi3),
+        ];
+
+        let w4_targets = vec![
+            make_tc("1/π⁴", "\\frac{1}{\\pi^4}", inv_pi4),
+            make_tc("√2/π⁴", "\\frac{\\sqrt{2}}{\\pi^4}", sqrt2_over_pi4),
+            make_tc("√3/π⁴", "\\frac{\\sqrt{3}}{\\pi^4}", sqrt3_over_pi4),
+            make_tc("√6/π⁴", "\\frac{\\sqrt{6}}{\\pi^4}", sqrt6_over_pi4),
+        ];
+
+        let catalan_targets = vec![
+            make_tc("G/π", "\\frac{G}{\\pi}", g_over_pi),
+            make_tc("√2G/π", "\\frac{\\sqrt{2}G}{\\pi}", sqrt2_g_over_pi),
+            make_tc("√3G/π", "\\frac{\\sqrt{3}G}{\\pi}", sqrt3_g_over_pi),
+            make_tc("√6G/π", "\\frac{\\sqrt{6}G}{\\pi}", sqrt6_g_over_pi),
+            make_tc("G/π²", "\\frac{G}{\\pi^2}", g_over_pi2),
+        ];
+
+        Self {
+            reference_targets,
+            w2_targets,
+            w3_targets,
+            w4_targets,
+            catalan_targets,
         }
     }
 }

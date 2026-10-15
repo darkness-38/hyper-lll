@@ -1,0 +1,27 @@
+================================================================================
+FRONTIER SUPER-BINOMIAL & MODULAR IDENTITIES (DOMB, AZ, B8, B9)
+Discovered by hyper-lll (220-digit precision, LLL scale 10^140, threshold 10^-115)
+Total Identities: 3 (Novel: 0, Modular Reference: 3)
+================================================================================
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [1] [BİLİNEN REFERANS / MODÜLER] Çekirdek: Almkvist-Zudilin Z_n = sum_{k=0}^{n/3} (-1)^k 3^{n-3k} (3k)!/(k!)^3 binom(n,3k) binom(n+k,k), Taban: a = -81
+% Hedef: √3/π | Hata: 3.00e-220 | Norm: 8.7750
+\begin{equation}
+\sum_{n=0}^\infty \frac{Z_n}{(-81)^n} \left( 8 n + 2 \right) = \frac{3\sqrt{3}}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [2] [BİLİNEN REFERANS / MODÜLER] Çekirdek: Almkvist-Zudilin Z_n = sum_{k=0}^{n/3} (-1)^k 3^{n-3k} (3k)!/(k!)^3 binom(n,3k) binom(n+k,k), Taban: a = -81
+% Hedef: √3/π | Hata: 0.00e0 | Norm: 9.4340
+\begin{equation}
+\sum_{n=0}^\infty \frac{Z_n}{(-81)^n} \left( 8 n^3 + 2 n^2 - 4 n - 1 \right) = -\frac{2\sqrt{3}}{\pi}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [3] [BİLİNEN REFERANS / MODÜLER] Çekirdek: Domb Dizisi D_n = (-1)^n sum_{k=0}^n binom(n,k)^2 binom(2k,k) binom(2n-2k, n-k), Taban: a = -64
+% Hedef: √3/π | Hata: 1.82e-212 | Norm: 17.2627
+\begin{equation}
+\sum_{n=0}^\infty \frac{D_n}{(-64)^n} \left( 15 n + 3 \right) = \frac{8\sqrt{3}}{\pi}
+\end{equation}
+
