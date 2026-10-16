@@ -129,11 +129,11 @@ Closed-form rational hypergeometric series with zero harmonic numbers:
 
 #### C. Hexagonal Clausen Function $\text{Cl}_2(\pi/3)$ via Deuring Cubic Curves
 - **Deuring Cubic $B_1(n) = \binom{2n}{n}\binom{3n}{n}$ ($a = 3$, cyclotomic pole $m=1$):**
-  $$\sum_{n=1}^\infty \frac{3^n \left( 36n - 9 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 2.36 \times 10^{-219})$$
+  $$\sum_{n=1}^\infty \frac{3^n \left( 36n - 9 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3} \mathrm{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 2.36 \times 10^{-219})$$
 
 - **Cubic-Central Hybrid $B_2(n) = \binom{2n}{n}^2\binom{3n}{n}$ ($a = -27$, cubic pole $m=0$ and $m=1$):**
-  $$\sum_{n=1}^\infty \frac{(-27)^n \left( 15n - 4 \right)}{n^3 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 4.54 \times 10^{-219})$$
-  $$\sum_{n=1}^\infty \frac{(-27)^n \left( 30n^2 - 23n + 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 1.85 \times 10^{-218})$$
+  $$\sum_{n=1}^\infty \frac{(-27)^n \left( 15n - 4 \right)}{n^3 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \mathrm{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 4.54 \times 10^{-219})$$
+  $$\sum_{n=1}^\infty \frac{(-27)^n \left( 30n^2 - 23n + 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \mathrm{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 1.85 \times 10^{-218})$$
 
 #### D. Calabi-Yau Higher-Power Closed Forms ($\pi^4$ and $\pi^2$)
 - **Cubic-Central Hybrid $B_2(n) = \binom{2n}{n}^2\binom{3n}{n}$ ($a = 16$, cyclotomic pole $m=3$):**
