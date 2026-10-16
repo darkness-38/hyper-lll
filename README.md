@@ -97,20 +97,53 @@ $$\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 6n + 1 \r
 
 $$\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 18n^3 - 27n^2 - n \right) = \frac{6\sqrt{3}}{\pi} \quad (\text{Residual } 9.22 \times 10^{-132})$$
 
-### 10. Calabi-Yau Manifolds & Inverse Diagonal Series ($G$, $\zeta(3)$, $\text{Cl}_2(\pi/3)$)
-Discovered using the Inverse Calabi-Yau Super-Binomial Diagonal Engine at 225-digit precision ($10^{145}$ scale, residuals $< 10^{-218}$):
+### 10. Calabi-Yau Manifolds & Inverse Diagonal Series ($G$, $\zeta(3)$, $\text{Cl}_2(\pi/3)$, $\pi^4$)
+Discovered using the Inverse Calabi-Yau Super-Binomial Diagonal Engine at 225-digit precision ($10^{145}$ scale, residuals $< 10^{-218}$, 1352 parallel tasks across 7 CPU threads). Logged in [`discovered_calabi_yau_identities.txt`](discovered_calabi_yau_identities.txt):
 
-- **Catalan's Constant $G$ via Central Cube ($B_9$, $a = -8$):**
-  $$\sum_{n=1}^\infty \frac{(-8)^n \left( 3n - 1 \right)}{n^3 \binom{2n}{n}^3} = -2 G \quad (\text{Residual } 5.53 \times 10^{-221})$$
+#### A. Catalan's Constant ($G$) — The Holy Grail
+Closed-form rational hypergeometric series with zero harmonic numbers:
+- **Central Cube $B_9(n) = \binom{2n}{n}^3$ ($a = -8$, cyclotomic pole $m=0$):**
+  $$\sum_{n=1}^\infty \frac{(-8)^n \left( 3n - 1 \right)}{n^3 \binom{2n}{n}^3} = -2 G \quad (\text{Residual: } 5.53 \times 10^{-221})$$
 
-- **Catalan's Constant $G$ via Quantic-Central Twin ($B_5$, $a = 16$):**
-  $$\sum_{n=1}^\infty \frac{16^n \left( 6n - 1 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G \quad (\text{Residual } 1.18 \times 10^{-219})$$
+- **Central Cube $B_9(n) = \binom{2n}{n}^3$ ($a = -8$, cyclotomic pole $m=1$):**
+  $$\sum_{n=1}^\infty \frac{(-8)^n \left( 6n^2 - 5n + 1 \right)}{n^3 (2n-1) \binom{2n}{n}^3} = -2 G \quad (\text{Residual: } 4.55 \times 10^{-220})$$
 
-- **Apéry's Constant $\zeta(3)$ via Level-3 Calabi-Yau ($B_4$, $a = 1$):**
-  $$\sum_{n=1}^\infty \frac{364 n^2 - 227 n + 36}{n^4 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3) \quad (\text{Residual } 3.12 \times 10^{-219})$$
+- **Quantic-Central Twin $B_5(n) = \binom{2n}{n}\binom{4n}{2n}$ ($a = 16$, cyclotomic pole $m=1$):**
+  $$\sum_{n=1}^\infty \frac{16^n \left( 6n - 1 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G \quad (\text{Residual: } 1.18 \times 10^{-219})$$
 
-- **Hexagonal Clausen $\text{Cl}_2(\pi/3)$ via Deuring Cubic ($B_1$, $a = 3$):**
-  $$\sum_{n=1}^\infty \frac{3^n \left( 36n - 9 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual } 2.36 \times 10^{-219})$$
+#### B. Apéry's Constant $\zeta(3)$ from Calabi-Yau 3-Folds
+- **Level-3 Calabi-Yau $B_4(n) = \binom{2n}{n}^2 \binom{3n}{n}^2$ ($a = 1$, cyclotomic pole $m=1$):**
+  $$\sum_{n=1}^\infty \frac{364 n^2 - 227 n + 36}{n^4 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3) \quad (\text{Residual: } 3.12 \times 10^{-219})$$
+
+- **Level-3 Calabi-Yau $B_4(n) = \binom{2n}{n}^2 \binom{3n}{n}^2$ ($a = 1$, cyclotomic pole $m=2$):**
+  $$\sum_{n=1}^\infty \frac{728 n^3 - 818 n^2 + 299 n - 36}{n^4 (2n-1)^2 \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3) \quad (\text{Residual: } 2.12 \times 10^{-219})$$
+
+- **Quantic-Central Twin $B_5(n) = \binom{2n}{n}\binom{4n}{2n}$ ($a = -16$, cyclotomic pole $m=2$):**
+  $$\sum_{n=1}^\infty \frac{(-16)^n \left( 20 n^2 - 8 n + 1 \right)}{n^3 (2n-1)^2 \binom{2n}{n} \binom{4n}{2n}} = -14 \zeta(3) \quad (\text{Residual: } 1.09 \times 10^{-218})$$
+
+- **Central 5th Power $B_{11}(n) = \binom{2n}{n}^5$ ($a = -256$, accelerated pole $m=0$):**
+  $$\sum_{n=1}^\infty \frac{(-256)^n \left( 10 n^2 - 6 n + 1 \right)}{n^5 \binom{2n}{n}^5} = -28 \zeta(3) \quad (\text{Residual: } 1.19 \times 10^{-218})$$
+
+- **Central Square $B_8(n) = \binom{2n}{n}^2$ ($a = 4$ and $a = 1$):**
+  $$\sum_{n=1}^\infty \frac{4^n \left( 12 n - 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2} = 7 \zeta(3), \quad \sum_{n=1}^\infty \frac{30 n - 11}{n^3 (2n-1) \binom{2n}{n}^2} = 4 \zeta(3) \quad (\text{Residuals } < 10^{-218})$$
+
+#### C. Hexagonal Clausen Function $\text{Cl}_2(\pi/3)$ via Deuring Cubic Curves
+- **Deuring Cubic $B_1(n) = \binom{2n}{n}\binom{3n}{n}$ ($a = 3$, cyclotomic pole $m=1$):**
+  $$\sum_{n=1}^\infty \frac{3^n \left( 36n - 9 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 2.36 \times 10^{-219})$$
+
+- **Cubic-Central Hybrid $B_2(n) = \binom{2n}{n}^2\binom{3n}{n}$ ($a = -27$, cubic pole $m=0$ and $m=1$):**
+  $$\sum_{n=1}^\infty \frac{(-27)^n \left( 15n - 4 \right)}{n^3 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 4.54 \times 10^{-219})$$
+  $$\sum_{n=1}^\infty \frac{(-27)^n \left( 30n^2 - 23n + 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 1.85 \times 10^{-218})$$
+
+#### D. Calabi-Yau Higher-Power Closed Forms ($\pi^4$ and $\pi^2$)
+- **Cubic-Central Hybrid $B_2(n) = \binom{2n}{n}^2\binom{3n}{n}$ ($a = 16$, cyclotomic pole $m=3$):**
+  $$\sum_{n=1}^\infty \frac{16^n \left( 276 n^3 - 294 n^2 + 102 n - 12 \right)}{n^4 (2n-1)^3 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^4 \quad (\text{Residual: } 9.86 \times 10^{-218})$$
+
+- **Deuring Cubic $B_1(n) = \binom{2n}{n}\binom{3n}{n}$ ($a = -1$, cyclotomic pole $m=3$):**
+  $$\sum_{n=1}^\infty \frac{(-1)^n \left( 1260 n^2 - 810 n + 135 \right)}{n^4 (2n-1)^3 \binom{2n}{n} \binom{3n}{n}} = -\pi^4 \quad (\text{Residual: } 9.86 \times 10^{-218})$$
+
+- **Quintic Calabi-Yau $B_6(n) = \binom{2n}{n}^2\binom{4n}{2n}$ ($a = 81$, cyclotomic pole $m=0$):**
+  $$\sum_{n=1}^\infty \frac{81^n \left( 35 n - 8 \right)}{n^3 \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2 \quad (\text{Residual: } 3.82 \times 10^{-218})$$
 
 ---
 
@@ -173,6 +206,7 @@ Tested on an **Intel Core i3-N305 (8 Cores, 7 Rayon worker threads)** under Linu
 | **Cubic Binomial LLL** | 12-Dimensional Lattice | Scale $10^{120}$ (4 lattices) | **0.84 s** |
 | **Odd Denominator LLL** | 9-Dimensional Lattice | Scale $10^{120}$ (16 kernels) | **3.36 s** |
 | **Full Novel Space Scan** | 24 LLL Reductions | 200 Decimals | **5.47 s** |
+| **Inverse Calabi-Yau Scan** | 1352 Tasks (14 Kernels, $B_1..B_{14}$) | 650 steps (225 decimals, scale $10^{145}$) | **44.3 min (7 threads)** |
 | **Formal WZ Proof Suite** | 6 Theorems verified | $\mathbb{Z}[n, k]$ ring checks | **50 ms** |
 
 ---
@@ -189,10 +223,17 @@ cd hyper-lll
 cargo build --release
 ```
 
-### Run Ramanujan & Guillera Series Discovery (Default)
-Run the 200-digit Super-Binomial & Pure Polynomial discovery engine across all kernels $B_1 \dots B_7$ and modular bases:
+### Run Calabi-Yau Super-Binomial Diagonal Engine (Default)
+Run the 225-digit Calabi-Yau and inverse super-binomial discovery scanner across all 14 kernels ($B_1 \dots B_{14}$) and cyclotomic/cubic poles:
 ```bash
 cargo run --release
+```
+Results will be output to console and saved in [`discovered_calabi_yau_identities.txt`](discovered_calabi_yau_identities.txt).
+
+### Run Ramanujan & Guillera Series Discovery
+Run the 200-digit Super-Binomial & Pure Polynomial discovery engine across all kernels $B_1 \dots B_7$ and modular bases:
+```bash
+cargo run --release -- --guillera
 ```
 Results will be output to console and saved in [`discovered_guillera_series.txt`](discovered_guillera_series.txt).
 
@@ -202,6 +243,12 @@ Run the multi-harmonic high-weight discovery scan:
 cargo run --release -- --novel
 ```
 Results will be output to console and saved in [`discovered_novel_identities.txt`](discovered_novel_identities.txt).
+
+### Run Frontier Domb & Almkvist-Zudilin Modular Scan
+Run the double-sum modular Calabi-Yau scan for $1/\pi^3, 1/\pi^4$:
+```bash
+cargo run --release -- --frontier
+```
 
 ### Run Automated Formal Proofs (WZ Engine)
 Verify discovered theorems symbolically and generate a publication-ready LaTeX paper:
@@ -216,7 +263,7 @@ This produces:
 ```bash
 cargo test
 ```
-All 13 unit tests verify CVZ convergence to independent series, $\sqrt{2}$ precision, 2D polynomial ring algebra, and WZ divergence vanishing.
+All 15 unit tests verify CVZ convergence to independent series, $\sqrt{2}$ precision, 2D polynomial ring algebra, and WZ divergence vanishing.
 
 ---
 
