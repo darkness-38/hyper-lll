@@ -124,15 +124,20 @@ Closed-form rational hypergeometric series with zero harmonic numbers:
 - **Central 5th Power $B_{11}(n) = \binom{2n}{n}^5$ ($a = -256$, accelerated pole $m=0$):**
   $$\sum_{n=1}^\infty \frac{(-256)^n \left( 10 n^2 - 6 n + 1 \right)}{n^5 \binom{2n}{n}^5} = -28 \zeta(3) \quad (\text{Residual: } 1.19 \times 10^{-218})$$
 
-- **Central Square $B_8(n) = \binom{2n}{n}^2$ ($a = 4$ and $a = 1$):**
-  $$\sum_{n=1}^\infty \frac{4^n \left( 12 n - 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2} = 7 \zeta(3), \quad \sum_{n=1}^\infty \frac{30 n - 11}{n^3 (2n-1) \binom{2n}{n}^2} = 4 \zeta(3) \quad (\text{Residuals } < 10^{-218})$$
+- **Central Square $B_8(n) = \binom{2n}{n}^2$ ($a = 4$, cyclotomic pole $m=1$):**
+  $$\sum_{n=1}^\infty \frac{4^n \left( 12 n - 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2} = 7 \zeta(3) \quad (\text{Residual: } 6.47 \times 10^{-219})$$
+
+- **Central Square $B_8(n) = \binom{2n}{n}^2$ ($a = 1$, cyclotomic pole $m=1$):**
+  $$\sum_{n=1}^\infty \frac{30 n - 11}{n^3 (2n-1) \binom{2n}{n}^2} = 4 \zeta(3) \quad (\text{Residual: } 1.12 \times 10^{-219})$$
 
 #### C. Hexagonal Clausen Function $\text{Cl}_2(\pi/3)$ via Deuring Cubic Curves
 - **Deuring Cubic $B_1(n) = \binom{2n}{n}\binom{3n}{n}$ ($a = 3$, cyclotomic pole $m=1$):**
   $$\sum_{n=1}^\infty \frac{3^n \left( 36n - 9 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3} \mathrm{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 2.36 \times 10^{-219})$$
 
-- **Cubic-Central Hybrid $B_2(n) = \binom{2n}{n}^2\binom{3n}{n}$ ($a = -27$, cubic pole $m=0$ and $m=1$):**
+- **Cubic-Central Hybrid $B_2(n) = \binom{2n}{n}^2\binom{3n}{n}$ ($a = -27$, cubic pole $m=0$):**
   $$\sum_{n=1}^\infty \frac{(-27)^n \left( 15n - 4 \right)}{n^3 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \mathrm{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 4.54 \times 10^{-219})$$
+
+- **Cubic-Central Hybrid $B_2(n) = \binom{2n}{n}^2\binom{3n}{n}$ ($a = -27$, cyclotomic pole $m=1$):**
   $$\sum_{n=1}^\infty \frac{(-27)^n \left( 30n^2 - 23n + 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3} \mathrm{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual: } 1.85 \times 10^{-218})$$
 
 #### D. Calabi-Yau Higher-Power Closed Forms ($\pi^4$ and $\pi^2$)
