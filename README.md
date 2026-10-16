@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![DOI](https://zenodo.org/badge/1421191622.svg)](https://doi.org/10.5281/zenodo.23425304)
 [![Rust](https://img.shields.io/badge/Rust-2024_Edition-orange.svg?style=flat-square&logo=rust)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg?style=flat-square)](LICENSE)
 [![Precision](https://img.shields.io/badge/Precision-225_Decimals-brightgreen.svg?style=flat-square)]()
