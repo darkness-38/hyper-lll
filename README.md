@@ -4,13 +4,13 @@
 
 [![Rust](https://img.shields.io/badge/Rust-2024_Edition-orange.svg?style=flat-square&logo=rust)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg?style=flat-square)](LICENSE)
-[![Precision](https://img.shields.io/badge/Precision-200_Decimals-brightgreen.svg?style=flat-square)]()
-[![Lattice](https://img.shields.io/badge/LLL_Scale-10%5E120-purple.svg?style=flat-square)]()
-[![Tests](https://img.shields.io/badge/Tests-13%2F13_Passing-success.svg?style=flat-square)]()
+[![Precision](https://img.shields.io/badge/Precision-225_Decimals-brightgreen.svg?style=flat-square)]()
+[![Lattice](https://img.shields.io/badge/LLL_Scale-10%5E145-purple.svg?style=flat-square)]()
+[![Tests](https://img.shields.io/badge/Tests-15%2F15_Passing-success.svg?style=flat-square)]()
 
 **High-Precision Integer Relation & Hypergeometric Constant Discovery Engine in Pure Rust.**
 
-*Reverse-engineering transcendental constants ($\zeta(7)$, Ramanujan/Guillera $1/\pi^k$ series, high-weight binomial hybrids) at 200-digit precision in seconds using multi-dimensional LLL lattice reduction and automated Wilf-Zeilberger proof certificates.*
+*Reverse-engineering transcendental constants ($\zeta(7)$, Catalan $G$, Level-3 Calabi-Yau, Ramanujan/Guillera $1/\pi^k$ series, high-weight binomial hybrids) at 225-digit precision in seconds using multi-dimensional LLL lattice reduction and automated Wilf-Zeilberger proof certificates.*
 
 [Features](#-key-features) •
 [Discovered Theorems](#-discovered-theorems--breakthroughs) •
@@ -95,6 +95,21 @@ $$\sum_{n=0}^\infty \frac{\binom{2n}{n}^3}{4096^n} \left( 42n + 5 \right) = \fra
 $$\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 6n + 1 \right) = \frac{3\sqrt{3}}{\pi} \quad (\text{Residual } 1.51 \times 10^{-137})$$
 
 $$\sum_{n=0}^\infty \frac{\binom{2n}{n}^2 \binom{3n}{n}}{216^n} \left( 18n^3 - 27n^2 - n \right) = \frac{6\sqrt{3}}{\pi} \quad (\text{Residual } 9.22 \times 10^{-132})$$
+
+### 10. Calabi-Yau Manifolds & Inverse Diagonal Series ($G$, $\zeta(3)$, $\text{Cl}_2(\pi/3)$)
+Discovered using the Inverse Calabi-Yau Super-Binomial Diagonal Engine at 225-digit precision ($10^{145}$ scale, residuals $< 10^{-218}$):
+
+- **Catalan's Constant $G$ via Central Cube ($B_9$, $a = -8$):**
+  $$\sum_{n=1}^\infty \frac{(-8)^n \left( 3n - 1 \right)}{n^3 \binom{2n}{n}^3} = -2 G \quad (\text{Residual } 5.53 \times 10^{-221})$$
+
+- **Catalan's Constant $G$ via Quantic-Central Twin ($B_5$, $a = 16$):**
+  $$\sum_{n=1}^\infty \frac{16^n \left( 6n - 1 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G \quad (\text{Residual } 1.18 \times 10^{-219})$$
+
+- **Apéry's Constant $\zeta(3)$ via Level-3 Calabi-Yau ($B_4$, $a = 1$):**
+  $$\sum_{n=1}^\infty \frac{364 n^2 - 227 n + 36}{n^4 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3) \quad (\text{Residual } 3.12 \times 10^{-219})$$
+
+- **Hexagonal Clausen $\text{Cl}_2(\pi/3)$ via Deuring Cubic ($B_1$, $a = 3$):**
+  $$\sum_{n=1}^\infty \frac{3^n \left( 36n - 9 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3} \operatorname{Cl}_2\left(\frac{\pi}{3}\right) \quad (\text{Residual } 2.36 \times 10^{-219})$$
 
 ---
 

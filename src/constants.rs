@@ -658,6 +658,143 @@ impl FrontierConstantPool {
     }
 }
 
+pub fn compute_clausen_pi3(prec: usize) -> DBig {
+    const CL2_STR: &str = "1.01494160640965362502120255427452028594168930753029979201748910677659747625824402213647035422825669494586182753135988762597536082305019306224680177158580364265199242954529354609802401824271306276566807368558847200791172199266380932541685813";
+    DBig::from_str(CL2_STR).unwrap().with_precision(prec).value()
+}
+
+pub struct CalabiYauConstantPool {
+    pub odd_zeta_targets: Vec<TargetConstant>,
+    pub even_zeta_targets: Vec<TargetConstant>,
+    pub catalan_beta_targets: Vec<TargetConstant>,
+    pub hexagonal_cubic_targets: Vec<TargetConstant>,
+    pub weight4_mixed_targets: Vec<TargetConstant>,
+    pub pi3_targets: Vec<TargetConstant>,
+    pub pi2_targets: Vec<TargetConstant>,
+    pub all_inverse_targets: Vec<TargetConstant>,
+}
+
+impl CalabiYauConstantPool {
+    pub fn new() -> Self {
+        let prec = 225;
+        let one = DBig::ONE.with_precision(prec).value();
+        let pi = compute_pi(prec);
+        let sqrt2 = compute_sqrt2(prec);
+        let sqrt3 = compute_sqrt3(prec);
+        let ln2 = compute_ln2(prec);
+        let zeta3 = compute_zeta3(prec);
+        let zeta5 = compute_zeta5(prec);
+        let zeta7 = compute_zeta7(prec);
+        let catalan = compute_catalan(prec);
+        let beta4 = compute_beta4(prec);
+        let li4 = compute_li4_half(prec);
+        let cl2 = compute_clausen_pi3(prec);
+
+        let sqrt3_cl2 = (&sqrt3 * &cl2).with_precision(prec).value();
+        let pi_sqrt3 = (&pi * &sqrt3).with_precision(prec).value();
+        let pi_ln2 = (&pi * &ln2).with_precision(prec).value();
+
+        let pi2 = (&pi * &pi).with_precision(prec).value();
+        let pi3 = (&pi2 * &pi).with_precision(prec).value();
+        let pi4 = (&pi2 * &pi2).with_precision(prec).value();
+        let pi6 = (&pi4 * &pi2).with_precision(prec).value();
+
+        let ln2_2 = (&ln2 * &ln2).with_precision(prec).value();
+        let ln2_4 = (&ln2_2 * &ln2_2).with_precision(prec).value();
+        let pi2_ln2_2 = (&pi2 * &ln2_2).with_precision(prec).value();
+        let zeta3_ln2 = (&zeta3 * &ln2).with_precision(prec).value();
+
+        let inv_pi3 = (&one / &pi3).with_precision(prec).value();
+        let sqrt2_over_pi3 = (&sqrt2 / &pi3).with_precision(prec).value();
+        let sqrt3_over_pi3 = (&sqrt3 / &pi3).with_precision(prec).value();
+
+        let inv_pi2 = (&one / &pi2).with_precision(prec).value();
+        let sqrt2_over_pi2 = (&sqrt2 / &pi2).with_precision(prec).value();
+        let sqrt3_over_pi2 = (&sqrt3 / &pi2).with_precision(prec).value();
+
+        let make_tc = |name: &'static str, latex: &'static str, val: DBig| -> TargetConstant {
+            TargetConstant {
+                name,
+                latex,
+                value: val,
+            }
+        };
+
+        let odd_zeta_targets = vec![
+            make_tc("ζ(3)", "\\zeta(3)", zeta3.clone()),
+            make_tc("ζ(5)", "\\zeta(5)", zeta5.clone()),
+            make_tc("ζ(7)", "\\zeta(7)", zeta7.clone()),
+        ];
+
+        let even_zeta_targets = vec![
+            make_tc("π²", "\\pi^2", pi2.clone()),
+            make_tc("π⁴", "\\pi^4", pi4.clone()),
+            make_tc("π⁶", "\\pi^6", pi6.clone()),
+        ];
+
+        let catalan_beta_targets = vec![
+            make_tc("G", "G", catalan.clone()),
+            make_tc("π*ln(2)", "\\pi\\ln 2", pi_ln2.clone()),
+            make_tc("β(4)", "\\beta(4)", beta4.clone()),
+        ];
+
+        let hexagonal_cubic_targets = vec![
+            make_tc("π√3", "\\pi\\sqrt{3}", pi_sqrt3.clone()),
+            make_tc("√3*Cl₂(π/3)", "\\sqrt{3}\\text{Cl}_2(\\pi/3)", sqrt3_cl2.clone()),
+            make_tc("Cl₂(π/3)", "\\text{Cl}_2(\\pi/3)", cl2.clone()),
+            make_tc("ζ(3)", "\\zeta(3)", zeta3.clone()),
+        ];
+
+        let weight4_mixed_targets = vec![
+            make_tc("π⁴", "\\pi^4", pi4.clone()),
+            make_tc("ζ(3)ln(2)", "\\zeta(3)\\ln 2", zeta3_ln2.clone()),
+            make_tc("π²ln²(2)", "\\pi^2\\ln^2 2", pi2_ln2_2.clone()),
+            make_tc("ln⁴(2)", "\\ln^4 2", ln2_4.clone()),
+            make_tc("Li₄(1/2)", "\\text{Li}_4(1/2)", li4.clone()),
+        ];
+
+        let pi3_targets = vec![
+            make_tc("1/π³", "\\frac{1}{\\pi^3}", inv_pi3),
+            make_tc("√2/π³", "\\frac{\\sqrt{2}}{\\pi^3}", sqrt2_over_pi3),
+            make_tc("√3/π³", "\\frac{\\sqrt{3}}{\\pi^3}", sqrt3_over_pi3),
+        ];
+
+        let pi2_targets = vec![
+            make_tc("1/π²", "\\frac{1}{\\pi^2}", inv_pi2),
+            make_tc("√2/π²", "\\frac{\\sqrt{2}}{\\pi^2}", sqrt2_over_pi2),
+            make_tc("√3/π²", "\\frac{\\sqrt{3}}{\\pi^2}", sqrt3_over_pi2),
+        ];
+
+        let mut all_inverse_targets = Vec::new();
+        let mut seen_names = std::collections::HashSet::new();
+        let all_pools = [
+            &odd_zeta_targets,
+            &even_zeta_targets,
+            &catalan_beta_targets,
+            &hexagonal_cubic_targets,
+            &weight4_mixed_targets,
+        ];
+        for pool in all_pools {
+            for tc in pool {
+                if seen_names.insert(tc.name) {
+                    all_inverse_targets.push(tc.clone());
+                }
+            }
+        }
+
+        Self {
+            odd_zeta_targets,
+            even_zeta_targets,
+            catalan_beta_targets,
+            hexagonal_cubic_targets,
+            weight4_mixed_targets,
+            pi3_targets,
+            pi2_targets,
+            all_inverse_targets,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

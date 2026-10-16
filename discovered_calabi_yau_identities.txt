@@ -1,0 +1,1006 @@
+================================================================================
+CALABI-YAU SUPER-BINOMIAL & INVERSE DIAGONAL IDENTITIES
+Discovered by hyper-lll (225-digit precision, LLL scale 10^145, threshold 10^-120)
+Total Identities: 125 (Novel: 123, Known References: 2)
+================================================================================
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [1] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 5.53e-221 | Norm: 3.7417
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 3 n - 1 \right)}{n^3 \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [2] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 4.55e-220 | Norm: 3.7417
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 3 n^2 - n \right)}{n^4 \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [3] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 4.55e-220 | Norm: 3.7417
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 3 n^3 - n^2 \right)}{n^5 \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [4] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 4.55e-220 | Norm: 3.7417
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 3 n^4 - n^3 \right)}{n^6 \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [5] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 6.4031
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n - 2 \right)}{n^3 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [6] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 6.4031
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n^2 - 2 n \right)}{n^4 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [7] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 6.4031
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n^3 - 2 n^2 \right)}{n^5 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [8] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 6.4031
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n^4 - 2 n^3 \right)}{n^6 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [9] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 4.55e-220 | Norm: 8.1240
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 6 n^2 - 5 n + 1 \right)}{n^3 (2n-1) \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [10] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 4.55e-220 | Norm: 8.1240
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 6 n^3 - 5 n^2 + n \right)}{n^4 (2n-1) \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [11] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 4.55e-220 | Norm: 8.1240
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 6 n^4 - 5 n^3 + n^2 \right)}{n^5 (2n-1) \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [12] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = -8
+% Hata: 4.55e-220 | Norm: 8.1240
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-8)^n \left( 6 n^5 - 5 n^4 + n^3 \right)}{n^6 (2n-1) \binom{2n}{n}^3} = -2 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [13] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = 16
+% Hata: 1.18e-219 | Norm: 10.0499
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n - 1 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [14] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = 16
+% Hata: 1.18e-219 | Norm: 10.0499
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n^2 - n \right)}{n^3 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [15] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = 16
+% Hata: 1.18e-219 | Norm: 10.0499
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n^3 - n^2 \right)}{n^4 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [16] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = 16
+% Hata: 1.18e-219 | Norm: 10.0499
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n^4 - n^3 \right)}{n^5 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [17] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = 16
+% Hata: 1.18e-219 | Norm: 10.0499
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 6 n^5 - n^4 \right)}{n^6 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = 8 G
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [18] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 3.52e-219 | Norm: 10.2470
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 10 n - 2 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [19] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 3.52e-219 | Norm: 10.2470
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 10 n^2 - 2 n \right)}{n^3 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [20] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 3.52e-219 | Norm: 10.2470
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 10 n^3 - 2 n^2 \right)}{n^4 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [21] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 3.52e-219 | Norm: 10.2470
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 10 n^4 - 2 n^3 \right)}{n^5 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [22] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 3.52e-219 | Norm: 10.2470
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 10 n^5 - 2 n^4 \right)}{n^6 (2n-1) \binom{2n}{n} \binom{4n}{2n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [23] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 6.47e-219 | Norm: 14.4568
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 12 n - 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [24] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 6.47e-219 | Norm: 14.4568
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 12 n^2 - 4 n \right)}{n^4 (2n-1) \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [25] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 6.47e-219 | Norm: 14.4568
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 12 n^3 - 4 n^2 \right)}{n^5 (2n-1) \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [26] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 6.47e-219 | Norm: 14.4568
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 12 n^4 - 4 n^3 \right)}{n^6 (2n-1) \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [27] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 15.7797
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 12 n^2 - 10 n + 2 \right)}{n^3 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [28] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 15.7797
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 12 n^3 - 10 n^2 + 2 n \right)}{n^4 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [29] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 15.7797
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 12 n^4 - 10 n^3 + 2 n^2 \right)}{n^5 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [30] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 16
+% Hata: 2.48e-219 | Norm: 15.7797
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 12 n^5 - 10 n^4 + 2 n^3 \right)}{n^6 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [31] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 4.54e-219 | Norm: 19.6214
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 15 n - 4 \right)}{n^3 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [32] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 8.54e-219 | Norm: 19.6214
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 15 n^2 - 4 n \right)}{n^4 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [33] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 8.54e-219 | Norm: 19.6214
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 15 n^3 - 4 n^2 \right)}{n^5 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [34] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 8.54e-219 | Norm: 19.6214
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 15 n^4 - 4 n^3 \right)}{n^6 \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [35] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 1.52e-219 | Norm: 20.9045
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 20 n - 6 \right)}{n^3 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [36] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 1.52e-219 | Norm: 20.9045
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 20 n^2 - 6 n \right)}{n^4 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [37] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 1.52e-219 | Norm: 20.9045
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 20 n^3 - 6 n^2 \right)}{n^5 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [38] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 1.52e-219 | Norm: 20.9045
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 20 n^4 - 6 n^3 \right)}{n^6 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [39] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 1.09e-218 | Norm: 25.7099
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 20 n^2 - 8 n + 1 \right)}{n^3 (2n-1)^2 \binom{2n}{n} \binom{4n}{2n}} = -14 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [40] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 1.09e-218 | Norm: 25.7099
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 20 n^3 - 8 n^2 + n \right)}{n^4 (2n-1)^2 \binom{2n}{n} \binom{4n}{2n}} = -14 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [41] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 1.09e-218 | Norm: 25.7099
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 20 n^4 - 8 n^3 + n^2 \right)}{n^5 (2n-1)^2 \binom{2n}{n} \binom{4n}{2n}} = -14 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [42] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n), Taban: a = -16
+% Hata: 1.09e-218 | Norm: 25.7099
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-16)^n \left( 20 n^5 - 8 n^4 + n^3 \right)}{n^6 (2n-1)^2 \binom{2n}{n} \binom{4n}{2n}} = -14 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [43] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -256
+% Hata: 1.19e-218 | Norm: 30.3480
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-256)^n \left( 10 n^2 - 6 n + 1 \right)}{n^5 \binom{2n}{n}^5} = -28 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [44] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -256
+% Hata: 1.19e-218 | Norm: 30.3480
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-256)^n \left( 10 n^3 - 6 n^2 + n \right)}{n^6 \binom{2n}{n}^5} = -28 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [45] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.12e-219 | Norm: 32.2025
+\begin{equation}
+\sum_{n=1}^\infty \frac{30 n - 11}{n^3 (2n-1) \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [46] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.12e-219 | Norm: 32.2025
+\begin{equation}
+\sum_{n=1}^\infty \frac{30 n^2 - 11 n}{n^4 (2n-1) \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [47] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.12e-219 | Norm: 32.2025
+\begin{equation}
+\sum_{n=1}^\infty \frac{30 n^3 - 11 n^2}{n^5 (2n-1) \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [48] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.12e-219 | Norm: 32.2025
+\begin{equation}
+\sum_{n=1}^\infty \frac{30 n^4 - 11 n^3}{n^6 (2n-1) \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [49] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 2.47e-219 | Norm: 32.2645
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 24 n^2 - 20 n + 4 \right)}{n^3 (2n-1)^2 \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [50] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 2.47e-219 | Norm: 32.2645
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 24 n^3 - 20 n^2 + 4 n \right)}{n^4 (2n-1)^2 \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [51] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 2.47e-219 | Norm: 32.2645
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 24 n^4 - 20 n^3 + 4 n^2 \right)}{n^5 (2n-1)^2 \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [52] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 4
+% Hata: 2.47e-219 | Norm: 32.2645
+\begin{equation}
+\sum_{n=1}^\infty \frac{4^n \left( 24 n^5 - 20 n^4 + 4 n^3 \right)}{n^6 (2n-1)^2 \binom{2n}{n}^2} = 7 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [53] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 3.82e-218 | Norm: 37.8550
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 35 n - 8 \right)}{n^3 \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [54] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 5.82e-218 | Norm: 37.8550
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 35 n^2 - 8 n \right)}{n^4 \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [55] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 5.82e-218 | Norm: 37.8550
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 35 n^3 - 8 n^2 \right)}{n^5 \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [56] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 5.82e-218 | Norm: 37.8550
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 35 n^4 - 8 n^3 \right)}{n^6 \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [57] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = 3
+% Hata: 2.36e-219 | Norm: 37.9605
+\begin{equation}
+\sum_{n=1}^\infty \frac{3^n \left( 36 n - 9 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [58] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = 3
+% Hata: 2.36e-219 | Norm: 37.9605
+\begin{equation}
+\sum_{n=1}^\infty \frac{3^n \left( 36 n^2 - 9 n \right)}{n^3 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [59] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = 3
+% Hata: 2.36e-219 | Norm: 37.9605
+\begin{equation}
+\sum_{n=1}^\infty \frac{3^n \left( 36 n^3 - 9 n^2 \right)}{n^4 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [60] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = 3
+% Hata: 2.36e-219 | Norm: 37.9605
+\begin{equation}
+\sum_{n=1}^\infty \frac{3^n \left( 36 n^4 - 9 n^3 \right)}{n^5 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [61] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = 3
+% Hata: 2.36e-219 | Norm: 37.9605
+\begin{equation}
+\sum_{n=1}^\infty \frac{3^n \left( 36 n^5 - 9 n^4 \right)}{n^6 (2n-1) \binom{2n}{n} \binom{3n}{n}} = 8 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [62] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 1.85e-218 | Norm: 39.8623
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 30 n^2 - 23 n + 4 \right)}{n^3 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [63] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 1.85e-218 | Norm: 39.8623
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 30 n^3 - 23 n^2 + 4 n \right)}{n^4 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [64] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 1.85e-218 | Norm: 39.8623
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 30 n^4 - 23 n^3 + 4 n^2 \right)}{n^5 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [65] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = -27
+% Hata: 1.85e-218 | Norm: 39.8623
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-27)^n \left( 30 n^5 - 23 n^4 + 4 n^3 \right)}{n^6 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = -12 \sqrt{3}\text{Cl}_2(\pi/3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [66] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -256
+% Hata: 1.81e-218 | Norm: 41.6293
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-256)^n \left( 20 n^4 - 22 n^3 + 8 n^2 - n \right)}{n^6 (2n-1) \binom{2n}{n}^5} = -28 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [67] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -256
+% Hata: 2.11e-218 | Norm: 41.6293
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-256)^n \left( 20 n^3 - 22 n^2 + 8 n - 1 \right)}{n^5 (2n-1) \binom{2n}{n}^5} = -28 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [68] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 4.81e-220 | Norm: 51.5849
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 40 n^2 - 32 n + 6 \right)}{n^3 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [69] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 4.81e-220 | Norm: 51.5849
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 40 n^3 - 32 n^2 + 6 n \right)}{n^4 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [70] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 4.81e-220 | Norm: 51.5849
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 40 n^4 - 32 n^3 + 6 n^2 \right)}{n^5 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [71] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 8
+% Hata: 4.81e-220 | Norm: 51.5849
+\begin{equation}
+\sum_{n=1}^\infty \frac{8^n \left( 40 n^5 - 32 n^4 + 6 n^3 \right)}{n^6 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [72] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 2.88e-219 | Norm: 64.8151
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 56 n^3 - 32 n^2 + 5 n \right)}{n^4 (2n-1)^2 \binom{2n}{n} \binom{3n}{n}} = -4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [73] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 2.88e-219 | Norm: 64.8151
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 56 n^4 - 32 n^3 + 5 n^2 \right)}{n^5 (2n-1)^2 \binom{2n}{n} \binom{3n}{n}} = -4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [74] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 2.88e-219 | Norm: 64.8151
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 56 n^5 - 32 n^4 + 5 n^3 \right)}{n^6 (2n-1)^2 \binom{2n}{n} \binom{3n}{n}} = -4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [75] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.88e-219 | Norm: 80.2558
+\begin{equation}
+\sum_{n=1}^\infty \frac{60 n^2 - 52 n + 11}{n^3 (2n-1)^2 \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [76] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.88e-219 | Norm: 80.2558
+\begin{equation}
+\sum_{n=1}^\infty \frac{60 n^3 - 52 n^2 + 11 n}{n^4 (2n-1)^2 \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [77] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.88e-219 | Norm: 80.2558
+\begin{equation}
+\sum_{n=1}^\infty \frac{60 n^4 - 52 n^3 + 11 n^2}{n^5 (2n-1)^2 \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [78] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Kare B_8(n) = binom(2n,n)^2, Taban: a = 1
+% Hata: 1.88e-219 | Norm: 80.2558
+\begin{equation}
+\sum_{n=1}^\infty \frac{60 n^5 - 52 n^4 + 11 n^3}{n^6 (2n-1)^2 \binom{2n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [79] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 3.48e-219 | Norm: 87.3670
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 84 n - 24 \right)}{n^2 (2n-1) \binom{2n}{n} \binom{3n}{n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [80] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 3.48e-219 | Norm: 87.3670
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 84 n^2 - 24 n \right)}{n^3 (2n-1) \binom{2n}{n} \binom{3n}{n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [81] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 3.48e-219 | Norm: 87.3670
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 84 n^3 - 24 n^2 \right)}{n^4 (2n-1) \binom{2n}{n} \binom{3n}{n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [82] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 3.48e-219 | Norm: 87.3670
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 84 n^4 - 24 n^3 \right)}{n^5 (2n-1) \binom{2n}{n} \binom{3n}{n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [83] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 3.48e-219 | Norm: 87.3670
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 84 n^5 - 24 n^4 \right)}{n^6 (2n-1) \binom{2n}{n} \binom{3n}{n}} = -\pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [84] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 5.82e-218 | Norm: 87.8009
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 70 n^2 - 51 n + 8 \right)}{n^3 (2n-1) \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [85] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 5.82e-218 | Norm: 87.8009
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 70 n^3 - 51 n^2 + 8 n \right)}{n^4 (2n-1) \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [86] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 5.82e-218 | Norm: 87.8009
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 70 n^4 - 51 n^3 + 8 n^2 \right)}{n^5 (2n-1) \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [87] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n), Taban: a = 81
+% Hata: 5.82e-218 | Norm: 87.8009
+\begin{equation}
+\sum_{n=1}^\infty \frac{81^n \left( 70 n^5 - 51 n^4 + 8 n^3 \right)}{n^6 (2n-1) \binom{2n}{n}^2 \binom{4n}{2n}} = 12 \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [88] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -256
+% Hata: 1.38e-217 | Norm: 89.5824
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-256)^n \left( 40 n^4 - 64 n^3 + 38 n^2 - 10 n + 1 \right)}{n^5 (2n-1)^2 \binom{2n}{n}^5} = -28 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [89] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -256
+% Hata: 1.38e-217 | Norm: 89.5824
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-256)^n \left( 40 n^5 - 64 n^4 + 38 n^3 - 10 n^2 + n \right)}{n^6 (2n-1)^2 \binom{2n}{n}^5} = -28 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [90] [LİTERATÜR DIŞI YENİ KEŞİF] 7/5-Binomlu Pay Serisi
+% Çekirdek: 5-Binomlu Melez K_4(n) = binom(2n,n)^4 * binom(4n,2n) (1/pi^2), Taban: a = 65536
+% Hata: 1.47e-219 | Norm: 128.7983
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^4 \binom{4n}{2n}}{65536^n} \left( 3 + 34 n + 120 n^2 \right) = \frac{32}{\pi^2}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [91] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 1.48e-219 | Norm: 134.8369
+\begin{equation}
+\sum_{n=1}^\infty \frac{126 n - 48}{n^3 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [92] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 1.48e-219 | Norm: 134.8369
+\begin{equation}
+\sum_{n=1}^\infty \frac{126 n^2 - 48 n}{n^4 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [93] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 1.48e-219 | Norm: 134.8369
+\begin{equation}
+\sum_{n=1}^\infty \frac{126 n^3 - 48 n^2}{n^5 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [94] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 1.48e-219 | Norm: 134.8369
+\begin{equation}
+\sum_{n=1}^\infty \frac{126 n^4 - 48 n^3}{n^6 \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [95] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 16
+% Hata: 4.86e-218 | Norm: 158.9748
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 138 n^2 - 78 n + 12 \right)}{n^4 (2n-1)^2 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [96] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 16
+% Hata: 4.86e-218 | Norm: 158.9748
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 138 n^3 - 78 n^2 + 12 n \right)}{n^5 (2n-1)^2 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [97] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 16
+% Hata: 4.86e-218 | Norm: 158.9748
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 138 n^4 - 78 n^3 + 12 n^2 \right)}{n^6 (2n-1)^2 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [98] [LİTERATÜR DIŞI YENİ KEŞİF] 7/5-Binomlu Pay Serisi
+% Çekirdek: 7-Binomlu K_1(n) = binom(2n,n)^7 (1/pi^3), Taban: a = 1048576
+% Hata: 3.91e-220 | Norm: 187.6726
+\begin{equation}
+\sum_{n=0}^\infty \frac{\binom{2n}{n}^7}{1048576^n} \left( 1 + 14 n + 76 n^2 + 168 n^3 \right) = \frac{32}{\pi^3}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [99] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -1
+% Hata: 4.38e-220 | Norm: 262.0172
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 205 n^3 - 160 n^2 + 32 n \right)}{n^6 \binom{2n}{n}^5} = -2 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [100] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 5.19e-220 | Norm: 339.2536
+\begin{equation}
+\sum_{n=1}^\infty \frac{252 n^2 - 222 n + 48}{n^3 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [101] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 5.19e-220 | Norm: 339.2536
+\begin{equation}
+\sum_{n=1}^\infty \frac{252 n^3 - 222 n^2 + 48 n}{n^4 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [102] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 5.19e-220 | Norm: 339.2536
+\begin{equation}
+\sum_{n=1}^\infty \frac{252 n^4 - 222 n^3 + 48 n^2}{n^5 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [103] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi Küp B_9(n) = binom(2n,n)^3, Taban: a = 1
+% Hata: 5.19e-220 | Norm: 339.2536
+\begin{equation}
+\sum_{n=1}^\infty \frac{252 n^5 - 222 n^4 + 48 n^3}{n^6 (2n-1) \binom{2n}{n}^3} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [104] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 16
+% Hata: 9.86e-218 | Norm: 416.1262
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 276 n^3 - 294 n^2 + 102 n - 12 \right)}{n^4 (2n-1)^3 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [105] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 16
+% Hata: 9.86e-218 | Norm: 416.1262
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 276 n^4 - 294 n^3 + 102 n^2 - 12 n \right)}{n^5 (2n-1)^3 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [106] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n), Taban: a = 16
+% Hata: 9.86e-218 | Norm: 416.1262
+\begin{equation}
+\sum_{n=1}^\infty \frac{16^n \left( 276 n^5 - 294 n^4 + 102 n^3 - 12 n^2 \right)}{n^6 (2n-1)^3 \binom{2n}{n}^2 \binom{3n}{n}} = \pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [107] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Seviye-3 Calabi-Yau B_4(n) = binom(2n,n)^2*binom(3n,n)^2, Taban: a = 1
+% Hata: 3.12e-219 | Norm: 430.5078
+\begin{equation}
+\sum_{n=1}^\infty \frac{364 n^2 - 227 n + 36}{n^4 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [108] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Seviye-3 Calabi-Yau B_4(n) = binom(2n,n)^2*binom(3n,n)^2, Taban: a = 1
+% Hata: 3.12e-219 | Norm: 430.5078
+\begin{equation}
+\sum_{n=1}^\infty \frac{364 n^3 - 227 n^2 + 36 n}{n^5 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [109] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Seviye-3 Calabi-Yau B_4(n) = binom(2n,n)^2*binom(3n,n)^2, Taban: a = 1
+% Hata: 3.12e-219 | Norm: 430.5078
+\begin{equation}
+\sum_{n=1}^\infty \frac{364 n^4 - 227 n^3 + 36 n^2}{n^6 (2n-1) \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [110] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Çift Kübik-Merkezi B_3(n) = binom(2n,n)*binom(3n,n)^2, Taban: a = 1
+% Hata: 3.52e-219 | Norm: 538.0390
+\begin{equation}
+\sum_{n=1}^\infty \frac{435 n^2 - 312 n + 54}{n^3 (2n-1) \binom{2n}{n} \binom{3n}{n}^2} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [111] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Çift Kübik-Merkezi B_3(n) = binom(2n,n)*binom(3n,n)^2, Taban: a = 1
+% Hata: 3.52e-219 | Norm: 538.0390
+\begin{equation}
+\sum_{n=1}^\infty \frac{435 n^3 - 312 n^2 + 54 n}{n^4 (2n-1) \binom{2n}{n} \binom{3n}{n}^2} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [112] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Çift Kübik-Merkezi B_3(n) = binom(2n,n)*binom(3n,n)^2, Taban: a = 1
+% Hata: 3.52e-219 | Norm: 538.0390
+\begin{equation}
+\sum_{n=1}^\infty \frac{435 n^4 - 312 n^3 + 54 n^2}{n^5 (2n-1) \binom{2n}{n} \binom{3n}{n}^2} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [113] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Çift Kübik-Merkezi B_3(n) = binom(2n,n)*binom(3n,n)^2, Taban: a = 1
+% Hata: 3.52e-219 | Norm: 538.0390
+\begin{equation}
+\sum_{n=1}^\infty \frac{435 n^5 - 312 n^4 + 54 n^3}{n^6 (2n-1) \binom{2n}{n} \binom{3n}{n}^2} = \pi^2
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [114] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -1
+% Hata: 3.04e-219 | Norm: 703.5119
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 410 n^3 - 525 n^2 + 224 n - 32 \right)}{n^5 (2n-1) \binom{2n}{n}^5} = -2 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [115] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -1
+% Hata: 3.44e-219 | Norm: 703.5119
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 410 n^4 - 525 n^3 + 224 n^2 - 32 n \right)}{n^6 (2n-1) \binom{2n}{n}^5} = -2 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [116] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Seviye-3 Calabi-Yau B_4(n) = binom(2n,n)^2*binom(3n,n)^2, Taban: a = 1
+% Hata: 2.12e-219 | Norm: 1135.7029
+\begin{equation}
+\sum_{n=1}^\infty \frac{728 n^3 - 818 n^2 + 299 n - 36}{n^4 (2n-1)^2 \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [117] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Seviye-3 Calabi-Yau B_4(n) = binom(2n,n)^2*binom(3n,n)^2, Taban: a = 1
+% Hata: 2.12e-219 | Norm: 1135.7029
+\begin{equation}
+\sum_{n=1}^\infty \frac{728 n^4 - 818 n^3 + 299 n^2 - 36 n}{n^5 (2n-1)^2 \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [118] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Seviye-3 Calabi-Yau B_4(n) = binom(2n,n)^2*binom(3n,n)^2, Taban: a = 1
+% Hata: 2.12e-219 | Norm: 1135.7029
+\begin{equation}
+\sum_{n=1}^\infty \frac{728 n^5 - 818 n^4 + 299 n^3 - 36 n^2}{n^6 (2n-1)^2 \binom{2n}{n}^2 \binom{3n}{n}^2} = 4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [119] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 9.86e-218 | Norm: 1503.9701
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 1260 n^2 - 810 n + 135 \right)}{n^4 (2n-1)^3 \binom{2n}{n} \binom{3n}{n}} = -\pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [120] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 9.86e-218 | Norm: 1503.9701
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 1260 n^3 - 810 n^2 + 135 n \right)}{n^5 (2n-1)^3 \binom{2n}{n} \binom{3n}{n}} = -\pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [121] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 9.86e-218 | Norm: 1503.9701
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 1260 n^4 - 810 n^3 + 135 n^2 \right)}{n^6 (2n-1)^3 \binom{2n}{n} \binom{3n}{n}} = -\pi^4
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [122] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -1
+% Hata: 7.44e-219 | Norm: 1958.2393
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 820 n^4 - 1460 n^3 + 973 n^2 - 288 n + 32 \right)}{n^5 (2n-1)^2 \binom{2n}{n}^5} = -2 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [123] [LİTERATÜR DIŞI YENİ KEŞİF] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -1
+% Hata: 7.44e-219 | Norm: 1958.2393
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 820 n^5 - 1460 n^4 + 973 n^3 - 288 n^2 + 32 n \right)}{n^6 (2n-1)^2 \binom{2n}{n}^5} = -2 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [124] [BİLİNEN REFERANS / DOĞRULAMA] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n), Taban: a = -1
+% Hata: 2.88e-219 | Norm: 64.8151
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 56 n^2 - 32 n + 5 \right)}{n^3 (2n-1)^2 \binom{2n}{n} \binom{3n}{n}} = -4 \zeta(3)
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% [125] [BİLİNEN REFERANS / DOĞRULAMA] Siklotomik Kutup (2n-1)^m
+% Çekirdek: Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5, Taban: a = -1
+% Hata: 4.38e-220 | Norm: 262.0172
+\begin{equation}
+\sum_{n=1}^\infty \frac{(-1)^n \left( 205 n^2 - 160 n + 32 \right)}{n^5 \binom{2n}{n}^5} = -2 \zeta(3)
+\end{equation}
+

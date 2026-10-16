@@ -14,6 +14,10 @@ pub const FRONTIER_SCALE_EXPONENT: isize = 140;
 pub const FRONTIER_VERIFY_EXPONENT: isize = -115;
 pub const FRONTIER_MAX_NORM: f64 = 120000.0;
 
+pub const CALABI_YAU_SCALE_EXPONENT: isize = 145;
+pub const CALABI_YAU_VERIFY_EXPONENT: isize = -120;
+pub const CALABI_YAU_MAX_NORM: f64 = 500000.0;
+
 #[derive(Debug, Clone)]
 pub struct IntegerRelation {
     pub m: Vec<i64>,
@@ -305,6 +309,16 @@ pub fn find_all_integer_relations_frontier(x: &[DBig]) -> Vec<IntegerRelation> {
         FRONTIER_SCALE_EXPONENT,
         FRONTIER_VERIFY_EXPONENT,
         FRONTIER_MAX_NORM,
+    )
+}
+
+/// Solves all integer relations for Calabi-Yau / Super-binomial vector `x` with LLL at 10^145 scale and verification at < 10^-120 (max norm 500000).
+pub fn find_all_integer_relations_calabi_yau(x: &[DBig]) -> Vec<IntegerRelation> {
+    find_all_integer_relations_custom(
+        x,
+        CALABI_YAU_SCALE_EXPONENT,
+        CALABI_YAU_VERIFY_EXPONENT,
+        CALABI_YAU_MAX_NORM,
     )
 }
 

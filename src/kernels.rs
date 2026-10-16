@@ -1208,3 +1208,680 @@ pub fn format_polynomial5_latex(coeffs: &[i64; 5]) -> String {
     }
     res
 }
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  4. TERS CALABI-YAU / SÜPER-BİNOM KÖŞEGEN MOTORU (B1..B14)
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum InverseKernelType {
+    B1,  // binom(2n, n) * binom(3n, n)
+    B2,  // binom(2n, n)^2 * binom(3n, n)
+    B3,  // binom(2n, n) * binom(3n, n)^2
+    B4,  // binom(2n, n)^2 * binom(3n, n)^2
+    B5,  // binom(2n, n) * binom(4n, 2n)
+    B6,  // binom(2n, n)^2 * binom(4n, 2n)
+    B7,  // binom(2n, n) * binom(3n, n) * binom(6n, 3n)
+    B8,  // binom(2n, n)^2
+    B9,  // binom(2n, n)^3
+    B10, // binom(2n, n)^4
+    B11, // binom(2n, n)^5
+    B12, // binom(2n, n)^7
+    B13, // binom(3n, n)^2
+    B14, // binom(3n, n)^3
+}
+
+impl InverseKernelType {
+    pub const ALL: [InverseKernelType; 14] = [
+        Self::B1, Self::B2, Self::B3, Self::B4, Self::B5, Self::B6, Self::B7,
+        Self::B8, Self::B9, Self::B10, Self::B11, Self::B12, Self::B13, Self::B14,
+    ];
+
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::B1 => "B_1",
+            Self::B2 => "B_2",
+            Self::B3 => "B_3",
+            Self::B4 => "B_4",
+            Self::B5 => "B_5",
+            Self::B6 => "B_6",
+            Self::B7 => "B_7",
+            Self::B8 => "B_8",
+            Self::B9 => "B_9",
+            Self::B10 => "B_{10}",
+            Self::B11 => "B_{11}",
+            Self::B12 => "B_{12}",
+            Self::B13 => "B_{13}",
+            Self::B14 => "B_{14}",
+        }
+    }
+
+    pub fn description(&self) -> &'static str {
+        match self {
+            Self::B1 => "Deuring Kübik B_1(n) = binom(2n,n)*binom(3n,n)",
+            Self::B2 => "Kübik-Merkezi Melez B_2(n) = binom(2n,n)^2*binom(3n,n)",
+            Self::B3 => "Çift Kübik-Merkezi B_3(n) = binom(2n,n)*binom(3n,n)^2",
+            Self::B4 => "Seviye-3 Calabi-Yau B_4(n) = binom(2n,n)^2*binom(3n,n)^2",
+            Self::B5 => "Kuantik-Merkezi İkiz B_5(n) = binom(2n,n)*binom(4n,2n)",
+            Self::B6 => "Quintic Calabi-Yau B_6(n) = binom(2n,n)^2*binom(4n,2n)",
+            Self::B7 => "Sextic Calabi-Yau B_7(n) = binom(2n,n)*binom(3n,n)*binom(6n,3n)",
+            Self::B8 => "Merkezi Kare B_8(n) = binom(2n,n)^2",
+            Self::B9 => "Merkezi Küp B_9(n) = binom(2n,n)^3",
+            Self::B10 => "Merkezi 4. Güç B_{10}(n) = binom(2n,n)^4",
+            Self::B11 => "Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5",
+            Self::B12 => "Merkezi 7. Güç B_{12}(n) = binom(2n,n)^7",
+            Self::B13 => "Saf Kübik Kare B_{13}(n) = binom(3n,n)^2",
+            Self::B14 => "Saf Kübik Küp B_{14}(n) = binom(3n,n)^3",
+        }
+    }
+
+    pub fn latex(&self) -> &'static str {
+        match self {
+            Self::B1 => "\\binom{2n}{n} \\binom{3n}{n}",
+            Self::B2 => "\\binom{2n}{n}^2 \\binom{3n}{n}",
+            Self::B3 => "\\binom{2n}{n} \\binom{3n}{n}^2",
+            Self::B4 => "\\binom{2n}{n}^2 \\binom{3n}{n}^2",
+            Self::B5 => "\\binom{2n}{n} \\binom{4n}{2n}",
+            Self::B6 => "\\binom{2n}{n}^2 \\binom{4n}{2n}",
+            Self::B7 => "\\binom{2n}{n} \\binom{3n}{n} \\binom{6n}{3n}",
+            Self::B8 => "\\binom{2n}{n}^2",
+            Self::B9 => "\\binom{2n}{n}^3",
+            Self::B10 => "\\binom{2n}{n}^4",
+            Self::B11 => "\\binom{2n}{n}^5",
+            Self::B12 => "\\binom{2n}{n}^7",
+            Self::B13 => "\\binom{3n}{n}^2",
+            Self::B14 => "\\binom{3n}{n}^3",
+        }
+    }
+
+    pub fn growth_ratio(&self) -> f64 {
+        match self {
+            Self::B1 => 27.0,
+            Self::B2 => 108.0,
+            Self::B3 => 182.25,
+            Self::B4 => 729.0,
+            Self::B5 => 64.0,
+            Self::B6 => 256.0,
+            Self::B7 => 1728.0,
+            Self::B8 => 16.0,
+            Self::B9 => 64.0,
+            Self::B10 => 256.0,
+            Self::B11 => 1024.0,
+            Self::B12 => 16384.0,
+            Self::B13 => 45.5625,
+            Self::B14 => 307.546875,
+        }
+    }
+
+    pub fn has_cubic_pole(&self) -> bool {
+        matches!(
+            self,
+            Self::B1 | Self::B2 | Self::B3 | Self::B4 | Self::B7 | Self::B13 | Self::B14
+        )
+    }
+
+    pub fn eval_at(&self, n: usize, tables: &BinomialTables) -> IBig {
+        let c2 = &tables.c2n[n];
+        let c3 = &tables.c3n[n];
+        let c4 = &tables.c4n[n];
+        let c6 = &tables.c6n[n];
+
+        match self {
+            Self::B1 => c2 * c3,
+            Self::B2 => (c2 * c2) * c3,
+            Self::B3 => c2 * (c3 * c3),
+            Self::B4 => (c2 * c2) * (c3 * c3),
+            Self::B5 => c2 * c4,
+            Self::B6 => (c2 * c2) * c4,
+            Self::B7 => (c2 * c3) * c6,
+            Self::B8 => c2 * c2,
+            Self::B9 => (c2 * c2) * c2,
+            Self::B10 => {
+                let sq = c2 * c2;
+                &sq * &sq
+            }
+            Self::B11 => {
+                let sq = c2 * c2;
+                (&sq * &sq) * c2
+            }
+            Self::B12 => {
+                let sq = c2 * c2;
+                let q4 = &sq * &sq;
+                (&q4 * &sq) * c2
+            }
+            Self::B13 => c3 * c3,
+            Self::B14 => (c3 * c3) * c3,
+        }
+    }
+}
+
+pub const INVERSE_CANDIDATE_BASES: [i64; 26] = [
+    -1, 1, -2, 2, -3, 3, -4, 4, -8, 8, -9, 9, -12, 12, -16, 16, -27, 27, -32, 32, -64, 64,
+    -81, 81, -256, 256,
+];
+
+pub struct BinomialTables {
+    pub c2n: Vec<IBig>,
+    pub c3n: Vec<IBig>,
+    pub c4n: Vec<IBig>,
+    pub c6n: Vec<IBig>,
+}
+
+pub fn compute_binomial_tables(max_n: usize) -> BinomialTables {
+    let mut c2n = Vec::with_capacity(max_n + 1);
+    let mut c3n = Vec::with_capacity(max_n + 1);
+    let mut c4n = Vec::with_capacity(max_n + 1);
+    let mut c6n = Vec::with_capacity(max_n + 1);
+
+    let mut b2 = IBig::ONE;
+    let mut b3 = IBig::ONE;
+    let mut b4 = IBig::ONE;
+    let mut b6 = IBig::ONE;
+
+    c2n.push(b2.clone());
+    c3n.push(b3.clone());
+    c4n.push(b4.clone());
+    c6n.push(b6.clone());
+
+    for n in 1..=max_n {
+        let n_i = n as i64;
+        b2 = &b2 * IBig::from(2 * (2 * n_i - 1)) / IBig::from(n_i);
+        b3 = &b3 * IBig::from(3 * (3 * n_i - 1) * (3 * n_i - 2))
+            / IBig::from(2 * n_i * (2 * n_i - 1));
+        b4 = &b4 * IBig::from(2 * (4 * n_i - 1) * (4 * n_i - 3))
+            / IBig::from(n_i * (2 * n_i - 1));
+        b6 = &b6 * IBig::from(2 * (6 * n_i - 1) * (6 * n_i - 3) * (6 * n_i - 5))
+            / IBig::from(n_i * (3 * n_i - 1) * (3 * n_i - 2));
+
+        c2n.push(b2.clone());
+        c3n.push(b3.clone());
+        c4n.push(b4.clone());
+        c6n.push(b6.clone());
+    }
+
+    BinomialTables { c2n, c3n, c4n, c6n }
+}
+
+/// Computes cyclotomic pole basis vectors U_k^(m) for k = 1..6:
+/// U_k^(m) = sum_{n=1}^\infty a^n / (n^k * (2n-1)^m * B_i(n))
+pub fn compute_inverse_cyclotomic_bases(
+    kernel: InverseKernelType,
+    a: i64,
+    m: usize,
+    prec: usize,
+    max_steps: usize,
+    tables: &BinomialTables,
+) -> Option<[DBig; 6]> {
+    let growth = kernel.growth_ratio();
+    if (a.abs() as f64) > (growth / 2.5) + 1e-6 {
+        return None;
+    }
+
+    let prec_calc = prec + 30;
+    let mut u = [
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+    ];
+
+    let mut a_pow = IBig::ONE;
+    let a_ibig = IBig::from(a);
+    let eps = DBig::from_parts(IBig::ONE, -240).with_precision(prec_calc).value();
+
+    for n in 1..=max_steps {
+        let n_i = n as i64;
+        a_pow = &a_pow * &a_ibig;
+
+        let b_val = kernel.eval_at(n, tables);
+
+        let mut pole_factor = IBig::ONE;
+        if m > 0 {
+            let odd = IBig::from(2 * n_i - 1);
+            for _ in 0..m {
+                pole_factor = &pole_factor * &odd;
+            }
+        }
+        let den_i = &b_val * &pole_factor;
+
+        let a_d = DBig::from_parts(a_pow.clone(), 0).with_precision(prec_calc).value();
+        let den_d = DBig::from_parts(den_i, 0).with_precision(prec_calc).value();
+        let term_base = (&a_d / &den_d).with_precision(prec_calc).value();
+
+        let mut n_pow = DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value();
+        for k in 0..6 {
+            let term_k = (&term_base / &n_pow).with_precision(prec_calc).value();
+            u[k] = &u[k] + &term_k;
+            if k < 5 {
+                n_pow = (&n_pow * DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value())
+                    .with_precision(prec_calc)
+                    .value();
+            }
+        }
+
+        let abs_t = if term_base < DBig::ZERO { -term_base } else { term_base };
+        if abs_t < eps {
+            break;
+        }
+    }
+
+    let [u0, u1, u2, u3, u4, u5] = u;
+    Some([
+        u0.with_precision(prec).value(),
+        u1.with_precision(prec).value(),
+        u2.with_precision(prec).value(),
+        u3.with_precision(prec).value(),
+        u4.with_precision(prec).value(),
+        u5.with_precision(prec).value(),
+    ])
+}
+
+/// Computes cubic pole basis vectors V_k for k = 1..5:
+/// V_k = sum_{n=1}^\infty a^n / (n^k * (3n-1)(3n-2) * B_i(n))
+pub fn compute_inverse_cubic_pole_bases(
+    kernel: InverseKernelType,
+    a: i64,
+    prec: usize,
+    max_steps: usize,
+    tables: &BinomialTables,
+) -> Option<[DBig; 5]> {
+    let growth = kernel.growth_ratio();
+    if (a.abs() as f64) > (growth / 2.5) + 1e-6 {
+        return None;
+    }
+
+    let prec_calc = prec + 30;
+    let mut v = [
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+    ];
+
+    let mut a_pow = IBig::ONE;
+    let a_ibig = IBig::from(a);
+    let eps = DBig::from_parts(IBig::ONE, -240).with_precision(prec_calc).value();
+
+    for n in 1..=max_steps {
+        let n_i = n as i64;
+        a_pow = &a_pow * &a_ibig;
+
+        let b_val = kernel.eval_at(n, tables);
+        let pole_factor = IBig::from((3 * n_i - 1) * (3 * n_i - 2));
+        let den_i = &b_val * &pole_factor;
+
+        let a_d = DBig::from_parts(a_pow.clone(), 0).with_precision(prec_calc).value();
+        let den_d = DBig::from_parts(den_i, 0).with_precision(prec_calc).value();
+        let term_base = (&a_d / &den_d).with_precision(prec_calc).value();
+
+        let mut n_pow = DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value();
+        for k in 0..5 {
+            let term_k = (&term_base / &n_pow).with_precision(prec_calc).value();
+            v[k] = &v[k] + &term_k;
+            if k < 4 {
+                n_pow = (&n_pow * DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value())
+                    .with_precision(prec_calc)
+                    .value();
+            }
+        }
+
+        let abs_t = if term_base < DBig::ZERO { -term_base } else { term_base };
+        if abs_t < eps {
+            break;
+        }
+    }
+
+    let [v0, v1, v2, v3, v4] = v;
+    Some([
+        v0.with_precision(prec).value(),
+        v1.with_precision(prec).value(),
+        v2.with_precision(prec).value(),
+        v3.with_precision(prec).value(),
+        v4.with_precision(prec).value(),
+    ])
+}
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  5. GERÇEK 7-BİNOMLU (1/pi^3) VE 5-BİNOMLU (1/pi^2) PAY ÇEKİRDEKLERİ (K1..K5)
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum NumeratorKernelType {
+    K1, // binom(2n, n)^7 (7-binom -> 1/pi^3)
+    K2, // binom(2n, n)^5 * binom(3n, n)^2 (7-binom -> 1/pi^3)
+    K3, // binom(2n, n)^5 * binom(4n, 2n)^2 (7-binom -> 1/pi^3)
+    K4, // binom(2n, n)^4 * binom(4n, 2n) (5-binom -> 1/pi^2)
+    K5, // binom(2n, n)^3 * binom(4n, 2n)^2 (5-binom -> 1/pi^2)
+}
+
+impl NumeratorKernelType {
+    pub const ALL: [NumeratorKernelType; 5] = [
+        Self::K1, Self::K2, Self::K3, Self::K4, Self::K5,
+    ];
+
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::K1 => "K_1",
+            Self::K2 => "K_2",
+            Self::K3 => "K_3",
+            Self::K4 => "K_4",
+            Self::K5 => "K_5",
+        }
+    }
+
+    pub fn description(&self) -> &'static str {
+        match self {
+            Self::K1 => "7-Binomlu K_1(n) = binom(2n,n)^7 (1/pi^3)",
+            Self::K2 => "7-Binomlu Melez K_2(n) = binom(2n,n)^5 * binom(3n,n)^2 (1/pi^3)",
+            Self::K3 => "7-Binomlu Melez K_3(n) = binom(2n,n)^5 * binom(4n,2n)^2 (1/pi^3)",
+            Self::K4 => "5-Binomlu Melez K_4(n) = binom(2n,n)^4 * binom(4n,2n) (1/pi^2)",
+            Self::K5 => "5-Binomlu Melez K_5(n) = binom(2n,n)^3 * binom(4n,2n)^2 (1/pi^2)",
+        }
+    }
+
+    pub fn latex(&self) -> &'static str {
+        match self {
+            Self::K1 => "\\binom{2n}{n}^7",
+            Self::K2 => "\\binom{2n}{n}^5 \\binom{3n}{n}^2",
+            Self::K3 => "\\binom{2n}{n}^5 \\binom{4n}{2n}^2",
+            Self::K4 => "\\binom{2n}{n}^4 \\binom{4n}{2n}",
+            Self::K5 => "\\binom{2n}{n}^3 \\binom{4n}{2n}^2",
+        }
+    }
+
+    pub fn growth_ratio(&self) -> f64 {
+        match self {
+            Self::K1 => 16384.0,
+            Self::K2 => 46656.0,
+            Self::K3 => 65536.0,
+            Self::K4 => 16384.0,
+            Self::K5 => 262144.0,
+        }
+    }
+
+    pub fn poly_degree(&self) -> usize {
+        match self {
+            Self::K1 | Self::K2 | Self::K3 => 3, // S0, S1, S2, S3
+            Self::K4 | Self::K5 => 2,           // S0, S1, S2
+        }
+    }
+
+    pub fn eval_at(&self, n: usize, tables: &BinomialTables) -> IBig {
+        let c2 = &tables.c2n[n];
+        let c3 = &tables.c3n[n];
+        let c4 = &tables.c4n[n];
+
+        match self {
+            Self::K1 => {
+                let sq = c2 * c2;
+                let q4 = &sq * &sq;
+                (&q4 * &sq) * c2
+            }
+            Self::K2 => {
+                let sq = c2 * c2;
+                let q5 = (&sq * &sq) * c2;
+                let c3_sq = c3 * c3;
+                q5 * c3_sq
+            }
+            Self::K3 => {
+                let sq = c2 * c2;
+                let q5 = (&sq * &sq) * c2;
+                let c4_sq = c4 * c4;
+                q5 * c4_sq
+            }
+            Self::K4 => {
+                let sq = c2 * c2;
+                let q4 = &sq * &sq;
+                q4 * c4
+            }
+            Self::K5 => {
+                let sq = c2 * c2;
+                let q3 = &sq * c2;
+                let c4_sq = c4 * c4;
+                q3 * c4_sq
+            }
+        }
+    }
+}
+
+pub const K1_BASES: [i64; 6] = [
+    65536, -65536, 1048576, -1048576, 16777216, -16777216,
+];
+
+pub const K2_K3_BASES: [i64; 16] = [
+    -65536, 65536, -131072, 131072, -262144, 262144, -524288, 524288,
+    -1048576, 1048576, -2097152, 2097152, -4194304, 4194304, -16777216, 16777216,
+];
+
+pub const K4_K5_BASES: [i64; 12] = [
+    -32768, 32768, -65536, 65536, -131072, 131072, -262144, 262144,
+    -524288, 524288, -1048576, 1048576,
+];
+
+pub fn get_numerator_bases(kernel: NumeratorKernelType) -> &'static [i64] {
+    match kernel {
+        NumeratorKernelType::K1 => &K1_BASES,
+        NumeratorKernelType::K2 | NumeratorKernelType::K3 => &K2_K3_BASES,
+        NumeratorKernelType::K4 | NumeratorKernelType::K5 => &K4_K5_BASES,
+    }
+}
+
+/// Computes basis sums S_k = sum_{n=0}^\infty n^k * K(n) / a^n up to k=3
+pub fn compute_numerator_bases(
+    kernel: NumeratorKernelType,
+    a: i64,
+    prec: usize,
+    max_steps: usize,
+    tables: &BinomialTables,
+) -> Option<Vec<DBig>> {
+    let growth = kernel.growth_ratio();
+    if (a.abs() as f64) <= growth + 0.1 {
+        return None;
+    }
+
+    let deg = kernel.poly_degree();
+    let num_bases = deg + 1; // S0..S_deg
+
+    let prec_calc = prec + 25;
+    let mut s = vec![DBig::ZERO.with_precision(prec_calc).value(); num_bases];
+
+    // n=0 term: K(0) = 1, a^0 = 1, n^0 = 1 => S0 gets 1, others 0
+    s[0] = &s[0] + DBig::ONE.with_precision(prec_calc).value();
+
+    let mut a_pow = IBig::ONE;
+    let a_ibig = IBig::from(a);
+    let eps = DBig::from_parts(IBig::ONE, -235).with_precision(prec_calc).value();
+
+    for n in 1..=max_steps {
+        let n_i = n as i64;
+        a_pow = &a_pow * &a_ibig;
+
+        let k_val = kernel.eval_at(n, tables);
+
+        let k_d = DBig::from_parts(k_val, 0).with_precision(prec_calc).value();
+        let a_d = DBig::from_parts(a_pow.clone(), 0).with_precision(prec_calc).value();
+        let term = (&k_d / &a_d).with_precision(prec_calc).value();
+
+        let mut n_mult = DBig::ONE.with_precision(prec_calc).value();
+        let n_d = DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value();
+
+        for k in 0..num_bases {
+            s[k] = &s[k] + &(&term * &n_mult);
+            n_mult = (&n_mult * &n_d).with_precision(prec_calc).value();
+        }
+
+        let abs_t = if term < DBig::ZERO { -term } else { term };
+        if abs_t < eps {
+            break;
+        }
+    }
+
+    Some(s.into_iter().map(|v| v.with_precision(prec).value()).collect())
+}
+
+pub fn format_descending_polynomial_text(coeffs: &[i64]) -> String {
+    // coeffs[0] is n^{d-1}, coeffs[d-1] is constant term
+    let d = coeffs.len();
+    let mut terms = Vec::new();
+
+    for (i, &c) in coeffs.iter().enumerate() {
+        if c == 0 {
+            continue;
+        }
+        let power = d - 1 - i;
+        let var = match power {
+            0 => "".to_string(),
+            1 => "n".to_string(),
+            p => format!("n^{p}"),
+        };
+        terms.push((c, var));
+    }
+
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+
+    let mut res = String::new();
+    for (i, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if i == 0 { "-" } else { " - " }
+        } else if i == 0 {
+            ""
+        } else {
+            " + "
+        };
+
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c}*{var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}
+
+pub fn format_descending_polynomial_latex(coeffs: &[i64]) -> String {
+    let d = coeffs.len();
+    let mut terms = Vec::new();
+
+    for (i, &c) in coeffs.iter().enumerate() {
+        if c == 0 {
+            continue;
+        }
+        let power = d - 1 - i;
+        let var = match power {
+            0 => "".to_string(),
+            1 => "n".to_string(),
+            p => format!("n^{p}"),
+        };
+        terms.push((c, var));
+    }
+
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+
+    let mut res = String::new();
+    for (i, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if i == 0 { "-" } else { " - " }
+        } else if i == 0 {
+            ""
+        } else {
+            " + "
+        };
+
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c} {var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::constants::compute_zeta3;
+
+    #[test]
+    fn test_control_point_1_b11_amdeberhan_zeilberger() {
+        let prec = 220;
+        let tables = compute_binomial_tables(250);
+        let u = compute_inverse_cyclotomic_bases(InverseKernelType::B11, -1, 0, prec, 250, &tables)
+            .expect("B11 bases must compute");
+
+        // 205*U3 - 160*U4 + 32*U5 + 2*zeta(3) == 0
+        let zeta3 = compute_zeta3(prec);
+        let c205 = DBig::from_parts(IBig::from(205), 0).with_precision(prec).value();
+        let c160 = DBig::from_parts(IBig::from(160), 0).with_precision(prec).value();
+        let c32 = DBig::from_parts(IBig::from(32), 0).with_precision(prec).value();
+        let c2 = DBig::from_parts(IBig::from(2), 0).with_precision(prec).value();
+
+        let term1 = (&c205 * &u[2]).with_precision(prec).value();
+        let term2 = (&c160 * &u[3]).with_precision(prec).value();
+        let term3 = (&c32 * &u[4]).with_precision(prec).value();
+        let rhs = (&c2 * &zeta3).with_precision(prec).value();
+
+        let sum = (&(&term1 - &term2) + &term3).with_precision(prec).value();
+        let diff = if sum >= -rhs.clone() {
+            &sum + &rhs
+        } else {
+            -(&sum + &rhs)
+        };
+
+        let thresh = DBig::from_parts(IBig::ONE, -120).with_precision(prec).value();
+        assert!(
+            diff < thresh,
+            "Control Point 1 (B11) failed: diff = {:?}",
+            diff
+        );
+    }
+
+    #[test]
+    fn test_control_point_2_b1_deuring_zeta3() {
+        let prec = 220;
+        let tables = compute_binomial_tables(250);
+        let u = compute_inverse_cyclotomic_bases(InverseKernelType::B1, -1, 2, prec, 250, &tables)
+            .expect("B1 bases must compute");
+
+        // 56*U1 - 32*U2 + 5*U3 + 4*zeta(3) == 0
+        let zeta3 = compute_zeta3(prec);
+        let c56 = DBig::from_parts(IBig::from(56), 0).with_precision(prec).value();
+        let c32 = DBig::from_parts(IBig::from(32), 0).with_precision(prec).value();
+        let c5 = DBig::from_parts(IBig::from(5), 0).with_precision(prec).value();
+        let c4 = DBig::from_parts(IBig::from(4), 0).with_precision(prec).value();
+
+        let term1 = (&c56 * &u[0]).with_precision(prec).value();
+        let term2 = (&c32 * &u[1]).with_precision(prec).value();
+        let term3 = (&c5 * &u[2]).with_precision(prec).value();
+        let rhs = (&c4 * &zeta3).with_precision(prec).value();
+
+        let sum = (&(&term1 - &term2) + &term3).with_precision(prec).value();
+        let diff = if sum >= -rhs.clone() {
+            &sum + &rhs
+        } else {
+            -(&sum + &rhs)
+        };
+
+        let thresh = DBig::from_parts(IBig::ONE, -120).with_precision(prec).value();
+        assert!(
+            diff < thresh,
+            "Control Point 2 (B1) failed: diff = {:?}",
+            diff
+        );
+    }
+}
+

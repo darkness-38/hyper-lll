@@ -4,20 +4,24 @@ mod lll;
 mod proof;
 
 use constants::{
-    FrontierConstantPool, NovelConstantPool, RamanujanGuilleraPool, TargetConstant,
-    FRONTIER_PRECISION, PRECISION,
+    CalabiYauConstantPool, FrontierConstantPool, NovelConstantPool, RamanujanGuilleraPool,
+    TargetConstant, FRONTIER_PRECISION, PRECISION,
 };
 use kernels::{
-    compute_az_table, compute_cubic_bases, compute_domb_table, compute_frontier_bases,
-    compute_odd_denom_bases, compute_super_binomial_bases, compute_w7_bases,
-    format_cubic_w4_lhs_latex, format_cubic_w5_lhs_latex, format_odd_denom_lhs_latex,
-    format_polynomial5_latex, format_polynomial5_text, format_polynomial_latex,
-    format_polynomial_text, format_w7_lhs_latex, get_bases_for_kernel, get_frontier_bases,
-    HarmonicTables, SuperBinomialType, FrontierKernelType,
+    compute_az_table, compute_binomial_tables, compute_cubic_bases, compute_domb_table,
+    compute_frontier_bases, compute_inverse_cubic_pole_bases, compute_inverse_cyclotomic_bases,
+    compute_numerator_bases, compute_odd_denom_bases, compute_super_binomial_bases,
+    compute_w7_bases, format_cubic_w4_lhs_latex, format_cubic_w5_lhs_latex,
+    format_descending_polynomial_latex, format_descending_polynomial_text,
+    format_odd_denom_lhs_latex, format_polynomial5_latex, format_polynomial5_text,
+    format_polynomial_latex, format_polynomial_text, format_w7_lhs_latex,
+    get_bases_for_kernel, get_frontier_bases, get_numerator_bases, BinomialTables,
+    FrontierKernelType, HarmonicTables, InverseKernelType, NumeratorKernelType,
+    SuperBinomialType, INVERSE_CANDIDATE_BASES,
 };
 use lll::{
-    find_all_integer_relations_frontier, find_all_integer_relations_generic,
-    find_all_integer_relations_guillera, IntegerRelation,
+    find_all_integer_relations_calabi_yau, find_all_integer_relations_frontier,
+    find_all_integer_relations_generic, find_all_integer_relations_guillera, IntegerRelation,
 };
 use rayon::prelude::*;
 use std::collections::HashSet;
@@ -25,6 +29,803 @@ use std::fs::File;
 use std::io::Write;
 use std::time::Instant;
 use dashu::float::DBig;
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  0. TERS CALABI-YAU / SÜPER-BİNOM KÖŞEGEN MOTORU (B1..B14, K1..K5)
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Debug)]
+pub struct CalabiYauDiscovery {
+    pub kind_str: &'static str,
+    pub kernel_desc: &'static str,
+    pub kernel_code: &'static str,
+    pub a: i64,
+    pub m: Option<usize>,
+    pub d: usize,
+    pub poly: Vec<i64>,
+    pub target_coeffs: Vec<(TargetConstant, i64)>,
+    pub formula_text: String,
+    pub formula_latex: String,
+    pub residual_str: String,
+    pub residual_f64: f64,
+    pub norm: f64,
+    pub is_novel: bool,
+}
+
+fn format_cy_rhs(const_coeffs: &[(TargetConstant, i64)]) -> (String, String) {
+    let mut txt_parts = Vec::new();
+    let mut ltx_parts = Vec::new();
+
+    for (tc, k) in const_coeffs {
+        let k = *k;
+        let abs_k = k.abs();
+        let sign_txt = if k < 0 {
+            if txt_parts.is_empty() { "-" } else { " - " }
+        } else if txt_parts.is_empty() {
+            ""
+        } else {
+            " + "
+        };
+        let term_txt = if abs_k == 1 {
+            tc.name.to_string()
+        } else {
+            format!("{abs_k}*{}", tc.name)
+        };
+        txt_parts.push(format!("{sign_txt}{term_txt}"));
+
+        let sign_ltx = if k < 0 {
+            if ltx_parts.is_empty() { "-" } else { " - " }
+        } else if ltx_parts.is_empty() {
+            ""
+        } else {
+            " + "
+        };
+        let term_ltx = if abs_k == 1 {
+            tc.latex.to_string()
+        } else {
+            format!("{abs_k} {}", tc.latex)
+        };
+        ltx_parts.push(format!("{sign_ltx}{term_ltx}"));
+    }
+
+    let txt = if txt_parts.is_empty() { "0".to_string() } else { txt_parts.join("") };
+    let ltx = if ltx_parts.is_empty() { "0".to_string() } else { ltx_parts.join("") };
+    (txt, ltx)
+}
+
+fn format_ascending_poly_text(coeffs: &[i64]) -> String {
+    let mut terms = Vec::new();
+    for (i, &c) in coeffs.iter().enumerate() {
+        if c == 0 {
+            continue;
+        }
+        let var = match i {
+            0 => "".to_string(),
+            1 => "n".to_string(),
+            p => format!("n^{p}"),
+        };
+        terms.push((c, var));
+    }
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+    let mut res = String::new();
+    for (idx, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if idx == 0 { "-" } else { " - " }
+        } else if idx == 0 {
+            ""
+        } else {
+            " + "
+        };
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c}*{var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}
+
+fn format_ascending_poly_latex(coeffs: &[i64]) -> String {
+    let mut terms = Vec::new();
+    for (i, &c) in coeffs.iter().enumerate() {
+        if c == 0 {
+            continue;
+        }
+        let var = match i {
+            0 => "".to_string(),
+            1 => "n".to_string(),
+            p => format!("n^{p}"),
+        };
+        terms.push((c, var));
+    }
+    if terms.is_empty() {
+        return "0".to_string();
+    }
+    let mut res = String::new();
+    for (idx, (c, var)) in terms.iter().enumerate() {
+        let abs_c = c.abs();
+        let sign = if *c < 0 {
+            if idx == 0 { "-" } else { " - " }
+        } else if idx == 0 {
+            ""
+        } else {
+            " + "
+        };
+        let term_str = if var.is_empty() {
+            format!("{abs_c}")
+        } else if abs_c == 1 {
+            var.to_string()
+        } else {
+            format!("{abs_c} {var}")
+        };
+        res.push_str(&format!("{sign}{term_str}"));
+    }
+    res
+}
+
+fn build_inverse_cyclotomic_formula(
+    kernel: InverseKernelType,
+    a: i64,
+    m: usize,
+    d: usize,
+    poly: &[i64],
+    const_coeffs: &[(TargetConstant, i64)],
+) -> (String, String) {
+    let poly_txt = format_descending_polynomial_text(poly);
+    let poly_ltx = format_descending_polynomial_latex(poly);
+
+    let k_code = kernel.code();
+    let k_ltx = kernel.latex();
+
+    let a_txt = if a == -1 {
+        "(-1)^n".to_string()
+    } else if a < 0 {
+        format!("({a})^n")
+    } else if a == 1 {
+        "1".to_string()
+    } else {
+        format!("{a}^n")
+    };
+
+    let (denom_txt, denom_ltx) = match m {
+        0 => (
+            format!("n^{d} * {k_code}(n)"),
+            format!("n^{d} {k_ltx}"),
+        ),
+        1 => (
+            format!("n^{d} * (2n-1) * {k_code}(n)"),
+            format!("n^{d} (2n-1) {k_ltx}"),
+        ),
+        _ => (
+            format!("n^{d} * (2n-1)^{m} * {k_code}(n)"),
+            format!("n^{d} (2n-1)^{m} {k_ltx}"),
+        ),
+    };
+
+    let (rhs_txt, rhs_ltx) = format_cy_rhs(const_coeffs);
+
+    let formula_text = if a_txt == "1" {
+        format!("sum_{{n=1}}^inf ({poly_txt}) / ({denom_txt}) = {rhs_txt}")
+    } else {
+        format!("sum_{{n=1}}^inf ({a_txt} * ({poly_txt})) / ({denom_txt}) = {rhs_txt}")
+    };
+
+    let formula_latex = if a == 1 {
+        format!("\\sum_{{n=1}}^\\infty \\frac{{{poly_ltx}}}{{{denom_ltx}}} = {rhs_ltx}")
+    } else {
+        format!("\\sum_{{n=1}}^\\infty \\frac{{{a_txt} \\left( {poly_ltx} \\right)}}{{{denom_ltx}}} = {rhs_ltx}")
+    };
+
+    (formula_text, formula_latex)
+}
+
+fn build_inverse_cubic_pole_formula(
+    kernel: InverseKernelType,
+    a: i64,
+    d: usize,
+    poly: &[i64],
+    const_coeffs: &[(TargetConstant, i64)],
+) -> (String, String) {
+    let poly_txt = format_descending_polynomial_text(poly);
+    let poly_ltx = format_descending_polynomial_latex(poly);
+
+    let k_code = kernel.code();
+    let k_ltx = kernel.latex();
+
+    let a_txt = if a == -1 {
+        "(-1)^n".to_string()
+    } else if a < 0 {
+        format!("({a})^n")
+    } else if a == 1 {
+        "1".to_string()
+    } else {
+        format!("{a}^n")
+    };
+
+    let denom_txt = format!("n^{d} * (3n-1)(3n-2) * {k_code}(n)");
+    let denom_ltx = format!("n^{d} (3n-1)(3n-2) {k_ltx}");
+
+    let (rhs_txt, rhs_ltx) = format_cy_rhs(const_coeffs);
+
+    let formula_text = if a_txt == "1" {
+        format!("sum_{{n=1}}^inf ({poly_txt}) / ({denom_txt}) = {rhs_txt}")
+    } else {
+        format!("sum_{{n=1}}^inf ({a_txt} * ({poly_txt})) / ({denom_txt}) = {rhs_txt}")
+    };
+
+    let formula_latex = if a == 1 {
+        format!("\\sum_{{n=1}}^\\infty \\frac{{{poly_ltx}}}{{{denom_ltx}}} = {rhs_ltx}")
+    } else {
+        format!("\\sum_{{n=1}}^\\infty \\frac{{{a_txt} \\left( {poly_ltx} \\right)}}{{{denom_ltx}}} = {rhs_ltx}")
+    };
+
+    (formula_text, formula_latex)
+}
+
+fn build_numerator_formula(
+    kernel: NumeratorKernelType,
+    a: i64,
+    poly: &[i64],
+    tc: &TargetConstant,
+    k: i64,
+) -> (String, String) {
+    let poly_txt = format_ascending_poly_text(poly);
+    let poly_ltx = format_ascending_poly_latex(poly);
+
+    let k_code = kernel.code();
+    let k_ltx = kernel.latex();
+
+    let abs_k = k.abs();
+    let sign_txt = if k < 0 { "-" } else { "" };
+    let rhs_txt = if tc.name.starts_with("1/") {
+        let denom = &tc.name[2..];
+        if abs_k == 1 {
+            format!("{sign_txt}1 / {denom}")
+        } else {
+            format!("{sign_txt}{abs_k} / {denom}")
+        }
+    } else if abs_k == 1 {
+        format!("{sign_txt}{}", tc.name)
+    } else {
+        format!("{sign_txt}{abs_k}*{}", tc.name)
+    };
+
+    let sign_ltx = if k < 0 { "-" } else { "" };
+    let rhs_ltx = if tc.latex.starts_with("\\frac{1}{") && abs_k != 1 {
+        format!("{}{}", sign_ltx, tc.latex.replacen("\\frac{1}{", &format!("\\frac{{{abs_k}}}{{"), 1))
+    } else if tc.latex.starts_with("\\frac{\\sqrt{") && abs_k != 1 {
+        format!("{}{}", sign_ltx, tc.latex.replacen("\\frac{\\sqrt{", &format!("\\frac{{{abs_k}\\sqrt{{"), 1))
+    } else if abs_k == 1 {
+        format!("{}{}", sign_ltx, tc.latex)
+    } else {
+        format!("{}{abs_k} {}", sign_ltx, tc.latex)
+    };
+
+    let a_txt = if a < 0 { format!("({a})^n") } else { format!("{a}^n") };
+    let formula_text = format!("sum_{{n=0}}^inf ({k_code}(n) / {a_txt}) * ({poly_txt}) = {rhs_txt}");
+    let formula_latex = format!("\\sum_{{n=0}}^\\infty \\frac{{{k_ltx}}}{{{a_txt}}} \\left( {poly_ltx} \\right) = {rhs_ltx}");
+
+    (formula_text, formula_latex)
+}
+
+fn process_inverse_relation(
+    d: usize,
+    m_vec: &[i64],
+    targets: &[TargetConstant],
+) -> Option<(Vec<i64>, Vec<(TargetConstant, i64)>)> {
+    let num_series = d;
+    let num_targets = targets.len();
+    if m_vec.len() != num_series + num_targets {
+        return None;
+    }
+
+    let mut c_series = m_vec[0..num_series].to_vec();
+    let mut c_targets = m_vec[num_series..].to_vec();
+
+    if c_series.iter().all(|&v| v == 0) || c_targets.iter().all(|&v| v == 0) {
+        return None;
+    }
+
+    let leading = c_series.iter().copied().find(|&v| v != 0)?;
+    if leading < 0 {
+        for v in &mut c_series {
+            *v = -*v;
+        }
+        for v in &mut c_targets {
+            *v = -*v;
+        }
+    }
+
+    let mut g = 0;
+    for &c in c_series.iter().chain(c_targets.iter()) {
+        if c != 0 {
+            g = gcd_i64(g, c.abs());
+        }
+    }
+    if g > 1 {
+        for v in &mut c_series {
+            *v /= g;
+        }
+        for v in &mut c_targets {
+            *v /= g;
+        }
+    }
+
+    let mut const_coeffs = Vec::new();
+    for (i, &c) in c_targets.iter().enumerate() {
+        if c != 0 {
+            const_coeffs.push((targets[i].clone(), -c));
+        }
+    }
+
+    if const_coeffs.is_empty() {
+        return None;
+    }
+
+    Some((c_series, const_coeffs))
+}
+
+fn is_known_control_point(
+    kernel_code: &str,
+    a: i64,
+    m: Option<usize>,
+    poly: &[i64],
+    _const_coeffs: &[(TargetConstant, i64)],
+) -> bool {
+    // Control 1: B_11, a = -1, m = 0, poly = [..., 205, -160, 32]
+    if kernel_code == "B_{11}" && a == -1 && m == Some(0) {
+        if poly.ends_with(&[205, -160, 32]) {
+            return true;
+        }
+    }
+    // Control 2: B_1, a = -1, m = 2, poly = [..., 56, -32, 5]
+    if kernel_code == "B_1" && a == -1 && m == Some(2) {
+        if poly.ends_with(&[56, -32, 5]) {
+            return true;
+        }
+    }
+    false
+}
+
+fn scan_inverse_cyclotomic_task(
+    kernel: InverseKernelType,
+    a: i64,
+    m: usize,
+    pool: &CalabiYauConstantPool,
+    tables: &BinomialTables,
+) -> Vec<CalabiYauDiscovery> {
+    let mut discoveries = Vec::new();
+    let bases = match compute_inverse_cyclotomic_bases(kernel, a, m, 220, 650, tables) {
+        Some(b) => b,
+        None => return discoveries,
+    };
+
+    let [u1, u2, u3, u4, u5, u6] = bases;
+    let u_all = [u1, u2, u3, u4, u5, u6];
+
+    for d in 2..=6 {
+        let u_slice = &u_all[0..d];
+
+        for tc in &pool.all_inverse_targets {
+            let mut x = u_slice.to_vec();
+            x.push(tc.value.clone());
+
+            let rels = find_all_integer_relations_calabi_yau(&x);
+            for rel in rels {
+                let targets = std::slice::from_ref(tc);
+                if let Some((poly, const_coeffs)) = process_inverse_relation(d, &rel.m, targets) {
+                    let (formula_text, formula_latex) = build_inverse_cyclotomic_formula(
+                        kernel, a, m, d, &poly, &const_coeffs,
+                    );
+                    let is_novel = !is_known_control_point(kernel.code(), a, Some(m), &poly, &const_coeffs);
+                    discoveries.push(CalabiYauDiscovery {
+                        kind_str: "Siklotomik Kutup (2n-1)^m",
+                        kernel_desc: kernel.description(),
+                        kernel_code: kernel.code(),
+                        a,
+                        m: Some(m),
+                        d,
+                        poly,
+                        target_coeffs: const_coeffs,
+                        formula_text,
+                        formula_latex,
+                        residual_str: format!("{:.2e}", rel.residual_f64),
+                        residual_f64: rel.residual_f64,
+                        norm: rel.norm,
+                        is_novel,
+                    });
+                }
+            }
+        }
+
+        let mut check_group = |group: &[TargetConstant]| {
+            let mut x = u_slice.to_vec();
+            for tc in group {
+                x.push(tc.value.clone());
+            }
+            let rels = find_all_integer_relations_calabi_yau(&x);
+            for rel in rels {
+                if let Some((poly, const_coeffs)) = process_inverse_relation(d, &rel.m, group) {
+                    let (formula_text, formula_latex) = build_inverse_cyclotomic_formula(
+                        kernel, a, m, d, &poly, &const_coeffs,
+                    );
+                    let is_novel = !is_known_control_point(kernel.code(), a, Some(m), &poly, &const_coeffs);
+                    discoveries.push(CalabiYauDiscovery {
+                        kind_str: "Siklotomik Kutup (2n-1)^m",
+                        kernel_desc: kernel.description(),
+                        kernel_code: kernel.code(),
+                        a,
+                        m: Some(m),
+                        d,
+                        poly,
+                        target_coeffs: const_coeffs,
+                        formula_text,
+                        formula_latex,
+                        residual_str: format!("{:.2e}", rel.residual_f64),
+                        residual_f64: rel.residual_f64,
+                        norm: rel.norm,
+                        is_novel,
+                    });
+                }
+            }
+        };
+
+        if d <= 4 {
+            check_group(&pool.odd_zeta_targets);
+            check_group(&pool.even_zeta_targets);
+            check_group(&pool.catalan_beta_targets);
+        }
+        if d <= 3 {
+            if kernel.has_cubic_pole() {
+                check_group(&pool.hexagonal_cubic_targets);
+            }
+            check_group(&pool.weight4_mixed_targets);
+        }
+    }
+
+    discoveries
+}
+
+fn scan_inverse_cubic_pole_task(
+    kernel: InverseKernelType,
+    a: i64,
+    pool: &CalabiYauConstantPool,
+    tables: &BinomialTables,
+) -> Vec<CalabiYauDiscovery> {
+    let mut discoveries = Vec::new();
+    let bases = match compute_inverse_cubic_pole_bases(kernel, a, 220, 650, tables) {
+        Some(b) => b,
+        None => return discoveries,
+    };
+
+    let [v1, v2, v3, v4, v5] = bases;
+    let v_all = [v1, v2, v3, v4, v5];
+
+    for d in 2..=5 {
+        let v_slice = &v_all[0..d];
+
+        for tc in &pool.all_inverse_targets {
+            let mut x = v_slice.to_vec();
+            x.push(tc.value.clone());
+
+            let rels = find_all_integer_relations_calabi_yau(&x);
+            for rel in rels {
+                let targets = std::slice::from_ref(tc);
+                if let Some((poly, const_coeffs)) = process_inverse_relation(d, &rel.m, targets) {
+                    let (formula_text, formula_latex) = build_inverse_cubic_pole_formula(
+                        kernel, a, d, &poly, &const_coeffs,
+                    );
+                    let is_novel = !is_known_control_point(kernel.code(), a, None, &poly, &const_coeffs);
+                    discoveries.push(CalabiYauDiscovery {
+                        kind_str: "Kübik Kutup (3n-1)(3n-2)",
+                        kernel_desc: kernel.description(),
+                        kernel_code: kernel.code(),
+                        a,
+                        m: None,
+                        d,
+                        poly,
+                        target_coeffs: const_coeffs,
+                        formula_text,
+                        formula_latex,
+                        residual_str: format!("{:.2e}", rel.residual_f64),
+                        residual_f64: rel.residual_f64,
+                        norm: rel.norm,
+                        is_novel,
+                    });
+                }
+            }
+        }
+
+        if d <= 3 {
+            let mut check_group = |group: &[TargetConstant]| {
+                let mut x = v_slice.to_vec();
+                for tc in group {
+                    x.push(tc.value.clone());
+                }
+                let rels = find_all_integer_relations_calabi_yau(&x);
+                for rel in rels {
+                    if let Some((poly, const_coeffs)) = process_inverse_relation(d, &rel.m, group) {
+                        let (formula_text, formula_latex) = build_inverse_cubic_pole_formula(
+                            kernel, a, d, &poly, &const_coeffs,
+                        );
+                        let is_novel = !is_known_control_point(kernel.code(), a, None, &poly, &const_coeffs);
+                        discoveries.push(CalabiYauDiscovery {
+                            kind_str: "Kübik Kutup (3n-1)(3n-2)",
+                            kernel_desc: kernel.description(),
+                            kernel_code: kernel.code(),
+                            a,
+                            m: None,
+                            d,
+                            poly,
+                            target_coeffs: const_coeffs,
+                            formula_text,
+                            formula_latex,
+                            residual_str: format!("{:.2e}", rel.residual_f64),
+                            residual_f64: rel.residual_f64,
+                            norm: rel.norm,
+                            is_novel,
+                        });
+                    }
+                }
+            };
+
+            check_group(&pool.hexagonal_cubic_targets);
+            check_group(&pool.odd_zeta_targets);
+        }
+    }
+
+    discoveries
+}
+
+fn scan_numerator_task(
+    kernel: NumeratorKernelType,
+    a: i64,
+    pool: &CalabiYauConstantPool,
+    tables: &BinomialTables,
+) -> Vec<CalabiYauDiscovery> {
+    let mut discoveries = Vec::new();
+    let s_bases = match compute_numerator_bases(kernel, a, 220, 350, tables) {
+        Some(b) => b,
+        None => return discoveries,
+    };
+
+    let targets = match kernel {
+        NumeratorKernelType::K1 | NumeratorKernelType::K2 | NumeratorKernelType::K3 => &pool.pi3_targets,
+        NumeratorKernelType::K4 | NumeratorKernelType::K5 => &pool.pi2_targets,
+    };
+
+    for tc in targets {
+        let mut x = s_bases.clone();
+        x.push(tc.value.clone());
+
+        let rels = find_all_integer_relations_calabi_yau(&x);
+        for rel in rels {
+            let m = &rel.m;
+            let num_series = s_bases.len();
+            let mut c_series = m[0..num_series].to_vec();
+            let mut c_const = m[num_series];
+
+            if c_series.iter().all(|&v| v == 0) || c_const == 0 {
+                continue;
+            }
+
+            let leading = c_series.iter().rev().copied().find(|&v| v != 0).unwrap_or(0);
+            if leading < 0 {
+                for v in &mut c_series {
+                    *v = -*v;
+                }
+                c_const = -c_const;
+            }
+
+            let mut g = c_const.abs();
+            for &c in &c_series {
+                if c != 0 {
+                    g = gcd_i64(g, c.abs());
+                }
+            }
+            if g > 1 {
+                for v in &mut c_series {
+                    *v /= g;
+                }
+                c_const /= g;
+            }
+
+            let k = -c_const;
+            let (formula_text, formula_latex) = build_numerator_formula(kernel, a, &c_series, tc, k);
+
+            discoveries.push(CalabiYauDiscovery {
+                kind_str: "7/5-Binomlu Pay Serisi",
+                kernel_desc: kernel.description(),
+                kernel_code: kernel.code(),
+                a,
+                m: None,
+                d: 0,
+                poly: c_series,
+                target_coeffs: vec![(tc.clone(), k)],
+                formula_text,
+                formula_latex,
+                residual_str: format!("{:.2e}", rel.residual_f64),
+                residual_f64: rel.residual_f64,
+                norm: rel.norm,
+                is_novel: true,
+            });
+        }
+    }
+
+    discoveries
+}
+
+pub fn run_calabi_yau_discovery_scan() {
+    let t_start = Instant::now();
+
+    println!("================================================================================");
+    println!("  TERS CALABI-YAU / SÜPER-BİNOM KÖŞEGEN MOTORU VE 7. MERTEBE 1/π³ TARAYICISI");
+    println!("  Hassasiyet: 650 Adım (225 Basamak) | LLL: 10^145 | Eşik: < 10^-120 | Norm: 500000");
+    println!("================================================================================");
+
+    print!("[1/4] Binom katsayıları tabloları (c2n, c3n, c4n, c6n, 650 adım) hesaplanıyor... ");
+    let t_tbl = Instant::now();
+    let tables = compute_binomial_tables(650);
+    println!("Tamamlandı ({:.2?})", t_tbl.elapsed());
+
+    print!("[2/4] 225-Basamak Calabi-Yau Sabit Havuzları üretiliyor... ");
+    let t_pool = Instant::now();
+    let pool = CalabiYauConstantPool::new();
+    println!("Tamamlandı ({:.2?})", t_pool.elapsed());
+
+    enum ScanTask {
+        Cyclotomic(InverseKernelType, i64, usize),
+        CubicPole(InverseKernelType, i64),
+        Numerator(NumeratorKernelType, i64),
+    }
+
+    let mut tasks = Vec::new();
+
+    // 1. Ters Siklotomik Kutup Görevleri (B1..B14, a, m in 0..=3)
+    for &k in &InverseKernelType::ALL {
+        let growth = k.growth_ratio();
+        for &a in &INVERSE_CANDIDATE_BASES {
+            if (a.abs() as f64) <= (growth / 2.5) + 1e-6 {
+                for m in 0..=3 {
+                    tasks.push(ScanTask::Cyclotomic(k, a, m));
+                }
+            }
+        }
+    }
+
+    // 2. Kübik Kutup Görevleri (B1, B2, B3, B4, B7, B13, B14, a)
+    for &k in &InverseKernelType::ALL {
+        if k.has_cubic_pole() {
+            let growth = k.growth_ratio();
+            for &a in &INVERSE_CANDIDATE_BASES {
+                if (a.abs() as f64) <= (growth / 2.5) + 1e-6 {
+                    tasks.push(ScanTask::CubicPole(k, a));
+                }
+            }
+        }
+    }
+
+    // 3. 7-Binomlu ve 5-Binomlu Pay Görevleri (K1..K5)
+    for &k in &NumeratorKernelType::ALL {
+        let bases = get_numerator_bases(k);
+        for &a in bases {
+            tasks.push(ScanTask::Numerator(k, a));
+        }
+    }
+
+    let total_tasks = tasks.len();
+    let completed_tasks = std::sync::atomic::AtomicUsize::new(0);
+    let scan_start = Instant::now();
+
+    println!(
+        "[3/4] {} Ayrı Calabi-Yau / Süper-Binom Görevi Rayon ({} iş parçacığı) ile paralel taranıyor...",
+        total_tasks,
+        rayon::current_num_threads()
+    );
+
+    let raw_results: Vec<Vec<CalabiYauDiscovery>> = tasks
+        .par_iter()
+        .map(|task| {
+            let res = match task {
+                ScanTask::Cyclotomic(k, a, m) => {
+                    scan_inverse_cyclotomic_task(*k, *a, *m, &pool, &tables)
+                }
+                ScanTask::CubicPole(k, a) => {
+                    scan_inverse_cubic_pole_task(*k, *a, &pool, &tables)
+                }
+                ScanTask::Numerator(k, a) => {
+                    scan_numerator_task(*k, *a, &pool, &tables)
+                }
+            };
+            let c = completed_tasks.fetch_add(1, std::sync::atomic::Ordering::Relaxed) + 1;
+            if c % 50 == 0 || c == total_tasks {
+                let pct = (c as f64 / total_tasks as f64) * 100.0;
+                println!(
+                    "  [İlerleme: {} / {} Görev (%{:.1})] Geçen Süre: {:.1?}",
+                    c,
+                    total_tasks,
+                    pct,
+                    scan_start.elapsed()
+                );
+            }
+            res
+        })
+        .collect();
+
+    let mut seen = HashSet::new();
+    let mut all_discoveries = Vec::new();
+
+    for list in raw_results {
+        for id in list {
+            let rhs_sig: Vec<(&'static str, i64)> = id.target_coeffs.iter().map(|(tc, k)| (tc.name, *k)).collect();
+            let sig = format!("{}_{}_{}_{:?}_{:?}_{:?}", id.kind_str, id.kernel_code, id.a, id.m, id.poly, rhs_sig);
+            if seen.insert(sig) {
+                all_discoveries.push(id);
+            }
+        }
+    }
+
+    all_discoveries.sort_by(|a, b| {
+        b.is_novel
+            .cmp(&a.is_novel)
+            .then_with(|| a.norm.partial_cmp(&b.norm).unwrap_or(std::cmp::Ordering::Equal))
+            .then_with(|| a.residual_f64.partial_cmp(&b.residual_f64).unwrap_or(std::cmp::Ordering::Equal))
+    });
+
+    let novel_count = all_discoveries.iter().filter(|d| d.is_novel).count();
+    let ref_count = all_discoveries.len() - novel_count;
+
+    println!("[4/4] Tarama tamamlandı. Bulunan bağıntılar: {} Novel, {} Bilinen Kontrol/Referans\n", novel_count, ref_count);
+
+    if all_discoveries.is_empty() {
+        println!("(Belirtilen aralıkta ve kalibrasyonda yeni bağıntı bulunamadı)");
+    } else {
+        for id in &all_discoveries {
+            if id.is_novel {
+                println!("🌌 [LİTERATÜR DIŞI YENİ KEŞİF]");
+            } else {
+                println!("📘 [BİLİNEN REFERANS / DOĞRULAMA]");
+            }
+            println!("Tür: {} | Çekirdek: {} | Taban: a = {}", id.kind_str, id.kernel_desc, id.a);
+            println!("Formül: {}", id.formula_text);
+            println!("LaTeX: {}", id.formula_latex);
+            println!("Hata: {} | Norm: {:.4}\n", id.residual_str, id.norm);
+        }
+    }
+
+    let filename = "discovered_calabi_yau_identities.txt";
+    let mut file = File::create(filename).expect("Sonuç dosyası oluşturulamadı");
+
+    writeln!(file, "================================================================================").unwrap();
+    writeln!(file, "CALABI-YAU SUPER-BINOMIAL & INVERSE DIAGONAL IDENTITIES").unwrap();
+    writeln!(file, "Discovered by hyper-lll (225-digit precision, LLL scale 10^145, threshold 10^-120)").unwrap();
+    writeln!(file, "Total Identities: {} (Novel: {}, Known References: {})", all_discoveries.len(), novel_count, ref_count).unwrap();
+    writeln!(file, "================================================================================\n").unwrap();
+
+    for (i, id) in all_discoveries.iter().enumerate() {
+        let tag = if id.is_novel {
+            "[LİTERATÜR DIŞI YENİ KEŞİF]"
+        } else {
+            "[BİLİNEN REFERANS / DOĞRULAMA]"
+        };
+        writeln!(file, "% ─────────────────────────────────────────────────────────────────────────────").unwrap();
+        writeln!(file, "% [{}] {} {}", i + 1, tag, id.kind_str).unwrap();
+        writeln!(file, "% Çekirdek: {}, Taban: a = {}", id.kernel_desc, id.a).unwrap();
+        writeln!(file, "% Hata: {} | Norm: {:.4}", id.residual_str, id.norm).unwrap();
+        writeln!(file, "\\begin{{equation}}").unwrap();
+        writeln!(file, "{}", id.formula_latex).unwrap();
+        writeln!(file, "\\end{{equation}}\n").unwrap();
+    }
+
+    println!("Sonuçlar '{}' kütüğüne kaydedildi.", filename);
+    println!("Toplam Süre: {:.2?}", t_start.elapsed());
+}
 
 // ════════════════════════════════════════════════════════════════════════════════
 //  1. SINIR ALAN MOTORU (DOMB, ALMKVIST-ZUDILIN, B8, B9, 1/pi^3, 1/pi^4, G/pi)
@@ -900,6 +1701,14 @@ pub fn run_novel_areas_scan() {
 }
 
 fn main() {
+    let num_threads = std::env::var("RAYON_NUM_THREADS")
+        .ok()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(7);
+    let _ = rayon::ThreadPoolBuilder::new()
+        .num_threads(num_threads)
+        .build_global();
+
     let args: Vec<String> = std::env::args().collect();
     if args.iter().any(|arg| arg == "--prove") {
         proof::run_formal_proof_verification();
@@ -914,5 +1723,10 @@ fn main() {
         return;
     }
 
-    run_frontier_discovery_scan();
+    if args.iter().any(|arg| arg == "--frontier") {
+        run_frontier_discovery_scan();
+        return;
+    }
+
+    run_calabi_yau_discovery_scan();
 }
