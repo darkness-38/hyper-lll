@@ -18,6 +18,10 @@ pub const CALABI_YAU_SCALE_EXPONENT: isize = 145;
 pub const CALABI_YAU_VERIFY_EXPONENT: isize = -120;
 pub const CALABI_YAU_MAX_NORM: f64 = 500000.0;
 
+pub const DEEP_POLE_SCALE_EXPONENT: isize = 160;
+pub const DEEP_POLE_VERIFY_EXPONENT: isize = -130;
+pub const DEEP_POLE_MAX_NORM: f64 = 50_000_000.0;
+
 #[derive(Debug, Clone)]
 pub struct IntegerRelation {
     pub m: Vec<i64>,
@@ -319,6 +323,16 @@ pub fn find_all_integer_relations_calabi_yau(x: &[DBig]) -> Vec<IntegerRelation>
         CALABI_YAU_SCALE_EXPONENT,
         CALABI_YAU_VERIFY_EXPONENT,
         CALABI_YAU_MAX_NORM,
+    )
+}
+
+/// Solves all integer relations for Weight-5 / Weight-7 deep pole vector `x` with LLL at 10^160 scale and verification at < 10^-130 (max norm 50,000,000).
+pub fn find_all_integer_relations_deep_pole(x: &[DBig]) -> Vec<IntegerRelation> {
+    find_all_integer_relations_custom(
+        x,
+        DEEP_POLE_SCALE_EXPONENT,
+        DEEP_POLE_VERIFY_EXPONENT,
+        DEEP_POLE_MAX_NORM,
     )
 }
 

@@ -1811,6 +1811,199 @@ pub fn format_descending_polynomial_latex(coeffs: &[i64]) -> String {
     res
 }
 
+// ════════════════════════════════════════════════════════════════════════════════
+//  6. AĞIRLIK-5 (ζ(5), π⁶) VE AĞIRLIK-7 (ζ(7)) DERİN KUTUP MOTORU
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum DeepPoleKernelType {
+    B11, // binom(2n, n)^5 (growth: 1024.0)
+    B12, // binom(2n, n)^7 (growth: 16384.0)
+    DP3, // binom(2n, n)^3 * binom(3n, n)^2 (growth: 2916.0)
+    DP4, // binom(2n, n)^3 * binom(4n, 2n)^2 (growth: 16384.0)
+    B7,  // binom(2n, n) * binom(3n, n) * binom(6n, 3n) (growth: 1728.0)
+    B15, // binom(2n, n)^2 * binom(3n, n)^3 (growth: 4920.75)
+    B16, // binom(2n, n)^4 * binom(3n, n) (growth: 1728.0)
+}
+
+impl DeepPoleKernelType {
+    pub const ALL: [DeepPoleKernelType; 7] = [
+        Self::B11, Self::B12, Self::DP3, Self::DP4, Self::B7, Self::B15, Self::B16,
+    ];
+
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::B11 => "B_{11}",
+            Self::B12 => "B_{12}",
+            Self::DP3 => "B_9^{\\text{CY}}",
+            Self::DP4 => "B_6^{\\text{Q}}",
+            Self::B7  => "B_7",
+            Self::B15 => "B_{15}",
+            Self::B16 => "B_{16}",
+        }
+    }
+
+    pub fn description(&self) -> &'static str {
+        match self {
+            Self::B11 => "Merkezi 5. Güç B_{11}(n) = binom(2n,n)^5",
+            Self::B12 => "Merkezi 7. Güç B_{12}(n) = binom(2n,n)^7",
+            Self::DP3 => "5-Binom Calabi-Yau B_9(n) = binom(2n,n)^3 * binom(3n,n)^2",
+            Self::DP4 => "5-Binom Kuantik B_6(n) = binom(2n,n)^3 * binom(4n,2n)^2",
+            Self::B7  => "Sextic Calabi-Yau B_7(n) = binom(2n,n)*binom(3n,n)*binom(6n,3n)",
+            Self::B15 => "5-Binom Kübik B_{15}(n) = binom(2n,n)^2 * binom(3n,n)^3",
+            Self::B16 => "5-Binom B_{16}(n) = binom(2n,n)^4 * binom(3n,n)",
+        }
+    }
+
+    pub fn latex(&self) -> &'static str {
+        match self {
+            Self::B11 => "\\binom{2n}{n}^5",
+            Self::B12 => "\\binom{2n}{n}^7",
+            Self::DP3 => "\\binom{2n}{n}^3 \\binom{3n}{n}^2",
+            Self::DP4 => "\\binom{2n}{n}^3 \\binom{4n}{2n}^2",
+            Self::B7  => "\\binom{2n}{n} \\binom{3n}{n} \\binom{6n}{3n}",
+            Self::B15 => "\\binom{2n}{n}^2 \\binom{3n}{n}^3",
+            Self::B16 => "\\binom{2n}{n}^4 \\binom{3n}{n}",
+        }
+    }
+
+    pub fn growth_ratio(&self) -> f64 {
+        match self {
+            Self::B11 => 1024.0,
+            Self::B12 => 16384.0,
+            Self::DP3 => 2916.0,
+            Self::DP4 => 16384.0,
+            Self::B7  => 1728.0,
+            Self::B15 => 4920.75,
+            Self::B16 => 1728.0,
+        }
+    }
+
+    pub fn eval_at(&self, n: usize, tables: &BinomialTables) -> IBig {
+        let c2 = &tables.c2n[n];
+        let c3 = &tables.c3n[n];
+        let c4 = &tables.c4n[n];
+        let c6 = &tables.c6n[n];
+
+        match self {
+            Self::B11 => {
+                let sq = c2 * c2;
+                (&sq * &sq) * c2
+            }
+            Self::B12 => {
+                let sq = c2 * c2;
+                let q4 = &sq * &sq;
+                (&q4 * &sq) * c2
+            }
+            Self::DP3 => {
+                let c2_3 = (c2 * c2) * c2;
+                let c3_2 = c3 * c3;
+                c2_3 * c3_2
+            }
+            Self::DP4 => {
+                let c2_3 = (c2 * c2) * c2;
+                let c4_2 = c4 * c4;
+                c2_3 * c4_2
+            }
+            Self::B7 => (c2 * c3) * c6,
+            Self::B15 => {
+                let c2_2 = c2 * c2;
+                let c3_3 = (c3 * c3) * c3;
+                c2_2 * c3_3
+            }
+            Self::B16 => {
+                let sq = c2 * c2;
+                let c2_4 = &sq * &sq;
+                c2_4 * c3
+            }
+        }
+    }
+}
+
+pub const DEEP_POLE_BASES: [i64; 16] = [
+    -1, 1, -4, 4, -8, 8, -16, 16, -27, 27, -64, 64, -256, 256, -1024, 1024,
+];
+
+/// Computes extended deep cyclotomic pole basis vectors U_k^(m) for k = 1..8:
+/// U_k^(m) = sum_{n=1}^\infty a^n / (n^k * (2n-1)^m * B(n))
+pub fn compute_deep_pole_bases(
+    kernel: DeepPoleKernelType,
+    a: i64,
+    m: usize,
+    prec: usize,
+    max_steps: usize,
+    tables: &BinomialTables,
+) -> Option<[DBig; 8]> {
+    let growth = kernel.growth_ratio();
+    if (a.abs() as f64) > (growth / 2.5) + 1e-6 {
+        return None;
+    }
+
+    let prec_calc = prec + 30;
+    let mut u = [
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+        DBig::ZERO.with_precision(prec_calc).value(),
+    ];
+
+    let mut a_pow = IBig::ONE;
+    let a_ibig = IBig::from(a);
+    let eps = DBig::from_parts(IBig::ONE, -250).with_precision(prec_calc).value();
+
+    for n in 1..=max_steps {
+        let n_i = n as i64;
+        a_pow = &a_pow * &a_ibig;
+
+        let b_val = kernel.eval_at(n, tables);
+
+        let mut pole_factor = IBig::ONE;
+        if m > 0 {
+            let odd = IBig::from(2 * n_i - 1);
+            for _ in 0..m {
+                pole_factor = &pole_factor * &odd;
+            }
+        }
+        let den_i = &b_val * &pole_factor;
+
+        let a_d = DBig::from_parts(a_pow.clone(), 0).with_precision(prec_calc).value();
+        let den_d = DBig::from_parts(den_i, 0).with_precision(prec_calc).value();
+        let term_base = (&a_d / &den_d).with_precision(prec_calc).value();
+
+        let mut n_pow = DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value();
+        for k in 0..8 {
+            let term_k = (&term_base / &n_pow).with_precision(prec_calc).value();
+            u[k] = &u[k] + &term_k;
+            if k < 7 {
+                n_pow = (&n_pow * DBig::from_parts(IBig::from(n_i), 0).with_precision(prec_calc).value())
+                    .with_precision(prec_calc)
+                    .value();
+            }
+        }
+
+        let abs_t = if term_base < DBig::ZERO { -term_base } else { term_base };
+        if abs_t < eps {
+            break;
+        }
+    }
+
+    let [u0, u1, u2, u3, u4, u5, u6, u7] = u;
+    Some([
+        u0.with_precision(prec).value(),
+        u1.with_precision(prec).value(),
+        u2.with_precision(prec).value(),
+        u3.with_precision(prec).value(),
+        u4.with_precision(prec).value(),
+        u5.with_precision(prec).value(),
+        u6.with_precision(prec).value(),
+        u7.with_precision(prec).value(),
+    ])
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

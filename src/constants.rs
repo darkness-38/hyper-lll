@@ -795,6 +795,44 @@ impl CalabiYauConstantPool {
     }
 }
 
+pub const DEEP_POLE_PRECISION: usize = 230;
+
+pub struct DeepPoleConstantPool {
+    pub zeta5: TargetConstant,
+    pub pi6: TargetConstant,
+    pub zeta7: TargetConstant,
+}
+
+impl DeepPoleConstantPool {
+    pub fn new() -> Self {
+        let prec = DEEP_POLE_PRECISION;
+        let zeta5 = compute_zeta5(prec);
+        let zeta7 = compute_zeta7(prec);
+        let pi = compute_pi(prec);
+        let pi2 = (&pi * &pi).with_precision(prec).value();
+        let pi4 = (&pi2 * &pi2).with_precision(prec).value();
+        let pi6 = (&pi4 * &pi2).with_precision(prec).value();
+
+        Self {
+            zeta5: TargetConstant {
+                name: "ζ(5)",
+                latex: "\\zeta(5)",
+                value: zeta5,
+            },
+            pi6: TargetConstant {
+                name: "π⁶",
+                latex: "\\pi^6",
+                value: pi6,
+            },
+            zeta7: TargetConstant {
+                name: "ζ(7)",
+                latex: "\\zeta(7)",
+                value: zeta7,
+            },
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

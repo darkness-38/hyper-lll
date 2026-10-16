@@ -4,24 +4,25 @@ mod lll;
 mod proof;
 
 use constants::{
-    CalabiYauConstantPool, FrontierConstantPool, NovelConstantPool, RamanujanGuilleraPool,
-    TargetConstant, FRONTIER_PRECISION, PRECISION,
+    CalabiYauConstantPool, DeepPoleConstantPool, FrontierConstantPool, NovelConstantPool,
+    RamanujanGuilleraPool, TargetConstant, DEEP_POLE_PRECISION, FRONTIER_PRECISION, PRECISION,
 };
 use kernels::{
-    compute_az_table, compute_binomial_tables, compute_cubic_bases, compute_domb_table,
-    compute_frontier_bases, compute_inverse_cubic_pole_bases, compute_inverse_cyclotomic_bases,
-    compute_numerator_bases, compute_odd_denom_bases, compute_super_binomial_bases,
-    compute_w7_bases, format_cubic_w4_lhs_latex, format_cubic_w5_lhs_latex,
-    format_descending_polynomial_latex, format_descending_polynomial_text,
+    compute_az_table, compute_binomial_tables, compute_cubic_bases, compute_deep_pole_bases,
+    compute_domb_table, compute_frontier_bases, compute_inverse_cubic_pole_bases,
+    compute_inverse_cyclotomic_bases, compute_numerator_bases, compute_odd_denom_bases,
+    compute_super_binomial_bases, compute_w7_bases, format_cubic_w4_lhs_latex,
+    format_cubic_w5_lhs_latex, format_descending_polynomial_latex, format_descending_polynomial_text,
     format_odd_denom_lhs_latex, format_polynomial5_latex, format_polynomial5_text,
-    format_polynomial_latex, format_polynomial_text, format_w7_lhs_latex,
-    get_bases_for_kernel, get_frontier_bases, get_numerator_bases, BinomialTables,
-    FrontierKernelType, HarmonicTables, InverseKernelType, NumeratorKernelType,
-    SuperBinomialType, INVERSE_CANDIDATE_BASES,
+    format_polynomial_latex, format_polynomial_text, format_w7_lhs_latex, get_bases_for_kernel,
+    get_frontier_bases, get_numerator_bases, BinomialTables, DeepPoleKernelType, FrontierKernelType,
+    HarmonicTables, InverseKernelType, NumeratorKernelType, SuperBinomialType,
+    DEEP_POLE_BASES, INVERSE_CANDIDATE_BASES,
 };
 use lll::{
-    find_all_integer_relations_calabi_yau, find_all_integer_relations_frontier,
-    find_all_integer_relations_generic, find_all_integer_relations_guillera, IntegerRelation,
+    find_all_integer_relations_calabi_yau, find_all_integer_relations_deep_pole,
+    find_all_integer_relations_frontier, find_all_integer_relations_generic,
+    find_all_integer_relations_guillera, IntegerRelation,
 };
 use rayon::prelude::*;
 use std::collections::HashSet;
@@ -821,6 +822,344 @@ pub fn run_calabi_yau_discovery_scan() {
         writeln!(file, "\\begin{{equation}}").unwrap();
         writeln!(file, "{}", id.formula_latex).unwrap();
         writeln!(file, "\\end{{equation}}\n").unwrap();
+    }
+
+    println!("Sonuçlar '{}' kütüğüne kaydedildi.", filename);
+    println!("Toplam Süre: {:.2?}", t_start.elapsed());
+}
+
+// ════════════════════════════════════════════════════════════════════════════════
+//  0.1. AĞIRLIK-5 (ζ(5), π⁶) VE AĞIRLIK-7 (ζ(7)) DERİN KUTUP MOTORU
+// ════════════════════════════════════════════════════════════════════════════════
+
+#[derive(Clone, Debug)]
+pub struct DeepPoleDiscovery {
+    pub kernel_desc: &'static str,
+    pub kernel_code: &'static str,
+    pub a: i64,
+    pub m: usize,
+    pub d: usize,
+    pub poly: Vec<i64>,
+    pub target: TargetConstant,
+    pub k: i64,
+    pub formula_text: String,
+    pub formula_latex: String,
+    pub residual_str: String,
+    pub residual_f64: f64,
+    pub norm: f64,
+}
+
+fn build_deep_pole_formula(
+    kernel: DeepPoleKernelType,
+    a: i64,
+    m: usize,
+    d: usize,
+    poly: &[i64],
+    target: &TargetConstant,
+    k: i64,
+) -> (String, String) {
+    let poly_txt = format_descending_polynomial_text(poly);
+    let poly_ltx = format_descending_polynomial_latex(poly);
+
+    let a_str_txt = if a == 1 {
+        "".to_string()
+    } else if a == -1 {
+        "(-1)^n * ".to_string()
+    } else {
+        format!("{a}^n * ")
+    };
+
+    let a_str_ltx = if a == 1 {
+        "".to_string()
+    } else if a == -1 {
+        "(-1)^n ".to_string()
+    } else if a < 0 {
+        format!("({a})^n ")
+    } else {
+        format!("{a}^n ")
+    };
+
+    let pole_txt = if m == 0 {
+        "".to_string()
+    } else if m == 1 {
+        " * (2n-1)".to_string()
+    } else {
+        format!(" * (2n-1)^{m}")
+    };
+
+    let pole_ltx = if m == 0 {
+        "".to_string()
+    } else if m == 1 {
+        "(2n-1) ".to_string()
+    } else {
+        format!("(2n-1)^{m} ")
+    };
+
+    let den_txt = format!("n^{d}{pole_txt} * {}", kernel.code());
+    let den_ltx = format!("n^{d} {pole_ltx}{}", kernel.latex());
+
+    let rhs_txt = if k == 1 {
+        target.name.to_string()
+    } else if k == -1 {
+        format!("-{}", target.name)
+    } else {
+        format!("{k}*{}", target.name)
+    };
+
+    let rhs_ltx = if k == 1 {
+        target.latex.to_string()
+    } else if k == -1 {
+        format!("-{}", target.latex)
+    } else {
+        format!("{k} {}", target.latex)
+    };
+
+    let num_wrap_txt = if poly.iter().filter(|&&c| c != 0).count() > 1 {
+        format!("({poly_txt})")
+    } else {
+        poly_txt
+    };
+
+    let num_wrap_ltx = if poly.iter().filter(|&&c| c != 0).count() > 1 {
+        format!("\\left( {poly_ltx} \\right)")
+    } else {
+        poly_ltx
+    };
+
+    let formula_text = format!("sum_{{n=1}}^inf ({a_str_txt}{num_wrap_txt}) / ({den_txt}) = {rhs_txt}");
+    let formula_latex = format!(
+        "\\sum_{{n=1}}^\\infty \\frac{{{a_str_ltx}{num_wrap_ltx}}}{{{den_ltx}}} = {rhs_ltx}"
+    );
+
+    (formula_text, formula_latex)
+}
+
+fn process_deep_pole_relation(
+    d: usize,
+    m: &[i64],
+    _target: &TargetConstant,
+) -> Option<(Vec<i64>, i64)> {
+    let mut c_series = m[0..d].to_vec();
+    let mut c_target = m[d];
+
+    if c_series.iter().all(|&v| v == 0) || c_target == 0 {
+        return None;
+    }
+
+    let leading = c_series.iter().copied().find(|&v| v != 0).unwrap_or(0);
+    if leading < 0 {
+        for v in &mut c_series {
+            *v = -*v;
+        }
+        c_target = -c_target;
+    }
+
+    let mut k_const = -c_target;
+
+    let mut g = k_const.abs();
+    for &c in &c_series {
+        if c != 0 {
+            g = gcd_i64(g, c.abs());
+        }
+    }
+    if g > 1 {
+        for v in &mut c_series {
+            *v /= g;
+        }
+        k_const /= g;
+    }
+
+    Some((c_series, k_const))
+}
+
+fn scan_deep_pole_task(
+    kernel: DeepPoleKernelType,
+    a: i64,
+    m: usize,
+    pool: &DeepPoleConstantPool,
+    tables: &BinomialTables,
+) -> Vec<DeepPoleDiscovery> {
+    let mut discoveries = Vec::new();
+    let bases = match compute_deep_pole_bases(kernel, a, m, DEEP_POLE_PRECISION, 650, tables) {
+        Some(b) => b,
+        None => return discoveries,
+    };
+
+    let u_all = bases;
+
+    // Weight-5 Search (zeta(5), pi^6) for d = 2..=6
+    for d in 2..=6 {
+        let u_slice = &u_all[0..d];
+        for target in [&pool.zeta5, &pool.pi6] {
+            let mut x = u_slice.to_vec();
+            x.push(target.value.clone());
+
+            let rels = find_all_integer_relations_deep_pole(&x);
+            for rel in rels {
+                if let Some((poly, k)) = process_deep_pole_relation(d, &rel.m, target) {
+                    let (formula_text, formula_latex) = build_deep_pole_formula(
+                        kernel, a, m, d, &poly, target, k
+                    );
+                    discoveries.push(DeepPoleDiscovery {
+                        kernel_desc: kernel.description(),
+                        kernel_code: kernel.code(),
+                        a,
+                        m,
+                        d,
+                        poly,
+                        target: (*target).clone(),
+                        k,
+                        formula_text,
+                        formula_latex,
+                        residual_str: format!("{:.2e}", rel.residual_f64),
+                        residual_f64: rel.residual_f64,
+                        norm: rel.norm,
+                    });
+                }
+            }
+        }
+    }
+
+    // Weight-7 Search (zeta(7)) for d = 2..=8
+    for d in 2..=8 {
+        let u_slice = &u_all[0..d];
+        let target = &pool.zeta7;
+        let mut x = u_slice.to_vec();
+        x.push(target.value.clone());
+
+        let rels = find_all_integer_relations_deep_pole(&x);
+        for rel in rels {
+            if let Some((poly, k)) = process_deep_pole_relation(d, &rel.m, target) {
+                let (formula_text, formula_latex) = build_deep_pole_formula(
+                    kernel, a, m, d, &poly, target, k
+                );
+                discoveries.push(DeepPoleDiscovery {
+                    kernel_desc: kernel.description(),
+                    kernel_code: kernel.code(),
+                    a,
+                    m,
+                    d,
+                    poly,
+                    target: target.clone(),
+                    k,
+                    formula_text,
+                    formula_latex,
+                    residual_str: format!("{:.2e}", rel.residual_f64),
+                    residual_f64: rel.residual_f64,
+                    norm: rel.norm,
+                });
+            }
+        }
+    }
+
+    discoveries
+}
+
+pub fn run_deep_pole_discovery_scan() {
+    let t_start = Instant::now();
+
+    println!("================================================================================");
+    println!("  AĞIRLIK-5 (ζ(5), π⁶) VE AĞIRLIK-7 (ζ(7)) CALABI-YAU DERİN KUTUP AVCISI");
+    println!("  Hassasiyet: 650 Adım (230 Basamak) | LLL: 10^160 | Eşik: < 10^-130 | Norm: 50,000,000");
+    println!("================================================================================");
+
+    print!("[1/4] Binom katsayıları tabloları (c2n, c3n, c4n, c6n, 650 adım) hesaplanıyor... ");
+    let t_tbl = Instant::now();
+    let tables = compute_binomial_tables(650);
+    println!("Tamamlandı ({:.2?})", t_tbl.elapsed());
+
+    print!("[2/4] 230-Basamak Derin Kutup Sabit Havuzu (ζ(5), π⁶, ζ(7)) üretiliyor... ");
+    let t_pool = Instant::now();
+    let pool = DeepPoleConstantPool::new();
+    println!("Tamamlandı ({:.2?})", t_pool.elapsed());
+
+    let mut tasks = Vec::new();
+    for &k in &DeepPoleKernelType::ALL {
+        let growth = k.growth_ratio();
+        for &a in &DEEP_POLE_BASES {
+            if (a.abs() as f64) <= (growth / 2.5) + 1e-6 {
+                for m in 0..=4 {
+                    tasks.push((k, a, m));
+                }
+            }
+        }
+    }
+
+    let total_tasks = tasks.len();
+    let completed_tasks = std::sync::atomic::AtomicUsize::new(0);
+    let scan_start = Instant::now();
+
+    println!(
+        "[3/4] {} Ayrı Derin Kutup Görevi Rayon ({} iş parçacığı) ile taranıyor...",
+        total_tasks,
+        rayon::current_num_threads()
+    );
+
+    let raw_results: Vec<Vec<DeepPoleDiscovery>> = tasks
+        .par_iter()
+        .map(|&(k, a, m)| {
+            let res = scan_deep_pole_task(k, a, m, &pool, &tables);
+            let c = completed_tasks.fetch_add(1, std::sync::atomic::Ordering::Relaxed) + 1;
+            if c % 25 == 0 || c == total_tasks {
+                let pct = (c as f64 / total_tasks as f64) * 100.0;
+                println!(
+                    "  [İlerleme: {} / {} Görev (%{:.1})] Geçen Süre: {:.1?}",
+                    c,
+                    total_tasks,
+                    pct,
+                    scan_start.elapsed()
+                );
+            }
+            res
+        })
+        .collect();
+
+    let mut seen = HashSet::new();
+    let mut all_discoveries = Vec::new();
+
+    for list in raw_results {
+        for id in list {
+            let sig = format!("{}_{}_{}_{:?}_{}_{}", id.kernel_code, id.a, id.m, id.poly, id.target.name, id.k);
+            if seen.insert(sig) {
+                all_discoveries.push(id);
+            }
+        }
+    }
+
+    all_discoveries.sort_by(|a, b| {
+        a.norm.partial_cmp(&b.norm).unwrap_or(std::cmp::Ordering::Equal)
+            .then_with(|| a.residual_f64.partial_cmp(&b.residual_f64).unwrap_or(std::cmp::Ordering::Equal))
+    });
+
+    println!("[4/4] Tarama tamamlandı. Bulunan bağıntılar: {}\n", all_discoveries.len());
+
+    let filename = "discovered_deep_pole_identities.txt";
+    let mut file = File::create(filename).expect("Sonuç dosyası oluşturulamadı");
+
+    writeln!(file, "================================================================================").unwrap();
+    writeln!(file, "WEIGHT-5 (zeta(5), pi^6) & WEIGHT-7 (zeta(7)) DEEP POLE CALABI-YAU IDENTITIES").unwrap();
+    writeln!(file, "Discovered by hyper-lll (230-digit precision, LLL scale 10^160, threshold 10^-130, norm 50M)").unwrap();
+    writeln!(file, "Total Identities: {}", all_discoveries.len()).unwrap();
+    writeln!(file, "================================================================================\n").unwrap();
+
+    if all_discoveries.is_empty() {
+        println!("(Belirtilen aralıkta ve kalibrasyonda yeni bağıntı bulunamadı)");
+    } else {
+        for (i, id) in all_discoveries.iter().enumerate() {
+            println!("🌌 [LİTERATÜR DIŞI DERİN KUTUP KEŞFİ]");
+            println!("Çekirdek: {} | Taban: a = {} | Kutup: (2n-1)^{}", id.kernel_desc, id.a, id.m);
+            println!("Formül: {}", id.formula_text);
+            println!("LaTeX: {}", id.formula_latex);
+            println!("Hata: {} | Norm: {:.4}\n", id.residual_str, id.norm);
+
+            writeln!(file, "% ─────────────────────────────────────────────────────────────────────────────").unwrap();
+            writeln!(file, "% [{}] [LİTERATÜR DIŞI DERİN KUTUP KEŞFİ] Hedef: {}", i + 1, id.target.name).unwrap();
+            writeln!(file, "% Çekirdek: {}, Taban: a = {}, Kutup: (2n-1)^{}", id.kernel_desc, id.a, id.m).unwrap();
+            writeln!(file, "% Hata: {} | Norm: {:.4}", id.residual_str, id.norm).unwrap();
+            writeln!(file, "\\begin{{equation}}").unwrap();
+            writeln!(file, "{}", id.formula_latex).unwrap();
+            writeln!(file, "\\end{{equation}}\n").unwrap();
+        }
     }
 
     println!("Sonuçlar '{}' kütüğüne kaydedildi.", filename);
@@ -1727,6 +2066,10 @@ fn main() {
         run_frontier_discovery_scan();
         return;
     }
+    if args.iter().any(|arg| arg == "--calabi-yau") {
+        run_calabi_yau_discovery_scan();
+        return;
+    }
 
-    run_calabi_yau_discovery_scan();
+    run_deep_pole_discovery_scan();
 }

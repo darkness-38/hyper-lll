@@ -1,0 +1,6 @@
+================================================================================
+WEIGHT-5 (zeta(5), pi^6) & WEIGHT-7 (zeta(7)) DEEP POLE CALABI-YAU IDENTITIES
+Discovered by hyper-lll (230-digit precision, LLL scale 10^160, threshold 10^-130, norm 50M)
+Total Identities: 0
+================================================================================
+
